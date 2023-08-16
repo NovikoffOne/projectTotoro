@@ -13,9 +13,19 @@ public class MapManager : MonoBehaviour
     
     private List<LandingPlace> _places;
 
-    private void OnEnable()
+    //private void OnEnable()
+    //{
+    //    StartCoroutine(DelayEnable());
+    //}
+
+    private void Start()
     {
-        StartCoroutine(DelayEnable());
+        _places = _grid.GetLandingList();
+
+        foreach (var place in _places)
+        {
+            place.PassengerChanged += OnPassengerChanged;
+        }
     }
 
     private void OnDisable()
@@ -42,15 +52,15 @@ public class MapManager : MonoBehaviour
             Debug.Log("Вы еще не перевезли всех пассажиров");
     }
     
-    private IEnumerator DelayEnable()
-    {
-        yield return new WaitForSeconds(.2f);
+    //private IEnumerator DelayEnable()
+    //{
+    //    yield return new WaitForSeconds(.2f);
 
-        _places = _grid.GetLandingList();
+    //    _places = _grid.GetLandingList();
 
-        foreach (var place in _places)
-        {
-            place.PassengerChanged += OnPassengerChanged;
-        }
-    }
+    //    foreach (var place in _places)
+    //    {
+    //        place.PassengerChanged += OnPassengerChanged;
+    //    }
+    //}
 }

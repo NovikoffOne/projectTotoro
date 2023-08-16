@@ -19,9 +19,8 @@ public class LoadingPlace : MonoBehaviour, ITriggerZone
     public void ApplyEffect(Player player)
     {
         player.GetPassenger(_passenger);
-        _passenger.Move(player.transform);
-
-
+        
+        _passenger.Move(player.PassengerLoadingZone);
 
         _passenger = null;
     }

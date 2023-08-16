@@ -430,8 +430,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startPosition: {x: 0, y: 0, z: -0.3}
-  _speed: 1
+  _passengerZone: {fileID: 0}
   _playerPrefab: {fileID: 2906181011523101182, guid: c2a3d945c61fbad4e805e84a6549487a, type: 3}
+  _speed: 1
 --- !u!4 &994741985
 Transform:
   m_ObjectHideFlags: 0

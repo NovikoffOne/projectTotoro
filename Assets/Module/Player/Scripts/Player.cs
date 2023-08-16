@@ -7,9 +7,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private Vector3 _startPosition = new Vector3(0, 0, -.3f);
-    [SerializeField] private float _speed = 1f;
-
+    
     [SerializeField] private GameObject _playerPrefab;
+
+    [SerializeField] private float _speed = 1f;
 
     private List<Passenger> _passengers = new List<Passenger>();
 
@@ -18,14 +19,20 @@ public class Player : MonoBehaviour
     private bool _isAlreadyInside = true;
 
     private float _rayDistance = 20;
+    
+    private Transform _passengerZone;
 
     public Vector3 CurrentPosition { get; private set; }
+
+    public Transform PassengerLoadingZone => _passengerZone;
 
     public event Action<Vector3> PositionChanged;
 
     private void Start()
     {
         Instantiate(_playerPrefab, _startPosition, Quaternion.identity, transform);
+
+        _passengerZone = GetComponentInChildren<PassengerLoadingZone>().transform;
     }
 
     private void Update()

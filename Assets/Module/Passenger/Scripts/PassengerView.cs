@@ -20,8 +20,6 @@ public class PassengerView : MonoBehaviour
 
     public void OnPositionChanged(Vector3 newPosition)
     {
-        transform.DOMove(newPosition, _durationMove);
-
-        transform.position = transform.parent.position;
+        transform.position = newPosition;
     }
 }
