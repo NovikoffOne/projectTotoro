@@ -6,6 +6,6 @@ public class Barrier : MonoBehaviour, ITriggerZone
 {
     public void ApplyEffect(Player player)
     {
-        player.Rush(player.LastPosition);
+        player.Movement.Move(player.Movement.LastPosition);
     }
 }

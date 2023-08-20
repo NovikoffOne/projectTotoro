@@ -1,13 +1,16 @@
 using IJunior.TypedScenes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    [SerializeField] private GridManager _grid;
+    public static MapManager Instance { get; private set; }
 
-    [SerializeField] private Player _player;
+    [SerializeField] private List<GridManager> _gridPrefabs;
+    [SerializeField] private Player _playerPrefab;
 
     [SerializeField] private GameObject _interLevelMenu;
     [SerializeField] private GameObject _gameOverPanel;
@@ -15,12 +18,36 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int _minNumberPassengersCarried;
     [SerializeField] private int _numberPassengersCarried = 0;
 
-    private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
-    
+    [SerializeField] private Camera _camera;
+
+    [SerializeField] private GridManager _grid;
+    [SerializeField] private Player _player;
+
     private List<LandingPlace> _places;
     private LevelTransition _levelTransition;
 
+    public Camera Camera => _camera;
+    public Player Player => _player;
+
+    private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
+
     private void Start()
+    {
+        Init();
+        _camera = GetComponent<Camera>();
+    }
+
+    private void OnDisable()
+    {
+        foreach (var place in _places)
+        {
+            place.PassengerChanged -= OnEnergyChanged;
+        }
+
+        _levelTransition.PlayerInside -= OnPlayerInsaeded;
+    }
+
+    private void Init()
     {
         _places = _grid.GetLandingPlaces;
 
@@ -28,22 +55,12 @@ public class MapManager : MonoBehaviour
 
         foreach (var place in _places)
         {
-            place.PassengerChanged += OnPassengerChanged;
+            place.PassengerChanged += OnEnergyChanged;
         }
 
         _player.OnGameOver += OnOpenGameOverPanel;
 
         _levelTransition.PlayerInside += OnPlayerInsaeded;
-    }
-
-    private void OnDisable()
-    {
-        foreach (var place in _places)
-        {
-            place.PassengerChanged -= OnPassengerChanged;
-        }
-
-        _levelTransition.PlayerInside -= OnPlayerInsaeded;
     }
 
     public void OpenInterLevelMenu()
@@ -66,7 +83,7 @@ public class MapManager : MonoBehaviour
         _gameOverPanel.SetActive(true);
     }
 
-    private void OnPassengerChanged()
+    private void OnEnergyChanged()
     {
         ++_numberPassengersCarried;
 

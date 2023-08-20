@@ -8,13 +8,18 @@ public class LoadingPlace : MonoBehaviour, ITriggerZone
 
     [SerializeField] private Transform _chargePosition;
 
-    [SerializeField] private Charge _chargePrefab;
-
     private Charge _charge;
+
+    private ChargeColor _chargeColler;
+
+    private void Awake()
+    {
+        _chargeColler = GetComponent<ChargeColor>();
+    }
 
     private void Start()
     {
-        _charge = Instantiate(_chargePrefab, _chargePosition.position, Quaternion.identity, transform);
+        _charge = Instantiate(_chargeColler.GetMaterial(SiteLandingIndex), _chargePosition.position, Quaternion.identity, transform);
 
         _charge.Init(SiteLandingIndex);
     }

@@ -5,10 +5,13 @@ using UnityEngine;
 public class UIWigetLifeBar : MonoBehaviour
 {
     [SerializeField] private EnergyBar _energyBar;
-    [SerializeField] private Tank _tank;
+    [SerializeField] private Player _player;
 
-    private void OnEnable()
+    private EnergyReserve _tank;
+    
+    private void Start()
     {
+        _tank = _player.GetComponent<EnergyReserve>();
         _tank.OnTankValueChange += OnTankValueChanged;
     }
 

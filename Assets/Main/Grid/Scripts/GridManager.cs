@@ -1,14 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    [SerializeField] private Camera _camera;
+    [SerializeField] private Tile _tilePrefab;
+
     [SerializeField] private int _width;
     [SerializeField] private int _height;
-
-    [SerializeField] private Tile _tilePrefab;
 
     [SerializeField] private List<TriggerZone> _zonePrefabs = new List<TriggerZone>();
 
@@ -19,11 +19,16 @@ public class GridManager : MonoBehaviour
     [SerializeField] private List<Vector3> _loadingPlacePosition = new List<Vector3>();
     [SerializeField] private List<Vector3> _levelTransitionPosition = new List<Vector3>();
 
-    [SerializeField] private Camera _camera;
+    private MapManager _mapMnager;
 
-    [SerializeField] private enum ZoneIndex
+    public enum ZoneIndex
     {
-
+        Barier = 0,
+        Accelerartor = 1,
+        Repulsor = 2,
+        Landing = 3,
+        Loading = 4,
+        LevelTransition = 5,
     }
 
     public LevelTransition GetLevelTransition => GetComponentInChildren<LevelTransition>();
@@ -33,18 +38,22 @@ public class GridManager : MonoBehaviour
     {
         GenerateGrid();
 
-        ArrangeTriggerZone(_barriersPosition, _zonePrefabs[0]);
+        ArrangeTriggerZone(_barriersPosition, _zonePrefabs[(int)ZoneIndex.Barier]);
 
-        ArrangeTriggerZone(_acceleratorPosition, _zonePrefabs[1]);
+        ArrangeTriggerZone(_acceleratorPosition, _zonePrefabs[(int)ZoneIndex.Accelerartor]);
 
-        ArrangeTriggerZone(_repulsorPosition, _zonePrefabs[2]);
-        
-        ArrangeTriggerZone(_landingPlacePosition, _zonePrefabs[3]);
-        
-        ArrangeTriggerZone(_loadingPlacePosition, _zonePrefabs[4]);
+        ArrangeTriggerZone(_repulsorPosition, _zonePrefabs[(int)ZoneIndex.Repulsor]);
 
-        ArrangeTriggerZone(_levelTransitionPosition, _zonePrefabs[5]);
+        ArrangeTriggerZone(_landingPlacePosition, _zonePrefabs[(int)ZoneIndex.Landing]);
+
+        ArrangeTriggerZone(_loadingPlacePosition, _zonePrefabs[(int)ZoneIndex.Loading]);
+
+        ArrangeTriggerZone(_levelTransitionPosition, _zonePrefabs[(int)ZoneIndex.LevelTransition]);
     }
+
+    private void Start()
+    { }
+    
 
     public List<LandingPlace> GetLandingList()
     {
@@ -67,7 +76,7 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        _camera.transform.position = new Vector3(((float)_width / 2 - 0.5f), -4.5f, -10);
+        _camera.transform.position = new Vector3(((float)_width / 2 - 0.5f), -1, -10);
     }
 
     private void ArrangeTriggerZone(List<Vector3> zonePositions, TriggerZone triggerZone)
@@ -83,5 +92,10 @@ public class GridManager : MonoBehaviour
         }
         else
             return;
+    }
+
+    public void Destroy()
+    {
+        Destroy(this.gameObject);
     }
 }

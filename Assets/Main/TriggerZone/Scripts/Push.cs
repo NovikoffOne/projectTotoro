@@ -8,6 +8,6 @@ public class Push : MonoBehaviour, ITriggerZone
 
     public void ApplyEffect(Player player)
     {
-        player.Rush(player.CurrentPosition + _direction);
+        player.Movement.Move(player.Movement.CurrentPosition + _direction);
     }
 }
