@@ -18,23 +18,17 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int _minNumberPassengersCarried;
     [SerializeField] private int _numberPassengersCarried = 0;
 
-    [SerializeField] private Camera _camera;
-
     [SerializeField] private GridManager _grid;
     [SerializeField] private Player _player;
 
     private List<LandingPlace> _places;
     private LevelTransition _levelTransition;
 
-    public Camera Camera => _camera;
-    public Player Player => _player;
-
     private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
 
     private void Start()
     {
         Init();
-        _camera = GetComponent<Camera>();
     }
 
     private void OnDisable()
@@ -45,6 +39,12 @@ public class MapManager : MonoBehaviour
         }
 
         _levelTransition.PlayerInside -= OnPlayerInsaeded;
+    }
+
+    public void OpenInterLevelMenu()
+    {
+        Time.timeScale = 0;
+        _interLevelMenu.SetActive(true);
     }
 
     private void Init()
@@ -61,12 +61,6 @@ public class MapManager : MonoBehaviour
         _player.OnGameOver += OnOpenGameOverPanel;
 
         _levelTransition.PlayerInside += OnPlayerInsaeded;
-    }
-
-    public void OpenInterLevelMenu()
-    {
-        Time.timeScale = 0;
-        _interLevelMenu.SetActive(true);
     }
 
     private void OnPlayerInsaeded()

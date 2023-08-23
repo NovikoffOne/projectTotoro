@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private Camera _camera;
     [SerializeField] private Tile _tilePrefab;
+
+    [SerializeField] private Camera _camera;
+
+    [SerializeField] private float _cameraPositionY;
+    [SerializeField] private float _cameraPositionZ;
 
     [SerializeField] private int _width;
     [SerializeField] private int _height;
@@ -51,15 +55,11 @@ public class GridManager : MonoBehaviour
         ArrangeTriggerZone(_levelTransitionPosition, _zonePrefabs[(int)ZoneIndex.LevelTransition]);
     }
 
-    private void Start()
-    { }
-    
-
-    public List<LandingPlace> GetLandingList()
-    {
-        var tempList = GetComponentsInChildren<LandingPlace>().ToList();
-        return tempList;
-    }
+    //public List<LandingPlace> GetLandingList()
+    //{
+    //    var tempList = GetComponentsInChildren<LandingPlace>().ToList();
+    //    return tempList;
+    //}
 
     private void GenerateGrid()
     {
@@ -76,7 +76,7 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        _camera.transform.position = new Vector3(((float)_width / 2 - 0.5f), -1, -10);
+        _camera.transform.position = new Vector3(((float)_width / 2 - 0.5f), _cameraPositionY, _cameraPositionZ);
     }
 
     private void ArrangeTriggerZone(List<Vector3> zonePositions, TriggerZone triggerZone)
@@ -92,10 +92,5 @@ public class GridManager : MonoBehaviour
         }
         else
             return;
-    }
-
-    public void Destroy()
-    {
-        Destroy(this.gameObject);
     }
 }

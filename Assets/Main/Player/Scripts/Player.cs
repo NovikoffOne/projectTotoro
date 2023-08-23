@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    
     [SerializeField] private Vector3 _startPosition = new Vector3(0, 0, -.3f);
     
     [SerializeField] private PlayerPrimitiv _playerPrefab;
@@ -50,10 +49,5 @@ public class Player : MonoBehaviour
     {
         if(EnergyTank.HaveGas == false)
             OnGameOver?.Invoke();
-    }
-
-    public void Destroy()
-    {
-        Destroy(this.gameObject);
     }
 }
