@@ -1843,6 +1843,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1520352909}
     - target: {fileID: 6246736530858184497, guid: 3ecd15c95e8a95c439ffe431ea3f8522, type: 3}
+      propertyPath: _tilePoolPosition
+      value: 
+      objectReference: {fileID: 623490897}
+    - target: {fileID: 6246736530858184497, guid: 3ecd15c95e8a95c439ffe431ea3f8522, type: 3}
+      propertyPath: _triggerZonePoolPosition
+      value: 
+      objectReference: {fileID: 1520352909}
+    - target: {fileID: 6246736530858184497, guid: 3ecd15c95e8a95c439ffe431ea3f8522, type: 3}
       propertyPath: _zonePrefabs.Array.data[3]
       value: 
       objectReference: {fileID: 1387622390844753608, guid: 92085fb73c2572f468d5ed768f4949ba, type: 3}

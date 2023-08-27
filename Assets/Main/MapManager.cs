@@ -68,7 +68,7 @@ public class MapManager : MonoBehaviour
         if (_canTransition)
             OpenInterLevelMenu();
         else
-            Debug.Log("Вы еще не перевезли всех пассажиров");
+            throw new System.Exception("Нет свободных ячеек!");
     }
 
     private void OnOpenGameOverPanel()
