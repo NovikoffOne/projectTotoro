@@ -19,7 +19,7 @@ public class Tile : MonoBehaviour
     {
         if (isOffset)
             _meshRenderer.material = _baseMaterial;
-        else if (!isOffset)
+        else
             _meshRenderer.material = _offsetMaterial;
 
         _standartColor = _meshRenderer.material.color;

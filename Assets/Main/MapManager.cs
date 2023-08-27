@@ -79,7 +79,7 @@ public class MapManager : MonoBehaviour
 
     private void OnEnergyChanged()
     {
-        ++_numberPassengersCarried;
+        _numberPassengersCarried++;
 
         if (_canTransition)
         {

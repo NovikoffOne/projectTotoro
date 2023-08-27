@@ -5,6 +5,9 @@ using UnityEngine;
 public class TriggerZone : MonoBehaviour
 {
     [SerializeField] private ITriggerZone _entityTriggerZone;
+    [SerializeField] private ZoneIndex _zoneIndex;
+
+    public ZoneIndex ZoneIndex => _zoneIndex;
 
     private void Start()
     {
