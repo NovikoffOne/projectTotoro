@@ -25,6 +25,8 @@ public class Tile : MonoBehaviour
         _standartColor = _meshRenderer.material.color;
     }
 
+
+    // Производительность ?
     public void OnMouseEnter()
     {
         ChangeColor(_hoverColor);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LoadingPlace : MonoBehaviour, ITriggerZone
 {
-    [SerializeField] private int SiteLandingIndex = 0;
+    [SerializeField] private int SiteLandingIndex;
 
     [SerializeField] private Transform _chargePosition;
 
@@ -26,8 +26,11 @@ public class LoadingPlace : MonoBehaviour, ITriggerZone
 
     public void ApplyEffect(Player player)
     {
-        player.ChargeChanger.SetCharge(_charge);
-        
-        _charge = null;
+        if(_charge != null)
+        {
+            player.ChargeChanger.SetCharge(_charge);
+
+            _charge = null;
+        }
     }
 }

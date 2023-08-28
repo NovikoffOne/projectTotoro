@@ -68,7 +68,7 @@ public class MapManager : MonoBehaviour
         if (_canTransition)
             OpenInterLevelMenu();
         else
-            throw new System.Exception("Нет свободных ячеек!");
+            throw new System.Exception("Нет заряда");
     }
 
     private void OnOpenGameOverPanel()

@@ -6,13 +6,15 @@ using UnityEngine;
 
 public class Charge : MonoBehaviour
 {
-    public int Index { get; private set; }
+    private int _index;
+
+    public int Index => _index;
 
     public event Action<Vector3> PositionChanged;
 
     public void Init(int index)
     {
-        Index = index;
+        _index = index;
     }
 
     public void Move(Transform transformParent)

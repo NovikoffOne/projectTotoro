@@ -13,8 +13,13 @@ public class ChargeChanger : MonoBehaviour
     public Charge InstantiateCharge()
     {
         TargetPosition = GetComponentInChildren<PlayerPrimitiv>().transform;
+
         _charge = Instantiate(_chargePrefab, TargetPosition.position, Quaternion.identity, TargetPosition);
+        
         _charge.transform.position = TargetPosition.position;
+
+        _charge.Init(0);
+
         return _charge;
     }
 

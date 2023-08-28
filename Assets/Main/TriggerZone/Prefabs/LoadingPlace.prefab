@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f832e22003805a49bb9011b2e7614b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SiteLandingIndex: 0
+  SiteLandingIndex: 3
   _chargePosition: {fileID: 3058397417039606101}
 --- !u!114 &1387622390844753608
 MonoBehaviour:

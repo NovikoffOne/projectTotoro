@@ -1,27 +1,37 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LandingPlace : MonoBehaviour, ITriggerZone
 {
-    [SerializeField] private int _index;
+    [SerializeField] private Charge _chargeRed;
     [SerializeField] private Transform _chargePostion;
+    [SerializeField] private int _index;
 
     private Charge _charge;
 
     public event Action PassengerChanged;
 
+    public void Start()
+    {
+        _charge = Instantiate(_chargeRed, _chargePostion);
+    }
+
     public void ApplyEffect(Player player)
     {
-        _charge = player.ChargeChanger.GetCharge(_index);
+        var charge = player.ChargeChanger.GetCharge(_index);
 
-        if (_charge == null)
-            return;
-        else
+        if (charge != null)
         {
+            Destroy(_charge.gameObject);
+
+            _charge = charge;
+
             PassengerChanged?.Invoke();
+
             _charge.Move(_chargePostion);
         }
+        else
+            throw new Exception("Не тот заряд!");
+        
     }
 }
