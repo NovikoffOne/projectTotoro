@@ -26,8 +26,8 @@ public partial class GridManager : MonoBehaviour
     private PoolMono<TriggerZone> _triggerZoneLanding;
     private PoolMono<TriggerZone> _triggerZoneLoading;
     private PoolMono<TriggerZone> _triggerZoneLevelTransition;
-   
-    public LevelTransition GetLevelTransition => GetComponentInChildren<LevelTransition>();
+
+    public LevelTransition GetLevelTransition => GetComponentsInChildren<LevelTransition>()[0];
     public List<LandingPlace> GetLandingPlaces => GetComponentsInChildren<LandingPlace>().ToList();
 
     private void Awake()
@@ -69,14 +69,14 @@ public partial class GridManager : MonoBehaviour
 
     private void GeneraneGrid()
     {
-        _tilePool = new PoolMono<Tile>(_tilePrefab,  _tilePoolPosition);
+        _tilePool = new PoolMono<Tile>(_tilePrefab);
 
-        _triggerZoneBarrier = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Barier), _triggerZonePoolPosition);
-        _triggerZoneAccelerartor = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Accelerartor), _triggerZonePoolPosition);
-        _triggerZoneRepulsor = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Repulsor), _triggerZonePoolPosition);
-        _triggerZoneLanding = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Landing), _triggerZonePoolPosition);
-        _triggerZoneLoading = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Loading), _triggerZonePoolPosition);
-        _triggerZoneLevelTransition = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.LevelTransition), _triggerZonePoolPosition);
+        _triggerZoneBarrier = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Barier));
+        _triggerZoneAccelerartor = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Accelerartor));
+        _triggerZoneRepulsor = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Repulsor));
+        _triggerZoneLanding = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Landing));
+        _triggerZoneLoading = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Loading));
+        _triggerZoneLevelTransition = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.LevelTransition));
 
         InstantiateGrid();
 

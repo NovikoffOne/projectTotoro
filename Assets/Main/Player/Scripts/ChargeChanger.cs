@@ -8,11 +8,17 @@ public class ChargeChanger : MonoBehaviour
 
     private Charge _charge;
 
+    private Animator _animator;
+
     public Transform TargetPosition { get; private set; }
+
+    private void Awake()
+    {
+    }
 
     public Charge InstantiateCharge()
     {
-        TargetPosition = GetComponentInChildren<PlayerPrimitiv>().transform;
+        TargetPosition = GetComponentInChildren<PlayerView>().transform;
 
         _charge = Instantiate(_chargePrefab, TargetPosition.position, Quaternion.identity, TargetPosition);
         
@@ -25,9 +31,9 @@ public class ChargeChanger : MonoBehaviour
 
     public void SetCharge(Charge charge)
     {
-        var animator = GetComponentInChildren<Animator>();
+        _animator = GetComponentInChildren<Animator>();
 
-        animator.SetTrigger("StayChanger");
+        _animator.SetTrigger("StayChanger");
 
         Destroy(_charge.gameObject);
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChargeColor : MonoBehaviour
+public class ChargeColor:MonoBehaviour
 {
     [SerializeField] private List<Charge> _charges;
 

@@ -11,7 +11,7 @@ public class UIWigetLifeBar : MonoBehaviour
     
     private void Start()
     {
-        _tank = _player.GetComponent<EnergyReserve>();
+        _tank = _player.EnergyTank;
         _tank.OnTankValueChange += OnTankValueChanged;
     }
 

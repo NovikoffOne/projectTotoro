@@ -1,26 +1,37 @@
 using System.Collections.Generic;
 using System.Threading;
+using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
-public class PoolMono<T> where T : MonoBehaviour // Класс Т должен наследоваться от монобехейвера
+public class PoolMono<T> where T : MonoBehaviour
 {
+    private readonly T Prefab;
+    private readonly Transform PoolContainer;
+
     private List<T> _pool;
 
-    public T Prefab;
-    public Transform PoolContainer { get; private set; }
-
-    public PoolMono(T prefab,  Transform poolContainer)
+    public PoolMono(T prefab)
     {
+        Prefab = prefab;
         _pool = new List<T>();
 
-        CreatePool(prefab, poolContainer);
+        PoolContainer = new GameObject().transform;
+
+        Object.DontDestroyOnLoad(PoolContainer);        
     }
 
     public int Count => _pool.Count;
 
-    public virtual void OnSpawn() { }
+    public virtual void OnSpawn(T element) 
+    {
+        element.gameObject.SetActive(true);
+    }
 
-    public virtual void OnDespawn() { }
+    public virtual void OnDespawn(T element) 
+    {
+        element.gameObject.SetActive(false);
+    }
 
     public T Spawn()
     {
@@ -37,12 +48,9 @@ public class PoolMono<T> where T : MonoBehaviour // Класс Т должен наследоваться
         _pool.Add(spawnedObject);
     }
 
-    private void CreatePool(T prefab, Transform poolContainer)
+    public void DeSpawnAll()
     {
-        Prefab = prefab;
-        PoolContainer = poolContainer;
-
-        CreateItem();
+        _pool.ForEach(element => OnDespawn(element));
     }
 
     private T CreateItem(bool isActiveByDefault = false)
@@ -58,20 +66,16 @@ public class PoolMono<T> where T : MonoBehaviour // Класс Т должен наследоваться
 
     private bool HasFreeElement(out T element)
     {
-        foreach (var item in _pool)
+        if (element = _pool.Find(element => !element.gameObject.activeInHierarchy))
         {
-            if (!item.gameObject.activeInHierarchy)
-            {
-                element = item;
-
-                item.gameObject.SetActive(true);
-
-                return true;
-            }
+            OnSpawn(element);
+            return true;
         }
+        else
+        {
+            element = null;
 
-        element = null;
-
-        return false;
+            return false;
+        }
     }
 }

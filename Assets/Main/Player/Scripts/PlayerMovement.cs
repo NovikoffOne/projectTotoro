@@ -5,29 +5,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.Timeline.TimelineAsset;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement
 {
-    [SerializeField] private Player _player;
-    [SerializeField] private Animator _animator;
-
-    [SerializeField] private float _speed = 1f;
-    [SerializeField] private float _durationMove = 1f;
+    private readonly PlayerView PlayerView;
+    private readonly float Speed;
 
     public Vector3 CurrentPosition { get; private set; }
     public Vector3 LastPosition { get; private set; }
 
-    public event Action<Vector3> OnPositionChanged;
-
-    private void Start()
+    public PlayerMovement(PlayerView playerView, float speed = 1f)
     {
-        OnPositionChanged += OnPositionChanged;
-
-        _animator = GetComponentInChildren<Animator>();
-    }
-
-    private void OnDisable()
-    {
-        OnPositionChanged -= OnPositionChanged;
+        PlayerView = playerView;
+        Speed = speed;
     }
 
     public void Move(Vector3 newPosition)
@@ -38,9 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
         CurrentPosition = newPosition;
 
-        ChangePosition(CurrentPosition);
-
-        OnPositionChanged?.Invoke(CurrentPosition);
+        PlayerView.ChangePosition(CurrentPosition);
     }
 
     private Vector2 ClampingMoveDirection(Vector2 newPosition)
@@ -48,14 +35,9 @@ public class PlayerMovement : MonoBehaviour
         float deltaX = newPosition.x - CurrentPosition.x;
         float deltaY = newPosition.y - CurrentPosition.y;
 
-        newPosition.x = CurrentPosition.x + Mathf.Clamp(deltaX, -_speed, _speed);
-        newPosition.y = CurrentPosition.y + Mathf.Clamp(deltaY, -_speed, _speed);
+        newPosition.x = CurrentPosition.x + Mathf.Clamp(deltaX, -Speed, Speed);
+        newPosition.y = CurrentPosition.y + Mathf.Clamp(deltaY, -Speed, Speed);
 
         return newPosition;
-    }
-
-    private void ChangePosition(Vector3 newPosition)
-    {
-        transform.DOMove(newPosition, _durationMove).SetEase(Ease.Linear, 0);
     }
 }

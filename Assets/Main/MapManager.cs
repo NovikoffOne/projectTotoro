@@ -21,7 +21,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GridManager _grid;
     [SerializeField] private Player _player;
 
-    private List<LandingPlace> _places;
+    private LandingPlace _places;
     private LevelTransition _levelTransition;
 
     private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
@@ -33,10 +33,7 @@ public class MapManager : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (var place in _places)
-        {
-            place.PassengerChanged -= OnEnergyChanged;
-        }
+        _places.PassengerChanged -= OnEnergyChanged;
 
         _levelTransition.PlayerInside -= OnPlayerInsaeded;
     }
@@ -49,17 +46,11 @@ public class MapManager : MonoBehaviour
 
     private void Init()
     {
-        _places = _grid.GetLandingPlaces;
-
-        _levelTransition = _grid.GetLevelTransition;
-
-        foreach (var place in _places)
-        {
-            place.PassengerChanged += OnEnergyChanged;
-        }
-
+        _places = FindObjectOfType<LandingPlace>();
+        _levelTransition = FindObjectOfType<LevelTransition>();
+        
+        _places.PassengerChanged += OnEnergyChanged;
         _player.OnGameOver += OnOpenGameOverPanel;
-
         _levelTransition.PlayerInside += OnPlayerInsaeded;
     }
 
@@ -68,7 +59,7 @@ public class MapManager : MonoBehaviour
         if (_canTransition)
             OpenInterLevelMenu();
         else
-            throw new System.Exception("Нет заряда");
+            throw new System.Exception("Нет питания");
     }
 
     private void OnOpenGameOverPanel()

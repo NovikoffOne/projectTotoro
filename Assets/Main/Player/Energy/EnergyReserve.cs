@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
-public abstract class EnergyReserve : MonoBehaviour
+public abstract class EnergyReserve
 {
-    [SerializeField] private int _startValue;
+    private int _startValue;
     private const int _baseMileage = 1;
 
     protected int CurrentValue;
@@ -16,9 +16,9 @@ public abstract class EnergyReserve : MonoBehaviour
 
     public event Action<float> OnTankValueChange;
 
-    private void Awake()
+    public EnergyReserve(int startValue)
     {
-        CurrentValue = _startValue;
+        CurrentValue = _startValue = startValue;
 
         OnTankValueChange?.Invoke(ValueNormalized);
     }

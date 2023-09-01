@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour
+public class PlayerInput
 {
     private Player _player;
 
@@ -12,12 +12,12 @@ public class PlayerInput : MonoBehaviour
 
     private float _rayDistance = 20;
 
-    private void Start()
+    public PlayerInput(Player player)
     {
-        _player = GetComponent<Player>();   
+        _player = player;
     }
 
-    private void Update()
+    public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) && _isAlreadyInside == true)
         {
@@ -39,13 +39,4 @@ public class PlayerInput : MonoBehaviour
             return _player.Movement.CurrentPosition;
         }
     }
-
-    //private IEnumerator DelayLoadPassenger()
-    //{
-    //    _isAlreadyInside = false;
-
-    //    yield return new WaitForSeconds(1f); // заменить на длительность анимации
-
-    //    _isAlreadyInside = true;
-    //}
 }

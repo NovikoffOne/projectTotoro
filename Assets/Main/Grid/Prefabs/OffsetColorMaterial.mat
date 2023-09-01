@@ -10,7 +10,7 @@ Material:
   m_Name: OffsetColorMaterial
   m_Shader: {fileID: 45, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 2100000, guid: d132c8d971a9a3846b8852f830ddf368, type: 2}
-  m_ModifiedSerializedProperties: 0
+  m_ModifiedSerializedProperties: 4
   m_ValidKeywords:
   - _EMISSION
   - _NORMALMAP
@@ -18,7 +18,7 @@ Material:
   - _SPECGLOSSMAP
   m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}

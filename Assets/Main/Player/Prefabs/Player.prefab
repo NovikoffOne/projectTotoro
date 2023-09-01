@@ -47,10 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4117dc9b7082a874a9bd18b9cd9c6190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tank: {fileID: 0}
   _startPosition: {x: 0, y: 0, z: -0.3}
-  _playerPrefab: {fileID: 5515358873676603372, guid: c2a3d945c61fbad4e805e84a6549487a, type: 3}
-  _speed: 1
+  _playerView: {fileID: 218274920203888063, guid: c2a3d945c61fbad4e805e84a6549487a, type: 3}
   _chargePrefab: {fileID: -3253947782491088398, guid: 8ca3e9f5f53771b48ac75a278a4b2059, type: 3}
 --- !u!114 &8375032956617939114
 MonoBehaviour:
@@ -64,7 +62,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6adecae658ab9ad4db7617188412466c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 3926154434946997075}
   _durationMove: 1
 --- !u!65 &4420517378348559046
 BoxCollider:

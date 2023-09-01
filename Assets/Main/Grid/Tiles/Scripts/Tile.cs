@@ -7,38 +7,48 @@ public class Tile : MonoBehaviour
 {
     [SerializeField] private MeshRenderer _meshRenderer;
 
-    [SerializeField] private Material _baseMaterial;
-    [SerializeField] private Material _offsetMaterial;
-    
-    [SerializeField] private Color _standartColor;
-    [SerializeField] private Color _hoverColor;
+    [SerializeField] private GameObject _baseTile;
+    [SerializeField] private GameObject _offsetTile;
+    [SerializeField] private GameObject _highlightingTile;
 
+    private GameObject _currentTile;
+    
     public Vector3 Position => transform.position;
 
     public void Init(bool isOffset)
     {
         if (isOffset)
-            _meshRenderer.material = _baseMaterial;
-        else
-            _meshRenderer.material = _offsetMaterial;
+        {
+            _offsetTile.SetActive(true);
+            _currentTile = _offsetTile;
+        }
 
-        _standartColor = _meshRenderer.material.color;
+        else
+        {
+            _baseTile.SetActive(true);
+            _currentTile = _baseTile;
+        }
     }
 
-
-    // Производительность ?
     public void OnMouseEnter()
     {
-        ChangeColor(_hoverColor);
+        Highlight(_highlightingTile);
     }
 
     public void OnMouseExit()
     {
-        ChangeColor(_standartColor);
+        RevertBase(_highlightingTile);
     }
 
-    private void ChangeColor(Color color)
+    private void RevertBase(GameObject tile)
     {
-        _meshRenderer.material.color = color;
+        tile.SetActive(false);
+        _currentTile.SetActive(true);
+    }
+
+    private void Highlight(GameObject tile)
+    {
+        tile.SetActive(true);
+        _currentTile.SetActive(false);
     }
 }

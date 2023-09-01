@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class TriggerZone : MonoBehaviour
 {
-    [SerializeField] private ITriggerZone _entityTriggerZone;
     [SerializeField] private ZoneIndex _zoneIndex;
+    
+    private ITriggerZone _entityTriggerZone;
 
     public ZoneIndex ZoneIndex => _zoneIndex;
 
