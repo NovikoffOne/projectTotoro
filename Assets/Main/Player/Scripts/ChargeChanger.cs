@@ -12,10 +12,6 @@ public class ChargeChanger : MonoBehaviour
 
     public Transform TargetPosition { get; private set; }
 
-    private void Awake()
-    {
-    }
-
     public Charge InstantiateCharge()
     {
         TargetPosition = GetComponentInChildren<PlayerView>().transform;

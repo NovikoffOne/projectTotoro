@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class InterLevelMenu : MonoBehaviour
 {
+    [SerializeField] private MapManager _mapManager;
+
     public void OnButtonClickExit()
     {
         NewAction();
@@ -16,13 +18,13 @@ public class InterLevelMenu : MonoBehaviour
     public void OnButtonClickPlay()
     {
         NewAction();
-        Level_1.Load();
+        _mapManager.NewLevel();
     }
 
     public void OnButtonClickReload()
     {
         NewAction();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        _mapManager.ReloadLevel();
     }
 
     public void NewAction()

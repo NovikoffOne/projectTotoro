@@ -9,31 +9,48 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager Instance { get; private set; }
 
-    [SerializeField] private List<GridManager> _gridPrefabs;
+    [SerializeField] private List<GridData> _gridData;
     [SerializeField] private Player _playerPrefab;
 
     [SerializeField] private GameObject _interLevelMenu;
     [SerializeField] private GameObject _gameOverPanel;
-    
-    [SerializeField] private int _minNumberPassengersCarried;
-    [SerializeField] private int _numberPassengersCarried = 0;
 
     [SerializeField] private GridManager _grid;
     [SerializeField] private Player _player;
 
-    private LandingPlace _places;
+    [SerializeField] private int _minNumberPassengersCarried;
+    [SerializeField] private int _numberPassengersCarried = 0;
+
+    [SerializeField] private int GridIndex;
+
+    private List<LandingPlace> _places;
     private LevelTransition _levelTransition;
 
     private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
 
     private void Start()
     {
+        _grid.NewGrid(_gridData[GridIndex]);
+
         Init();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _grid.NewGrid(_gridData[++GridIndex]);
+        }
+    }
+
+    public void SetIndex(int index)
+    {
+        GridIndex = index;
     }
 
     private void OnDisable()
     {
-        _places.PassengerChanged -= OnEnergyChanged;
+        _places.ForEach(place => place.PassengerChanged -= OnEnergyChanged);
 
         _levelTransition.PlayerInside -= OnPlayerInsaeded;
     }
@@ -44,12 +61,38 @@ public class MapManager : MonoBehaviour
         _interLevelMenu.SetActive(true);
     }
 
+    public void NewLevel()
+    {
+        _places.ForEach(place => place.PassengerChanged -= OnEnergyChanged);
+
+        _levelTransition.PlayerInside -= OnPlayerInsaeded;
+
+        _grid.NewGrid(_gridData[++GridIndex]);
+
+        Init();
+    }
+
+    public void ReloadLevel()
+    {
+        _places.ForEach(place => place.PassengerChanged -= OnEnergyChanged);
+
+        _levelTransition.PlayerInside -= OnPlayerInsaeded;
+
+        _grid.NewGrid(_gridData[GridIndex]);
+
+        Init();
+    }
+
     private void Init()
     {
-        _places = FindObjectOfType<LandingPlace>();
-        _levelTransition = FindObjectOfType<LevelTransition>();
+        _grid.GetLandingPlaces().ForEach(landingPlace => _places.Add(landingPlace.GetComponent<LandingPlace>()));
+
+        Debug.Log(_places.Count);
+
+        _levelTransition = _grid.GetLevelTransition;
         
-        _places.PassengerChanged += OnEnergyChanged;
+        _places.ForEach(place => place.PassengerChanged += OnEnergyChanged);
+
         _player.OnGameOver += OnOpenGameOverPanel;
         _levelTransition.PlayerInside += OnPlayerInsaeded;
     }

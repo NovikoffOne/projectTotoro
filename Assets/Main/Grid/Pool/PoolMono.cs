@@ -4,12 +4,15 @@ using TMPro;
 using UnityEngine;
 using static UnityEditor.Progress;
 
-public class PoolMono<T> where T : MonoBehaviour
+public class PoolMono<T> 
+    where T : MonoBehaviour
 {
     private readonly T Prefab;
     private readonly Transform PoolContainer;
 
     private List<T> _pool;
+
+    public List<T> Pool;
 
     public PoolMono(T prefab)
     {
@@ -73,8 +76,6 @@ public class PoolMono<T> where T : MonoBehaviour
         }
         else
         {
-            element = null;
-
             return false;
         }
     }
