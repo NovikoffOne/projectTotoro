@@ -7,6 +7,8 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
     [SerializeField] private Transform _chargePostion;
     [SerializeField] private int _index;
 
+    [SerializeField] private MapManager _mapManager; //
+
     private Charge _charge;
 
     public event Action PassengerChanged;
@@ -26,7 +28,9 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
 
             _charge = charge;
 
-            PassengerChanged?.Invoke();
+            //PassengerChanged?.Invoke();
+
+            _mapManager.EventBus.Raise(new EnergyChangeEvent(true));
 
             _charge.Move(_chargePostion);
         }

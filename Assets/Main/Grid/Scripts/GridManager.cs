@@ -7,6 +7,7 @@ using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCou
 
 public partial class GridManager : MonoBehaviour
 {
+    [SerializeField] private MapManager _mapManager; //
 
     [SerializeField] private Tile _tilePrefab;
 

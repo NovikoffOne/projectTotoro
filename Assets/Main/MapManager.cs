@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public class MapManager : MonoBehaviour, IEventReceiver<EnergyChangeEvent>
 {
     public static MapManager Instance { get; private set; }
 
@@ -26,7 +26,14 @@ public class MapManager : MonoBehaviour
     private List<LandingPlace> _places;
     private LevelTransition _levelTransition;
 
+    public EventBus EventBus { get; private set; }
+
     private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
+
+    private void Awake()
+    {
+        EventBus = new EventBus();
+    }
 
     private void Start()
     {
@@ -91,7 +98,9 @@ public class MapManager : MonoBehaviour
 
         _levelTransition = _grid.GetLevelTransition;
         
-        _places.ForEach(place => place.PassengerChanged += OnEnergyChanged);
+        _places.ForEach(place => place.PassengerChanged += OnEnergyChanged); //
+
+        EventBus.Subscribe(this); //
 
         _player.OnGameOver += OnOpenGameOverPanel;
         _levelTransition.PlayerInside += OnPlayerInsaeded;
@@ -119,5 +128,14 @@ public class MapManager : MonoBehaviour
         {
             Debug.Log("Ворота открыты");
         }
+    }
+
+    public void OnEvent(EnergyChangeEvent var)
+    {
+        if(var.IsPassengerChange)
+            _numberPassengersCarried++;
+
+        if (_canTransition)
+            Debug.Log("Ворота открыты");
     }
 }
