@@ -33,5 +33,14 @@ public abstract class EnergyReserve
     public virtual void AddGas(int count)
     {
         CurrentValue += count;
+
+        OnTankValueChange?.Invoke(ValueNormalized);
+    }
+
+    public virtual void SetValueReserve(int value)
+    {
+        CurrentValue = value;
+
+        OnTankValueChange?.Invoke(ValueNormalized);
     }
 }

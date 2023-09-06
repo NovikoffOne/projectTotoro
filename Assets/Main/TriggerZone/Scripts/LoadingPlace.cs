@@ -12,16 +12,17 @@ public class LoadingPlace : MonoBehaviour, ITriggerZone
 
     private ChargeColor _chargeColler;
 
-    private void Awake()
+    private void OnEnable()
     {
         _chargeColler = GetComponent<ChargeColor>();
+        _charge = Instantiate(_chargeColler.GetMaterial(SiteLandingIndex), _chargePosition.position, Quaternion.identity, transform);
+        _charge.Init(SiteLandingIndex);
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        _charge = Instantiate(_chargeColler.GetMaterial(SiteLandingIndex), _chargePosition.position, Quaternion.identity, transform);
-
-        _charge.Init(SiteLandingIndex);
+        if (_charge != null)
+            Destroy(_charge.gameObject);
     }
 
     public void ApplyEffect(Player player)

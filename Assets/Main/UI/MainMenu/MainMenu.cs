@@ -6,9 +6,17 @@ using IJunior.TypedScenes;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private MapManager _mapManagerPrefab;
+
+    //private void Start()
+    //{
+    //    if (MapManager.Instance == null)
+    //        Instantiate(_mapManagerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+    //}
+
     public void PlayLevel1()
     {
-        SampleScene.Load();
+        SampleScene8x5.Load();
     }
 
     public void Exit()

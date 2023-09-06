@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LandingPlace : MonoBehaviour, ITriggerZone
@@ -7,15 +8,17 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
     [SerializeField] private Transform _chargePostion;
     [SerializeField] private int _index;
 
-    [SerializeField] private MapManager _mapManager; //
-
     private Charge _charge;
 
-    public event Action PassengerChanged;
-
-    public void Start()
+    private void OnEnable()
     {
         _charge = Instantiate(_chargeRed, _chargePostion);
+    }
+
+    private void OnDisable()
+    {
+        if (_charge != null)
+            Destroy(_charge.gameObject);
     }
 
     public void ApplyEffect(Player player)
@@ -28,14 +31,11 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
 
             _charge = charge;
 
-            //PassengerChanged?.Invoke();
-
-            _mapManager.EventBus.Raise(new EnergyChangeEvent(true));
+            EventBus.Raise(new EnergyChangeEvent(true));
 
             _charge.Move(_chargePostion);
         }
         else
             throw new Exception("Не тот заряд!");
-        
     }
 }

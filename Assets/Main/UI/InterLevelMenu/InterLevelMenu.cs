@@ -4,32 +4,36 @@ using UnityEngine;
 using IJunior;
 using IJunior.TypedScenes;
 using UnityEngine.SceneManagement;
+using Assets.Main.EventBus.Events;
 
 public class InterLevelMenu : MonoBehaviour
 {
-    [SerializeField] private MapManager _mapManager;
-
     public void OnButtonClickExit()
     {
         NewAction();
+
         IJunior.TypedScenes.MainMenu.Load();
     }
 
     public void OnButtonClickPlay()
     {
         NewAction();
-        _mapManager.NewLevel();
+
+        EventBus.Raise(new OnButtonClickPlay());
     }
 
     public void OnButtonClickReload()
     {
         NewAction();
-        _mapManager.ReloadLevel();
+
+        EventBus.Raise(new OnButtonClickReload());
     }
 
     public void NewAction()
     {
         Time.timeScale = 1;
         gameObject.SetActive(false);
+
+        EventBus.Raise(new OnOpenMenu(true));
     }
 }

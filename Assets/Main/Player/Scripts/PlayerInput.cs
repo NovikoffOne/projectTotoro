@@ -1,28 +1,36 @@
+using Assets.Main.EventBus.Events;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput
+public class PlayerInput : IEventReceiver<OnOpenMenu>
 {
     private Player _player;
 
     private LayerMask _ignorLayer = 3;
 
-    private bool _isAlreadyInside = true;
+    private bool _canInput = true;
 
     private float _rayDistance = 20;
 
     public PlayerInput(Player player)
     {
         _player = player;
+
+        EventBus.Subscribe((IEventReceiver<OnOpenMenu>) this);
     }
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _isAlreadyInside == true)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _canInput == true)
         {
             _player.Movement.Move(GetMouseColision());
         }
+    }
+
+    public void OnEvent(OnOpenMenu var)
+    {
+        _canInput = var.CanInput;
     }
 
     private Vector2 GetMouseColision()

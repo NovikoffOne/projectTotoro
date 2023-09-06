@@ -1,9 +1,11 @@
+using Assets.Main.DataSaver;
 using System.IO;
 using UnityEngine;
 
 public class LocalReposytory : IReposytory
 {
     public void Save<T>(T data, string fileName)
+        where T : IData
     {
         var dataJson = JsonUtility.ToJson(data);
 
@@ -13,6 +15,8 @@ public class LocalReposytory : IReposytory
     }
 
     public T Load<T>(string fileName)
+        where T : IData
+
     {
         var dataJson = File.ReadAllText(Application.persistentDataPath + $"/{fileName}.json");
 

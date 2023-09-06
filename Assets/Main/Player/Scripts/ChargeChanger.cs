@@ -31,7 +31,8 @@ public class ChargeChanger : MonoBehaviour
 
         _animator.SetTrigger("StayChanger");
 
-        Destroy(_charge.gameObject);
+        if(_charge != null)
+            Destroy(_charge.gameObject);
 
         _charge = charge;
         

@@ -1,9 +1,11 @@
+using Assets.Main.EventBus.Events;
 using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class Player : MonoBehaviour
 {
@@ -11,24 +13,36 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Charge _chargePrefab;
 
+    [SerializeField] private int _energyReserve = 20;
+
     public PlayerEnergyReserve EnergyTank { get; private set; }
     public ChargeChanger ChargeChanger { get; private set; }
     public PlayerMovement Movement { get; private set; }
     public PlayerInput Input { get; private set; }
 
-    public event Action OnGameOver;
-
     private void Awake()
     {
         Movement = new PlayerMovement(_playerView);
 
-        EnergyTank = new PlayerEnergyReserve(50);
+        EnergyTank = new PlayerEnergyReserve(_energyReserve);
 
         Input = new PlayerInput(this);
+
+        this.ChargeChanger = GetComponent<ChargeChanger>();
     }
 
-    private void Start()
+    public void Reset()
     {
+        gameObject.SetActive(false);
+
+        transform.position = new Vector3(0, 0, transform.position.z);
+
+        gameObject.SetActive(true);
+
+        this.ChargeChanger = GetComponent<ChargeChanger>();
+
+        EnergyTank.SetValueReserve(_energyReserve);
+
         this.ChargeChanger.InstantiateCharge();
 
         EnergyTank.OnTankValueChange += OnValueChanged;
@@ -39,11 +53,6 @@ public class Player : MonoBehaviour
         Input.Update();
     }
 
-    private void OnEnable()
-    {
-        this.ChargeChanger = GetComponent<ChargeChanger>();
-    }
-
     private void OnDisable()
     {
         EnergyTank.OnTankValueChange -= OnValueChanged;
@@ -51,7 +60,7 @@ public class Player : MonoBehaviour
 
     private void OnValueChanged(float newValue)
     {
-        if(EnergyTank.HaveGas == false)
-            OnGameOver?.Invoke();
+        if (!EnergyTank.HaveGas)
+            EventBus.Raise(new OnGameOver());
     }
 }

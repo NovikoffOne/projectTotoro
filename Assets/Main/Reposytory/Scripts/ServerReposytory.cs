@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace Assets.Main.DataSaver
 {
-    internal class ServerREposytory : IReposytory
+    public struct ServerReposytory : IReposytory
     {
         public void Save<T>(T data, string fileName)
+        where T : IData
         {
             var dataJson = JsonUtility.ToJson(data);
 
@@ -15,6 +16,7 @@ namespace Assets.Main.DataSaver
         }
 
         public T Load<T>(string fileName)
+        where T : IData
         {
             var dataJson = File.ReadAllText(Application.streamingAssetsPath + $"/{fileName}.json");
 

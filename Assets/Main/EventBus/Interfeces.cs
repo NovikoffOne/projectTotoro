@@ -1,8 +1,8 @@
-public interface IEvenet { };
+public interface IEvenet { }; //Маркер собитий
 
-public interface IBaceEventReceiver { };
+public interface IBaceEventReceiver { }; // Базовый интерфейс для слушателя
 
-public interface IEventReceiver<T> : IBaceEventReceiver 
+public interface IEventReceiver<T> : IBaceEventReceiver // Параметризированный интерфейс принимающий тип события
     where T:struct,IEvenet 
 {
     void OnEvent(T var);

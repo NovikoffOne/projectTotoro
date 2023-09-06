@@ -7,8 +7,6 @@ using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCou
 
 public partial class GridManager : MonoBehaviour
 {
-    [SerializeField] private MapManager _mapManager; //
-
     [SerializeField] private Tile _tilePrefab;
 
     [SerializeField] private Camera _camera;
@@ -20,7 +18,9 @@ public partial class GridManager : MonoBehaviour
     [SerializeField] private Transform _triggerZonePoolPosition;
 
     private GridData _gridData;
+    
     private PoolMono<Tile> _tilePool;
+    
     private List<PoolMono<TriggerZone>> _trigerZonePools = new List<PoolMono<TriggerZone>>();
 
     private PoolMono<TriggerZone> _triggerZoneBarrier;
@@ -30,8 +30,10 @@ public partial class GridManager : MonoBehaviour
     private PoolMono<TriggerZone> _triggerZoneLoading;
     private PoolMono<TriggerZone> _triggerZoneLevelTransition;
 
-    public LevelTransition GetLevelTransition => FindObjectOfType<LevelTransition>();
-    //public List<LandingPlace> GetLandingPlaces => GetComponentsInChildren<LandingPlace>().ToList();
+    public void Init(Camera camera)
+    {
+        _camera = camera;
+    }
 
     public void NewGrid(GridData gridData)
     {
@@ -62,8 +64,6 @@ public partial class GridManager : MonoBehaviour
             _tilePool = new PoolMono<Tile>(_tilePrefab);
 
         GenerateGrid();
-
-        _camera.transform.position = new Vector3(((float)_gridData.Width / 2 - 0.5f), _cameraPositionY, _cameraPositionZ);
     }
 
     public List<TriggerZone> GetLandingPlaces()
@@ -108,6 +108,8 @@ public partial class GridManager : MonoBehaviour
         InstantiateGrid();
 
         SetPositionsTriggerZones();
+
+        _camera.transform.position = new Vector3(((float)_gridData.Width / 2 - 0.5f), _cameraPositionY, _cameraPositionZ);
     }
 
     private void SetPositionsTriggerZones()
