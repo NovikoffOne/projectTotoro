@@ -9,11 +9,16 @@ public class InterLevelMenu : MonoBehaviour
         IJunior.TypedScenes.MainMenu.Load();
     }
 
-    public void OnButtonClickPlay()
+    public void OnButtonClickNextLevel()
     {
         NewAction();
 
         EventBus.Raise(new OnButtonClickPlay());
+    }
+
+    public void OnButtonClickPlay()
+    {
+        NewAction();
     }
 
     public void OnButtonClickReload()
@@ -21,6 +26,11 @@ public class InterLevelMenu : MonoBehaviour
         NewAction();
 
         EventBus.Raise(new OnButtonClickReload());
+    }
+
+    public void OnButtonClickPause()
+    {
+        EventBus.Raise(new OnButtonClickPause());
     }
 
     public void NewAction()

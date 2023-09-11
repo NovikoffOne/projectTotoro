@@ -34,9 +34,11 @@ public class PlayerInput : IEventReceiver<OnOpenMenu>
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, _rayDistance, _ignorLayer) && hit.transform.TryGetComponent<Tile>(out Tile tile))
+        if (Physics.Raycast(ray, out RaycastHit hit, _rayDistance, _ignorLayer) && hit.transform.TryGetComponent<Tile>(out Tile tile)
+          && _player.Movement.CurrentPosition != tile.Position)
         {
             _player.EnergyTank.SpendGas();
+            
             return tile.Position;
         }
         else

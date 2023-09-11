@@ -5,18 +5,13 @@ using static UnityEngine.Timeline.TimelineAsset;
 public class PlayerView : MonoBehaviour
 {
     [SerializeField] private GameObject prefab;
-    [SerializeField] private Vector3 _startPosition = new Vector3(0, 0, -.3f);
+    [SerializeField] private Transform _playerViewPosition;
     
-    [SerializeField] private float _durationMove = 1f;
-
-    //private Player _player;
-    //private Animator _animator;
+    [SerializeField] private float _durationMove;
 
     private void Start()
     {
-        Instantiate(prefab, _startPosition, Quaternion.identity, transform);
-     //   _animator = GetComponent<Animator>();
-     //   _player = GetComponent<Player>();
+        Instantiate(prefab, _playerViewPosition.position, Quaternion.identity, transform);
     }
 
     public void ChangePosition(Vector3 newPosition)

@@ -1,27 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class UIWigetLifeBar : MonoBehaviour
+public class UIWigetLifeBar : MonoBehaviour, IEventReceiver<OnTankValueChange>
 {
     [SerializeField] private EnergyBar _energyBar;
-    [SerializeField] private Player _player;
-
-    private EnergyReserve _tank;
     
     private void Start()
     {
-        _tank = _player.EnergyTank;
-        _tank.OnTankValueChange += OnTankValueChanged;
+        EventBus.Subscribe(this);
     }
 
     private void OnDisable()
     {
-        _tank.OnTankValueChange -= OnTankValueChanged;
+        EventBus.Unsubscribe(this);
     }
-
-    private void OnTankValueChanged(float newValueNormalized)
+    
+    public void OnEvent(OnTankValueChange var)
     {
-        _energyBar.SetValue(newValueNormalized);
+        _energyBar.SetValue(var.NewValue);
     }
 }

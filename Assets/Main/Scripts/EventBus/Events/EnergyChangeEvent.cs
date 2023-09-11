@@ -1,9 +1,9 @@
 public readonly struct EnergyChangeEvent : IEvenet
 {
-    public readonly bool IsPassengerChange;
+    public readonly bool IsChargeChange;
 
-    public EnergyChangeEvent(bool isPassengerChange)
+    public EnergyChangeEvent(bool isChargeChange)
     {
-        IsPassengerChange = isPassengerChange;
+        IsChargeChange = isChargeChange;
     }
 }

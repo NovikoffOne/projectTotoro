@@ -5,18 +5,15 @@ using UnityEngine;
 public class ChargeChanger : MonoBehaviour
 {
     [SerializeField] private Charge _chargePrefab;
+    [SerializeField] private Transform _chargePosition;
 
     private Charge _charge;
 
-    private Animator _animator;
-
-    public Transform TargetPosition { get; private set; }
+    public Transform TargetPosition { get => _chargePosition; }
 
     public Charge InstantiateCharge()
     {
-        TargetPosition = GetComponentInChildren<PlayerView>().transform;
-
-        _charge = Instantiate(_chargePrefab, TargetPosition.position, Quaternion.identity, TargetPosition);
+        _charge = Instantiate(_chargePrefab, TargetPosition.position, Quaternion.Euler(-90, 0, 0), TargetPosition);
         
         _charge.transform.position = TargetPosition.position;
 
@@ -27,10 +24,6 @@ public class ChargeChanger : MonoBehaviour
 
     public void SetCharge(Charge charge)
     {
-        _animator = GetComponentInChildren<Animator>();
-
-        _animator.SetTrigger("StayChanger");
-
         if(_charge != null)
             Destroy(_charge.gameObject);
 

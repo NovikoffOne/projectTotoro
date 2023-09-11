@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class LoadingPlace : MonoBehaviour, ITriggerZone
 {
-    [SerializeField] private int SiteLandingIndex;
-
+    [SerializeField] private ChargeColor _chargeColler;
     [SerializeField] private Transform _chargePosition;
+    
+    [SerializeField] private int SiteLandingIndex;
 
     private Charge _charge;
 
-    private ChargeColor _chargeColler;
-
     private void OnEnable()
     {
-        _chargeColler = GetComponent<ChargeColor>();
         _charge = Instantiate(_chargeColler.GetMaterial(SiteLandingIndex), _chargePosition.position, Quaternion.identity, transform);
+        
         _charge.Init(SiteLandingIndex);
     }
 

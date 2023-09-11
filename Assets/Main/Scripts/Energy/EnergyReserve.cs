@@ -14,33 +14,28 @@ public abstract class EnergyReserve
     public bool HaveGas => CurrentValue >= 0;
     public float ValueNormalized => (float) CurrentValue / _startValue;
 
-    public event Action<float> OnTankValueChange;
-
     public EnergyReserve(int startValue)
     {
         CurrentValue = _startValue = startValue;
 
-        OnTankValueChange?.Invoke(ValueNormalized);
+        EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 
     public virtual void SpendGas(int mileage = _baseMileage)
     {
         CurrentValue -= mileage;
-
-        OnTankValueChange?.Invoke(ValueNormalized);
+        EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 
     public virtual void AddGas(int count)
     {
         CurrentValue += count;
-
-        OnTankValueChange?.Invoke(ValueNormalized);
+        EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 
     public virtual void SetValueReserve(int value)
     {
         CurrentValue = value;
-
-        OnTankValueChange?.Invoke(ValueNormalized);
+        EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 }

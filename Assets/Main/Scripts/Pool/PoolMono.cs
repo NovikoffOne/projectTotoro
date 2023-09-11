@@ -5,15 +5,17 @@ public class PoolMono<T>
     where T : MonoBehaviour
 {
     private readonly T Prefab;
+    
     private readonly Transform PoolContainer;
+    
+    public readonly List<T> Pool;
 
     private List<T> _pool;
-
-    public readonly List<T> Pool;
 
     public PoolMono(T prefab)
     {
         Prefab = prefab;
+
         _pool = new List<T>();
 
         PoolContainer = new GameObject().transform;

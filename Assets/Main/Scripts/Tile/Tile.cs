@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] private MeshRenderer _meshRenderer;
-
     [SerializeField] private GameObject _baseTile;
     [SerializeField] private GameObject _offsetTile;
     [SerializeField] private GameObject _highlightingTile;

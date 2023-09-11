@@ -8,6 +8,7 @@ using static UnityEngine.Timeline.TimelineAsset;
 public class PlayerMovement
 {
     private readonly PlayerView PlayerView;
+
     private readonly float Speed;
 
     public Vector3 CurrentPosition { get; private set; }
@@ -26,6 +27,13 @@ public class PlayerMovement
         LastPosition = CurrentPosition;
 
         CurrentPosition = newPosition;
+
+        PlayerView.ChangePosition(CurrentPosition);
+    }
+
+    public void ResetPosition()
+    {
+        CurrentPosition = new Vector3(0, 0, 0);
 
         PlayerView.ChangePosition(CurrentPosition);
     }

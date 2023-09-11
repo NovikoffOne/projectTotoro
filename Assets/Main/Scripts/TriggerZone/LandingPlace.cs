@@ -5,7 +5,10 @@ using UnityEngine;
 public class LandingPlace : MonoBehaviour, ITriggerZone
 {
     [SerializeField] private Charge _chargeRed;
+    [SerializeField] private GameObject _basePlatform;
+    [SerializeField] private GameObject _completPlatform;
     [SerializeField] private Transform _chargePostion;
+    
     [SerializeField] private int _index;
 
     private Charge _charge;
@@ -13,6 +16,7 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
     private void OnEnable()
     {
         _charge = Instantiate(_chargeRed, _chargePostion);
+        _basePlatform.SetActive(true);
     }
 
     private void OnDisable()
@@ -34,6 +38,9 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
             EventBus.Raise(new EnergyChangeEvent(true));
 
             _charge.Move(_chargePostion);
+
+            _basePlatform.SetActive(false);
+            _completPlatform.SetActive(true);
         }
         else
             throw new Exception("Не тот заряд!");
