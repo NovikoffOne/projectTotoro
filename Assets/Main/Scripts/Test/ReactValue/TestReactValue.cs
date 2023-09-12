@@ -5,17 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class TestReactValue<T> : MonoBehaviour
+public class TestReactValue : MonoBehaviour
 {
     public IReactValue<int> _reactValueInt;
     public IReactValue<string> _reactValueString;
 
     private void Awake()
     {
-        //_reactValueInt = new ReactValue<int>(default);
+        _reactValueInt = new ReactValue<int>(default);
         _reactValueInt.OnValueChanged += ReactInt;
 
-        //_reactValueString = new ReactValue<string>(default);
+        _reactValueString = new ReactValue<string>(default);
         _reactValueString.OnValueChanged += ReactString;
     }
 
@@ -23,11 +23,17 @@ public class TestReactValue<T> : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            _reactValueInt.Value += 10;
+            var reactValueStr = ReactValueHolder<string>.GetReactValue("str");
+            var reactValueInt = ReactValueHolder<int>.GetReactValue("int");
+
+            reactValueInt.SetValue(reactValueInt.Value += 10);
+
+            reactValueStr.SetValue($"{reactValueInt.Value}");
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
+            _reactValueInt.Value += 10;
             _reactValueString.Value = $"string {_reactValueInt.Value}";
         }
     }

@@ -5,24 +5,39 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class TestReactValue2<T, T2> : MonoBehaviour, IObserverReactValue<T>, IObserveableReactValue<T>
+public class TestReactValue2 : MonoBehaviour
 {
-    public ReactValueHolder<T, T2> ReactValueHolder;
+    IReactValue<int> _reactValueInt;
+    IReactValue<string> _reactValueStr;
 
     private void Awake()
     {
-        ReactValueHolder.Add(this, new TesterReactValue<T2>(default));
+        ReactValueHolder<int>.Add("int", new ReactValue<int>(default));
 
-        //ReactValueHolder.GetReactValue(this, new TesterReactValue<T2>(default));
+        _reactValueInt = ReactValueHolder<int>.GetReactValue("int");
+
+        _reactValueInt.OnValueChanged += ReactInt;
+
+        ReactValueHolder<string>.Add("str", new ReactValue<string>(default));
+
+        _reactValueStr = ReactValueHolder<string>.GetReactValue("str");
+
+        _reactValueStr.OnValueChanged += ReactStr;
+    }
+
+    private void OnDestroy()
+    {
+        _reactValueInt.Dispose();
+        _reactValueStr.Dispose();
+    }
+
+    private void ReactStr(string var)
+    {
+        Debug.Log($"TEST2 STR - {var}");
     }
 
     private void ReactInt(int var)
     {
-        Debug.Log($"INT - {var}");
-    }
-
-    private void ReactString(string var)
-    {
-        Debug.Log($"STR - {var}");
+        Debug.Log($"TEST2 INT - {var}");
     }
 }

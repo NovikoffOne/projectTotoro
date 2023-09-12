@@ -1,43 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using Unity.VisualScripting;
 
-public class ReactValueHolder<T, T2>
+public class ReactValueHolder<T>
 {
-    //private Dictionary<IReactValue<T>, List<IObserverReactValue<T>>> _recever = new Dictionary<IReactValue<T>, List<IObserverReactValue<T>>>();
-    private Dictionary<Type, List<IReactValue<T2>>> _recevers = new Dictionary<Type, List<IReactValue<T2>>>();
+    private static Dictionary<int, IReactValue<T>> _recevers = new Dictionary<int, IReactValue<T>>();
 
-    public void Add(IObserveableReactValue<T> keyType, IReactValue<T2> reactValue)
+    public static void Add(string keyStr, IReactValue<T> reactValue)
     {
-        Type key = typeof(T);
+        var key = keyStr.GetHashCode();
 
         if (!_recevers.ContainsKey(key))
-            _recevers[key] = new List<IReactValue<T2>>();
-
-        _recevers[key].Add(reactValue);
+            _recevers[key] = reactValue;
     }
 
-    public void Remove(IObserveableReactValue<T> keyType, IReactValue<T2> recever)
+    public static void Remove(string keyStr)
     {
-        Type key = typeof(T);
+        var key = keyStr.GetHashCode();
 
         if (_recevers.ContainsKey(key))
         {
+            _recevers[key].Dispose();
             _recevers.Remove(key);
         }
     }
 
-    //public T GetReactValue(IObserveableReactValue<T> keyType, IReactValue<T2> valueType)
-    //{
-        
-    //}
+    public static IReactValue<T> GetReactValue(string keyStr)
+    {
+        var key = keyStr.GetHashCode();
 
-    //public void Add(IReactValue<T> key, IObserverReactValue<T> recever)
-    //{
-    //    if (!_recever.ContainsKey(key))
-    //        _recever[key] = new List<IObserverReactValue<T>>((IEnumerable<IObserverReactValue<T>>)recever);
-    //    else
-    //        _recever[key].Add(recever);
-    //}
+        if (_recevers.ContainsKey(key))
+            return _recevers[key];
 
-
+        return new ReactValue<T>(default);
+    }
 }
