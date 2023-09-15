@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 public class EventBusHolder
 {
-    private Dictionary<Type, List<WeakReference<IBaceEventReceiver>>> _receivers; // Тип событий / список подписчиков
+    private Dictionary<Type, LinkedList<WeakReference<IBaceEventReceiver>>> _receivers; // Тип событий / список подписчиков
     private Dictionary<int, WeakReference<IBaceEventReceiver>> _receiverHashToReference; // hash события и подписчик
 
     public EventBusHolder()
     {
-        _receivers = new Dictionary<Type, List<WeakReference<IBaceEventReceiver>>>();
+        _receivers = new Dictionary<Type, LinkedList<WeakReference<IBaceEventReceiver>>>();
         _receiverHashToReference = new Dictionary<int, WeakReference<IBaceEventReceiver>>();
     }
 
@@ -17,11 +17,11 @@ public class EventBusHolder
         Type eventType = typeof(T);
 
         if (!_receivers.ContainsKey(eventType))
-            _receivers[eventType] = new List<WeakReference<IBaceEventReceiver>>();
+            _receivers[eventType] = new LinkedList<WeakReference<IBaceEventReceiver>>();
 
         WeakReference<IBaceEventReceiver> reference = new WeakReference<IBaceEventReceiver>(receiver);
 
-        _receivers[eventType].Add(reference);
+        _receivers[eventType].AddLast(reference);
 
         _receiverHashToReference[receiver.GetHashCode()] = reference;
     }
@@ -48,10 +48,20 @@ public class EventBusHolder
         if (!_receivers.ContainsKey(eventType))
             return;
 
-        foreach (WeakReference<IBaceEventReceiver> reference in _receivers[eventType])
+        var node = _receivers[eventType].First;
+
+        while (node != null)
         {
-            if (reference.TryGetTarget(out IBaceEventReceiver receiver))
+            if (node.Value.TryGetTarget(out IBaceEventReceiver receiver))
                 ((IEventReceiver<T>)receiver).OnEvent(var);
+
+            node = node.Next;
         }
+
+        //foreach (WeakReference<IBaceEventReceiver> reference in _receivers[eventType])
+        //{
+        //    if (reference.TryGetTarget(out IBaceEventReceiver receiver))
+        //        ((IEventReceiver<T>)receiver).OnEvent(var);
+        //}
     }
 }

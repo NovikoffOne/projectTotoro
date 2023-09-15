@@ -21,21 +21,21 @@ public class TestReactValue : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            var reactValueStr = ReactValueHolder<string>.GetReactValue("str");
-            var reactValueInt = ReactValueHolder<int>.GetReactValue("int");
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    //var reactValueStr = ReactValueHandler<string>.GetReactValue("str");
+        //    //var reactValueInt = ReactValueHandler<int>.GetReactValue("int");
 
-            reactValueInt.SetValue(reactValueInt.Value += 10);
+        //    reactValueInt.Value += 10;
 
-            reactValueStr.SetValue($"{reactValueInt.Value}");
-        }
+        //    reactValueStr.Value = $"{reactValueInt.Value}";
+        //}
 
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            _reactValueInt.Value += 10;
-            _reactValueString.Value = $"string {_reactValueInt.Value}";
-        }
+        //if (Input.GetKeyDown(KeyCode.D))
+        //{
+        //    _reactValueInt.Value += 10;
+        //    _reactValueString.Value = $"string {_reactValueInt.Value}";
+        //}
     }
 
     private void OnDestroy()

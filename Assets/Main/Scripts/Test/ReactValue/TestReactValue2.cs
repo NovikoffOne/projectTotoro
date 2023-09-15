@@ -7,37 +7,37 @@ using UnityEngine;
 
 public class TestReactValue2 : MonoBehaviour
 {
-    IReactValue<int> _reactValueInt;
-    IReactValue<string> _reactValueStr;
+    //IReactValue<int> _reactValueInt;
+    //IReactValue<string> _reactValueStr;
 
-    private void Awake()
-    {
-        ReactValueHolder<int>.Add("int", new ReactValue<int>(default));
+    //private void Awake()
+    //{
+    //    ReactValueHandler.Create(1, "int");
 
-        _reactValueInt = ReactValueHolder<int>.GetReactValue("int");
+    //    _reactValueInt = ReactValueHandler.GetReactValue<int>("int");
 
-        _reactValueInt.OnValueChanged += ReactInt;
+    //    _reactValueInt.OnValueChanged += ReactInt;
 
-        ReactValueHolder<string>.Add("str", new ReactValue<string>(default));
+    //    ReactValueHandler.Create("str", "str");
 
-        _reactValueStr = ReactValueHolder<string>.GetReactValue("str");
+    //    //_reactValueStr = ReactValueHandler<string>.GetReactValue("str");
 
-        _reactValueStr.OnValueChanged += ReactStr;
-    }
+    //    _reactValueStr.OnValueChanged += ReactStr;
+    //}
 
-    private void OnDestroy()
-    {
-        _reactValueInt.Dispose();
-        _reactValueStr.Dispose();
-    }
+    //private void OnDestroy()
+    //{
+    //    _reactValueInt.Dispose();
+    //    _reactValueStr.Dispose();
+    //}
 
-    private void ReactStr(string var)
-    {
-        Debug.Log($"TEST2 STR - {var}");
-    }
+    //private void ReactStr(string var)
+    //{
+    //    Debug.Log($"TEST2 STR - {var}");
+    //}
 
-    private void ReactInt(int var)
-    {
-        Debug.Log($"TEST2 INT - {var}");
-    }
+    //private void ReactInt(int var)
+    //{
+    //    Debug.Log($"TEST2 INT - {var}");
+    //}
 }

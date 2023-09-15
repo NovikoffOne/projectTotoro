@@ -24,18 +24,21 @@ public abstract class EnergyReserve
     public virtual void SpendGas(int mileage = _baseMileage)
     {
         CurrentValue -= mileage;
+
         EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 
     public virtual void AddGas(int count)
     {
         CurrentValue += count;
+
         EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 
     public virtual void SetValueReserve(int value)
     {
         CurrentValue = value;
+
         EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 }

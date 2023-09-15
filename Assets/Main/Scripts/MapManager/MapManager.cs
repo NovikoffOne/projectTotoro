@@ -61,16 +61,12 @@ public class MapManager : MonoBehaviour,
 
         GridIndex += index;
 
-        UnsubscribeAll();
-
         if (_gridData.Count > GridIndex)
             _grid.NewGrid(_gridData[GridIndex]);
         else
             IJunior.TypedScenes.MainMenu.Load(); // Заглушка
         
         _player.Reset();
-
-        SubscribeAll();
     }
 
     public void OnEvent(EnergyChangeEvent var)

@@ -28,6 +28,11 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
         Input = new PlayerInput(this);
     }
 
+    private void Start()
+    {
+        EventBus.Subscribe(this);
+    }
+
 
     private void Update()
     {
@@ -44,15 +49,11 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
         _chargeChanger.InstantiateCharge();
 
         EnergyTank.SetValueReserve(_energyReserve);
-
-        EventBus.Subscribe(this);
     }
 
 
     public void Reset()
     {
-        EventBus.Unsubscribe(this);
-
         _boxCollider = GetComponent<BoxCollider>();
 
         _boxCollider.enabled = false;
