@@ -16,6 +16,8 @@ public class GridData : ScriptableObject
     [SerializeField] private List<Vector3> _loadingPlacePosition;
     [SerializeField] private List<Vector3> _levelTransitionPosition;
 
+    //[SerializeField] private Canvas _canvas;
+
     [SerializeField] private int _width;
     [SerializeField] private int _height;
 
@@ -25,6 +27,7 @@ public class GridData : ScriptableObject
     public IReadOnlyList<Vector3> LandingPlacePosition => _landingPlacePosition;
     public IReadOnlyList<Vector3> LoadingPlacePosition => _loadingPlacePosition;
     public IReadOnlyList<Vector3> LevelTransitionPosition => _levelTransitionPosition;
+    //public Canvas Canvas => _canvas;
 
     public int Width => _width;
     public int Height => _height;

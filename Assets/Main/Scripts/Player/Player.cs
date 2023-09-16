@@ -17,8 +17,6 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
     public PlayerMovement Movement { get; private set; }
     public PlayerInput Input { get; private set; }
 
-    private BoxCollider _boxCollider;
-
     private void Awake()
     {
         Movement = new PlayerMovement(_playerView);
@@ -33,51 +31,37 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
         EventBus.Subscribe(this);
     }
 
-
     private void Update()
     {
         Input.Update();
     }
 
-    private void OnDisable()
-    {
-        EventBus.Unsubscribe(this);
-    }
-
-    public void Init()
+    private void OnEnable()
     {
         _chargeChanger.InstantiateCharge();
 
         EnergyTank.SetValueReserve(_energyReserve);
-    }
 
-
-    public void Reset()
-    {
-        _boxCollider = GetComponent<BoxCollider>();
-
-        _boxCollider.enabled = false;
-
-        Init();
+        transform.position = new Vector3(0, 0, 0);
 
         Movement.ResetPosition();
+    }
 
-        StartCoroutine(MoveingStart());
+    private void OnDisable()
+    {
+        transform.position = new Vector3(0, 0, 0);
+
+        Movement.ResetPosition();
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe(this);
     }
 
     public void OnEvent(OnTankValueChange var)
     {
         if (!EnergyTank.HaveGas)
             EventBus.Raise(new OnGameOver());
-    }
-
-    private IEnumerator MoveingStart() // πετ
-    {
-        while (_playerView.transform.position.x != 0 && _playerView.transform.position.y != 0)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        _boxCollider.enabled = true;
     }
 }

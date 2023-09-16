@@ -20,9 +20,7 @@ public class PlayerInput : IEventReceiver<OnOpenMenu>
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) && _canInput == true)
-        {
             _player.Movement.Move(GetMouseColision());
-        }
     }
 
     public void OnEvent(OnOpenMenu var)
@@ -42,8 +40,6 @@ public class PlayerInput : IEventReceiver<OnOpenMenu>
             return tile.Position;
         }
         else
-        {
             return _player.Movement.CurrentPosition;
-        }
     }
 }

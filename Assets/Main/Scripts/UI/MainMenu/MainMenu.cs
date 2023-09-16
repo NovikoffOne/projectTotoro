@@ -8,14 +8,17 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private MapManager _mapManagerPrefab;
 
-    //private void Start()
-    //{
-    //    if (MapManager.Instance == null)
-    //        Instantiate(_mapManagerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-    //}
+    private void Start()
+    {
+        if (MapManager.Instance != null)
+            MapManager.Instance.gameObject.SetActive(false);
+    }
 
     public void PlayLevel1()
     {
+        if (MapManager.Instance != null)
+            MapManager.Instance.gameObject.SetActive(true);
+
         SampleScene8x5.Load();
     }
 

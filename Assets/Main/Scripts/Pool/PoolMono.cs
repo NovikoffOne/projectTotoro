@@ -38,14 +38,17 @@ public class PoolMono<T>
     public T Spawn()
     {
         if (HasFreeElement(out var element))
+        {
+            OnSpawn(element);
             return element;
+        }
         else
             return CreateItem(true);
     }
 
     public void DeSpawn(T spawnedObject)
     {
-        spawnedObject.gameObject.SetActive(false);
+        OnDespawn(spawnedObject);
 
         _pool.Add(spawnedObject);
     }

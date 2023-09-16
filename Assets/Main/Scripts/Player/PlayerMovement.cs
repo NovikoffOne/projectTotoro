@@ -35,7 +35,9 @@ public class PlayerMovement
     {
         CurrentPosition = new Vector3(0, 0, 0);
 
-        PlayerView.ChangePosition(CurrentPosition);
+        LastPosition = new Vector3(0, 0, 0);
+
+        PlayerView.ResetPosition();
     }
 
     private Vector2 ClampingMoveDirection(Vector2 newPosition)

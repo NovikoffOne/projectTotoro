@@ -34,5 +34,10 @@ MonoBehaviour:
   - {x: 6, y: 3, z: 0}
   _levelTransitionPosition:
   - {x: 7, y: 4, z: 0}
+  _interLevelMenuPrefab: {fileID: 6440269265780200848, guid: ed7943ab23d41a245b443bdf5d5da9a8, type: 3}
+  _pauseMenuPanelPrefab: {fileID: 3686498236005992486, guid: 47cbd314ce622854da135c5ce7e283a0, type: 3}
+  _gameOverPanelPrefab: {fileID: 7072174203056754347, guid: ee640427427aea64e86115c7d5c9f326, type: 3}
+  _pauseButtonPrefab: {fileID: 3314048387108355278, guid: c0b4c66c49dfbc04e9d1308d32ec9f9a, type: 3}
+  _canvas: {fileID: 7263441561029399350, guid: 4abeb18756dda1e4f98b3bf407936c11, type: 3}
   _width: 8
   _height: 5

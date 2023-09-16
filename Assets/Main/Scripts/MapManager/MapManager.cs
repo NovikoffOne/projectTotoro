@@ -1,8 +1,9 @@
 using LayerLab;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour,
+public class MapManager : MonoBehaviour, IDisposable,
     IEventReceiver<EnergyChangeEvent>,
     IEventReceiver<OnGameOver>,
     IEventReceiver<OnPlayerInsided>,
@@ -15,9 +16,11 @@ public class MapManager : MonoBehaviour,
     [SerializeField] private List<GridData> _gridData;
     [SerializeField] private GridGenerator _gridPrefab;
 
+    //[SerializeField] private Canvas _canvas;
     [SerializeField] private GameObject _interLevelMenu;
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _pauseMenuPanel;
+    [SerializeField] private GameObject _pauseButton;
 
     [SerializeField] private Player _player;
 
@@ -26,28 +29,27 @@ public class MapManager : MonoBehaviour,
 
     [SerializeField] private int GridIndex = 0;
 
+    private PoolMono<Player> _playerPool;
+
     private GridGenerator _grid;
 
     private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
 
     private void Start()
     {
-        if (Instance == null)
+        _playerPool = new PoolPlayer<Player>(_player);
+
+        if(MapManager.Instance != null)
+        {
+            Dispose();
+            Destroy(this.gameObject);
+        }
+        else
             Instance = this;
 
         DontDestroyOnLoad(this);
 
-        _grid = Instantiate(_gridPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-
-        _grid.Init(FindObjectOfType<Camera>());
-
-        _grid.NewGrid(_gridData[GridIndex]);
-
-        _player = Instantiate(_player, new Vector3(0, 0, -.3f), Quaternion.identity);
-
-        _player.Init();
-
-        SubscribeAll();
+        Init();
     }
 
     private void OnDisable()
@@ -57,6 +59,8 @@ public class MapManager : MonoBehaviour,
 
     public void NewLevel(int index)
     {
+        _player = _playerPool.Spawn();
+
         _numberPassengersCarried = 0;
 
         GridIndex += index;
@@ -65,8 +69,6 @@ public class MapManager : MonoBehaviour,
             _grid.NewGrid(_gridData[GridIndex]);
         else
             IJunior.TypedScenes.MainMenu.Load(); // Заглушка
-        
-        _player.Reset();
     }
 
     public void OnEvent(EnergyChangeEvent var)
@@ -80,27 +82,57 @@ public class MapManager : MonoBehaviour,
 
     public void OnEvent(OnGameOver var)
     {
+        _playerPool.DeSpawn(_player);
+
         OpenMenu(_gameOverPanel);
     }
 
     public void OnEvent(OnPlayerInsided var)
     {
+        _playerPool.DeSpawn(_player);
+
         PlayerInsaeded();
     }
 
     public void OnEvent(OnButtonClickPlay var)
     {
+        _playerPool.DeSpawn(_player);
+
         NewLevel(1);
     }
 
     public void OnEvent(OnButtonClickReload var)
     {
+        _playerPool.DeSpawn(_player);
+
         NewLevel(0);
     }
 
     public void OnEvent(OnButtonClickPause var)
     {
         OpenMenu(_pauseMenuPanel);
+    }
+
+    private void Init()
+    {
+        //if(_canvas == null)
+        //{
+        //    _canvas = Instantiate(_gridData[GridIndex].Canvas);
+        //}
+
+        _player = _playerPool.Spawn();
+
+        _grid = Instantiate(_gridPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+
+        _grid.Init(FindObjectOfType<Camera>());
+
+        _grid.NewGrid(_gridData[GridIndex]);
+
+        //_player = Instantiate(_player, new Vector3(0, 0, -.3f), Quaternion.identity);
+
+        _player.Init();
+
+        SubscribeAll();
     }
 
     private void SubscribeAll()
@@ -127,6 +159,8 @@ public class MapManager : MonoBehaviour,
     {
         if (_canTransition)
         {
+            //_player.gameObject.SetActive(false);
+
             OpenMenu(_interLevelMenu);
             EventBus.Raise(new OnOpenMenu(false));
         }
@@ -138,7 +172,14 @@ public class MapManager : MonoBehaviour,
     {
         EventBus.Raise(new OnOpenMenu(false));
 
+        _pauseButton.SetActive(false);
+
         Time.timeScale = 0;
         panel.SetActive(true);
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
     }
 }

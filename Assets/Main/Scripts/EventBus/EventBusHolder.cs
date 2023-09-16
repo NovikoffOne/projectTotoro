@@ -57,11 +57,5 @@ public class EventBusHolder
 
             node = node.Next;
         }
-
-        //foreach (WeakReference<IBaceEventReceiver> reference in _receivers[eventType])
-        //{
-        //    if (reference.TryGetTarget(out IBaceEventReceiver receiver))
-        //        ((IEventReceiver<T>)receiver).OnEvent(var);
-        //}
     }
 }

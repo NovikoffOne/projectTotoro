@@ -40,4 +40,9 @@ public class PlayerView : MonoBehaviour
     {
         transform.DOMove(newPosition, _durationMove).SetEase(Ease.Linear, 0);
     }
+
+    public void ResetPosition()
+    {
+        transform.position = new Vector3(0, 0, transform.position.z);
+    }
 }

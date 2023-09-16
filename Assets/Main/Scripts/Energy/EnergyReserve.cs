@@ -18,7 +18,7 @@ public abstract class EnergyReserve
     {
         CurrentValue = _startValue = startValue;
 
-        EventBus.Raise(new OnTankValueChange(ValueNormalized));
+        //EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 
     public virtual void SpendGas(int mileage = _baseMileage)
