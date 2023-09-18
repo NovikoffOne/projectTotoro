@@ -1,6 +1,7 @@
 using LayerLab;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour, IDisposable,
@@ -16,7 +17,6 @@ public class MapManager : MonoBehaviour, IDisposable,
     [SerializeField] private List<GridData> _gridData;
     [SerializeField] private GridGenerator _gridPrefab;
 
-    //[SerializeField] private Canvas _canvas;
     [SerializeField] private GameObject _interLevelMenu;
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _pauseMenuPanel;
@@ -35,21 +35,31 @@ public class MapManager : MonoBehaviour, IDisposable,
 
     private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
 
-    private void Start()
+    private void Awake()
     {
-        _playerPool = new PoolPlayer<Player>(_player);
-
-        if(MapManager.Instance != null)
+        if (MapManager.Instance != null)
         {
             Dispose();
             Destroy(this.gameObject);
+            return;
         }
         else
             Instance = this;
 
         DontDestroyOnLoad(this);
 
-        Init();
+        if(_playerPool == null)
+            _playerPool = new PoolPlayer<Player>(_player);
+
+        if(_grid == null)
+            Init();
+    }
+
+    private void Start()
+    {
+        
+
+        SubscribeAll();
     }
 
     private void OnDisable()
@@ -67,8 +77,16 @@ public class MapManager : MonoBehaviour, IDisposable,
 
         if (_gridData.Count > GridIndex)
             _grid.NewGrid(_gridData[GridIndex]);
-        else
+        else 
+        {
+            DespawnPlayer();
             IJunior.TypedScenes.MainMenu.Load(); // Заглушка
+        }
+    }
+
+    public void DespawnPlayer()
+    {
+        _playerPool?.DeSpawn(_player);
     }
 
     public void OnEvent(EnergyChangeEvent var)
@@ -82,28 +100,26 @@ public class MapManager : MonoBehaviour, IDisposable,
 
     public void OnEvent(OnGameOver var)
     {
-        _playerPool.DeSpawn(_player);
+        DespawnPlayer();
 
         OpenMenu(_gameOverPanel);
     }
 
     public void OnEvent(OnPlayerInsided var)
     {
-        _playerPool.DeSpawn(_player);
-
         PlayerInsaeded();
     }
 
     public void OnEvent(OnButtonClickPlay var)
     {
-        _playerPool.DeSpawn(_player);
+        DespawnPlayer();
 
         NewLevel(1);
     }
 
     public void OnEvent(OnButtonClickReload var)
     {
-        _playerPool.DeSpawn(_player);
+        DespawnPlayer();
 
         NewLevel(0);
     }
@@ -126,13 +142,6 @@ public class MapManager : MonoBehaviour, IDisposable,
 
         _grid.Init(FindObjectOfType<Camera>());
 
-        _grid.NewGrid(_gridData[GridIndex]);
-
-        //_player = Instantiate(_player, new Vector3(0, 0, -.3f), Quaternion.identity);
-
-        _player.Init();
-
-        SubscribeAll();
     }
 
     private void SubscribeAll()
@@ -159,8 +168,7 @@ public class MapManager : MonoBehaviour, IDisposable,
     {
         if (_canTransition)
         {
-            //_player.gameObject.SetActive(false);
-
+            DespawnPlayer();
             OpenMenu(_interLevelMenu);
             EventBus.Raise(new OnOpenMenu(false));
         }

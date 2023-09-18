@@ -45,6 +45,8 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
         transform.position = new Vector3(0, 0, 0);
 
         Movement.ResetPosition();
+
+        Movement.Move(new Vector3(0, 0, 0));
     }
 
     private void OnDisable()

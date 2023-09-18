@@ -4,6 +4,8 @@ public class InterLevelMenu : MonoBehaviour
 {
     public void OnButtonClickExit()
     {
+        MapManager.Instance.DespawnPlayer();
+
         NewAction();
 
         IJunior.TypedScenes.MainMenu.Load();
@@ -12,7 +14,7 @@ public class InterLevelMenu : MonoBehaviour
     public void OnButtonClickNextLevel()
     {
         NewAction();
-
+         
         EventBus.Raise(new OnButtonClickPlay());
     }
 
