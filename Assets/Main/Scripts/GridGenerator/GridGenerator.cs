@@ -30,9 +30,18 @@ public partial class GridGenerator : MonoBehaviour
     private PoolMono<TriggerZone> _triggerZoneLoading;
     private PoolMono<TriggerZone> _triggerZoneLevelTransition;
 
+    private void OnDisable()
+    {
+        _tilePool.DeSpawnAll();
+
+        _trigerZonePools.ForEach(temp => temp.DeSpawnAll());
+    }
+
     public void Init(Camera camera)
     {
         _camera = camera;
+        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(_camera);
     }
 
     public void NewGrid(GridData gridData)

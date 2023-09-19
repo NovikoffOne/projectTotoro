@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using IJunior.TypedScenes;
+using System.Dynamic;
 
 public class MapManager : MonoBehaviour, IDisposable,
     IEventReceiver<EnergyChangeEvent>,
@@ -16,7 +19,9 @@ public class MapManager : MonoBehaviour, IDisposable,
 
     [SerializeField] private List<GridData> _gridData;
     [SerializeField] private GridGenerator _gridPrefab;
+    [SerializeField] private Camera _camera;
 
+    [SerializeField] private GameObject _canvas;
     [SerializeField] private GameObject _interLevelMenu;
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _pauseMenuPanel;
@@ -39,30 +44,35 @@ public class MapManager : MonoBehaviour, IDisposable,
     {
         if (MapManager.Instance != null)
         {
-            Dispose();
             Destroy(this.gameObject);
+            Dispose();
             return;
         }
         else
             Instance = this;
 
-        DontDestroyOnLoad(this);
-
-        if(_playerPool == null)
-            _playerPool = new PoolPlayer<Player>(_player);
-
-        if(_grid == null)
-            Init();
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
     {
-        
-
         SubscribeAll();
     }
 
+    private void OnEnable()
+    {
+        Init();
+        _grid.gameObject.SetActive(true);
+    }
+
     private void OnDisable()
+    {
+        GridIndex = 0;
+        _playerPool?.DeSpawnAll();
+        _grid?.gameObject.SetActive(false);
+    }
+
+    private void OnDestroy()
     {
         UnsubscribeAll();
     }
@@ -131,37 +141,37 @@ public class MapManager : MonoBehaviour, IDisposable,
 
     private void Init()
     {
-        //if(_canvas == null)
-        //{
-        //    _canvas = Instantiate(_gridData[GridIndex].Canvas);
-        //}
+        if (_playerPool == null)
+            _playerPool = new PoolPlayer<Player>(_player);
 
-        _player = _playerPool.Spawn();
-
-        _grid = Instantiate(_gridPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-
-        _grid.Init(FindObjectOfType<Camera>());
-
+        if (_grid == null)
+        {
+            _grid = Instantiate(_gridPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            _grid.Init(_camera);
+        }
+        
+        _canvas.SetActive(true);
+        _camera.gameObject.SetActive(true);
     }
 
     private void SubscribeAll()
     {
-        EventBus.Subscribe((IEventReceiver<EnergyChangeEvent>)this);
-        EventBus.Subscribe((IEventReceiver<OnGameOver>)this);
-        EventBus.Subscribe((IEventReceiver<OnPlayerInsided>)this);
-        EventBus.Subscribe((IEventReceiver<OnButtonClickPlay>)this);
-        EventBus.Subscribe((IEventReceiver<OnButtonClickReload>)this);
-        EventBus.Subscribe((IEventReceiver<OnButtonClickPause>)this);
+        this.Subscribe<EnergyChangeEvent>();
+        this.Subscribe<OnGameOver>();
+        this.Subscribe<OnPlayerInsided>();
+        this.Subscribe<OnButtonClickPlay>();
+        this.Subscribe<OnButtonClickReload>();
+        this.Subscribe<OnButtonClickPause>();
     }
 
     private void UnsubscribeAll()
     {
-        EventBus.Unsubscribe((IEventReceiver<EnergyChangeEvent>)this);
-        EventBus.Unsubscribe((IEventReceiver<OnGameOver>)this);
-        EventBus.Unsubscribe((IEventReceiver<OnPlayerInsided>)this);
-        EventBus.Unsubscribe((IEventReceiver<OnButtonClickPlay>)this);
-        EventBus.Unsubscribe((IEventReceiver<OnButtonClickReload>)this);
-        EventBus.Unsubscribe((IEventReceiver<OnButtonClickPause>)this);
+        this.Unsubscribe<EnergyChangeEvent>();
+        this.Unsubscribe<OnGameOver>();
+        this.Unsubscribe<OnPlayerInsided>();
+        this.Unsubscribe<OnButtonClickPlay>();
+        this.Unsubscribe<OnButtonClickReload>();
+        this.Unsubscribe<OnButtonClickPause>();
     }
 
     private void PlayerInsaeded()

@@ -19,7 +19,10 @@ public class MainMenu : MonoBehaviour
         if (MapManager.Instance == null)
             Instantiate(_mapManagerPrefab);
 
+        MapManager.Instance.gameObject.SetActive(true);
+
         MapManager.Instance.NewLevel(0);
+
         SampleScene8x5.Load();
     }
 

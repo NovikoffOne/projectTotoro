@@ -5,6 +5,7 @@ public class InterLevelMenu : MonoBehaviour
     public void OnButtonClickExit()
     {
         MapManager.Instance.DespawnPlayer();
+        MapManager.Instance.gameObject.SetActive(false);
 
         NewAction();
 
