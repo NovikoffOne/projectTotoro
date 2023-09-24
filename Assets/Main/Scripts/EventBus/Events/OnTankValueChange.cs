@@ -1,4 +1,4 @@
-﻿public readonly struct OnTankValueChange : IEvenet
+﻿public readonly struct OnTankValueChange : IEvent
 {
     public readonly float NewValue;
 

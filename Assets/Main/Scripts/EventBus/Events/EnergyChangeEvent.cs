@@ -1,4 +1,4 @@
-public readonly struct EnergyChangeEvent : IEvenet
+public readonly struct EnergyChangeEvent : IEvent
 {
     public readonly bool IsChargeChange;
 

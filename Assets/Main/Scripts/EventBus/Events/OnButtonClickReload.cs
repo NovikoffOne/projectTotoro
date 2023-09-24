@@ -1,1 +1,1 @@
-﻿public readonly struct OnButtonClickReload : IEvenet { }
+﻿public readonly struct OnButtonClickReload : IEvent { }

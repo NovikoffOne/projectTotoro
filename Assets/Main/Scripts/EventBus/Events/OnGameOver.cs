@@ -1,1 +1,1 @@
-﻿public readonly struct OnGameOver : IEvenet { }
+﻿public readonly struct OnGameOver : IEvent { }

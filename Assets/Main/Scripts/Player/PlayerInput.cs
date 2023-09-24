@@ -1,6 +1,8 @@
 using UnityEngine;
 
-public class PlayerInput : IEventReceiver<OnOpenMenu>
+public class PlayerInput : 
+    IEventReceiver<OpenPauseMenu>, 
+    IEventReceiver<ClickGameActionEvent>
 {
     private Player _player;
 
@@ -14,7 +16,7 @@ public class PlayerInput : IEventReceiver<OnOpenMenu>
     {
         _player = player;
 
-        EventBus.Subscribe((IEventReceiver<OnOpenMenu>)this);
+        EventBus.Subscribe((IEventReceiver<OpenPauseMenu>)this);
     }
 
     public void Update()
@@ -23,7 +25,7 @@ public class PlayerInput : IEventReceiver<OnOpenMenu>
             _player.Movement.Move(GetMouseColision());
     }
 
-    public void OnEvent(OnOpenMenu var)
+    public void OnEvent(OpenPauseMenu var)
     {
         _canInput = var.CanInput;
     }
@@ -41,5 +43,25 @@ public class PlayerInput : IEventReceiver<OnOpenMenu>
         }
         else
             return _player.Movement.CurrentPosition;
+    }
+
+    public void OnEvent(ClickGameActionEvent var) // Вот так лучше?
+    {
+        switch (var.GameAction)
+        {
+            case GameAction.Completed:
+                _canInput = false;
+                break;
+
+            case GameAction.GameOver:
+                _canInput = false;
+                break;
+
+            //case GameAction.Pause
+
+            default:
+                _canInput = true;
+                break;
+        }
     }
 }

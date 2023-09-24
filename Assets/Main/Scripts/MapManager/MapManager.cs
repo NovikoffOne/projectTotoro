@@ -9,30 +9,17 @@ using System.Dynamic;
 
 public class MapManager : MonoBehaviour, IDisposable,
     IEventReceiver<EnergyChangeEvent>,
-    IEventReceiver<OnGameOver>,
-    IEventReceiver<OnPlayerInsided>,
-    IEventReceiver<OnButtonClickPlay>,
-    IEventReceiver<OnButtonClickReload>,
-    IEventReceiver<OnButtonClickPause>
+    IEventReceiver<ClickGameActionEvent>
 {
-    public static MapManager Instance { get; private set; }
+    [SerializeField] private List<GridData> _gridData; 
+    [SerializeField] private GridGenerator _gridPrefab; // Вынести в гриддату
 
-    [SerializeField] private List<GridData> _gridData;
-    [SerializeField] private GridGenerator _gridPrefab;
-    [SerializeField] private Camera _camera;
+    [SerializeField] private Player _player; // Вынести в гриддату
 
-    [SerializeField] private GameObject _canvas;
-    [SerializeField] private GameObject _interLevelMenu;
-    [SerializeField] private GameObject _gameOverPanel;
-    [SerializeField] private GameObject _pauseMenuPanel;
-    [SerializeField] private GameObject _pauseButton;
+    [SerializeField] private int _minNumberPassengersCarried; // Вынести в гриддату
+    [SerializeField] private int _numberPassengersCarried = 0; // Вынести в гриддату
 
-    [SerializeField] private Player _player;
-
-    [SerializeField] private int _minNumberPassengersCarried;
-    [SerializeField] private int _numberPassengersCarried = 0;
-
-    [SerializeField] private int GridIndex = 0;
+    [SerializeField] private int GridIndex = 0; // 
 
     private PoolMono<Player> _playerPool;
 
@@ -40,28 +27,19 @@ public class MapManager : MonoBehaviour, IDisposable,
 
     private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
 
-    private void Awake()
-    {
-        if (MapManager.Instance != null)
-        {
-            Destroy(this.gameObject);
-            Dispose();
-            return;
-        }
-        else
-            Instance = this;
-
-        DontDestroyOnLoad(this.gameObject);
-    }
-
     private void Start()
     {
+        Init();
+
+        NewLevel(GridIndex);
+
         SubscribeAll();
     }
 
     private void OnEnable()
     {
         Init();
+
         _grid.gameObject.SetActive(true);
     }
 
@@ -108,37 +86,6 @@ public class MapManager : MonoBehaviour, IDisposable,
             Debug.Log("Ворота открыты");
     }
 
-    public void OnEvent(OnGameOver var)
-    {
-        DespawnPlayer();
-
-        OpenMenu(_gameOverPanel);
-    }
-
-    public void OnEvent(OnPlayerInsided var)
-    {
-        PlayerInsaeded();
-    }
-
-    public void OnEvent(OnButtonClickPlay var)
-    {
-        DespawnPlayer();
-
-        NewLevel(1);
-    }
-
-    public void OnEvent(OnButtonClickReload var)
-    {
-        DespawnPlayer();
-
-        NewLevel(0);
-    }
-
-    public void OnEvent(OnButtonClickPause var)
-    {
-        OpenMenu(_pauseMenuPanel);
-    }
-
     private void Init()
     {
         if (_playerPool == null)
@@ -147,57 +94,68 @@ public class MapManager : MonoBehaviour, IDisposable,
         if (_grid == null)
         {
             _grid = Instantiate(_gridPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            _grid.Init(_camera);
+            _grid.Init(Camera.main);
         }
-        
-        _canvas.SetActive(true);
-        _camera.gameObject.SetActive(true);
     }
 
     private void SubscribeAll()
     {
         this.Subscribe<EnergyChangeEvent>();
-        this.Subscribe<OnGameOver>();
-        this.Subscribe<OnPlayerInsided>();
-        this.Subscribe<OnButtonClickPlay>();
-        this.Subscribe<OnButtonClickReload>();
-        this.Subscribe<OnButtonClickPause>();
+        this.Subscribe<ClickGameActionEvent>();
     }
 
     private void UnsubscribeAll()
     {
         this.Unsubscribe<EnergyChangeEvent>();
-        this.Unsubscribe<OnGameOver>();
-        this.Unsubscribe<OnPlayerInsided>();
-        this.Unsubscribe<OnButtonClickPlay>();
-        this.Unsubscribe<OnButtonClickReload>();
-        this.Unsubscribe<OnButtonClickPause>();
-    }
-
-    private void PlayerInsaeded()
-    {
-        if (_canTransition)
-        {
-            DespawnPlayer();
-            OpenMenu(_interLevelMenu);
-            EventBus.Raise(new OnOpenMenu(false));
-        }
-        else
-            throw new System.Exception("Нет питания");
-    }
-
-    private void OpenMenu(GameObject panel)
-    {
-        EventBus.Raise(new OnOpenMenu(false));
-
-        _pauseButton.SetActive(false);
-
-        Time.timeScale = 0;
-        panel.SetActive(true);
+        this.Unsubscribe<ClickGameActionEvent>();
     }
 
     public void Dispose()
     {
         GC.SuppressFinalize(this);
+    }
+
+    public void OnEvent(ClickGameActionEvent var)
+    {
+        switch (var.GameAction)
+        {
+            case GameAction.ClickPlay:
+
+                break;
+
+            case GameAction.ClickReload:
+                DespawnPlayer();
+                NewLevel(0);
+                break;
+
+            case GameAction.ClickNextLevel:
+                DespawnPlayer();
+                NewLevel(1);
+                break;
+
+            case GameAction.Completed:
+                if (_canTransition)
+                {
+                    DespawnPlayer();
+                    //OpenMenu(_interLevelMenu); не нужно, так как контроллер напрямую узнает о том что плеер дошел
+                }
+                else
+                    Debug.Log("Нет питания");
+                break;
+
+            case GameAction.GameOver:
+                DespawnPlayer();
+                break;
+
+            case GameAction.Exit:
+                IJunior.TypedScenes.MainMenu.Load();
+                break;
+
+            case GameAction.Start:
+                break;
+
+            default:
+                break;
+        }
     }
 }

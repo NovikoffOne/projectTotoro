@@ -1,1 +1,1 @@
-﻿public readonly struct OnPlayerInsided : IEvenet { }
+﻿public readonly struct OnPlayerInsided : IEvent { }

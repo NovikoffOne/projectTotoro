@@ -12,7 +12,7 @@ public class EventBusHolder
       //  _receiverHashToReference = new Dictionary<int, WeakReference<IBaceEventReceiver>>();
     }
 
-    public void AddSubscribe<T>(IEventReceiver<T> receiver) where T : struct, IEvenet
+    public void AddSubscribe<T>(IEventReceiver<T> receiver) where T : struct, IEvent
     {
         Type eventType = typeof(T);
 
@@ -26,7 +26,7 @@ public class EventBusHolder
         //_receiverHashToReference[receiver.GetHashCode()] = reference;
     }
 
-    public void RemoveUnsubscribe<T>(IEventReceiver<T> receiver) where T : struct, IEvenet
+    public void RemoveUnsubscribe<T>(IEventReceiver<T> receiver) where T : struct, IEvent
     {
         Type eventType = typeof(T);
 
@@ -42,7 +42,7 @@ public class EventBusHolder
         //_receiverHashToReference.Remove(receiverHash);
     }
 
-    public void Raise<T>(T var) where T : struct, IEvenet
+    public void Raise<T>(T var) where T : struct, IEvent
     {
         Type eventType = typeof(T);
 

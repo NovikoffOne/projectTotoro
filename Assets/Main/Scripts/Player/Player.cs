@@ -64,6 +64,6 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
     public void OnEvent(OnTankValueChange var)
     {
         if (!EnergyTank.HaveGas)
-            EventBus.Raise(new OnGameOver());
+            EventBus.Raise(new ClickGameActionEvent(GameAction.GameOver));
     }
 }

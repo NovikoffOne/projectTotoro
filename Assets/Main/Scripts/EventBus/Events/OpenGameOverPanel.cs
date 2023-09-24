@@ -4,9 +4,4 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public interface IModel
-{
-    void GetData();
-
-    void UpdateData();
-}
+public struct OpenGameOverPanel : IEvent { }
