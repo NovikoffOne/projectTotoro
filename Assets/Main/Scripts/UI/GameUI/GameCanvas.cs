@@ -14,7 +14,7 @@ internal class GameCanvas : MonoBehaviour, IView
     [SerializeField] private PauseMenuPanel _pauseMenuPanel;
     [SerializeField] private GameOverPanel _gameOverPanel;
 
-    private List<IPanel> _panels;
+    private List<IPanel> _panels = new List<IPanel>();
 
     public IReadOnlyList<IPanel> Panels => _panels;
 

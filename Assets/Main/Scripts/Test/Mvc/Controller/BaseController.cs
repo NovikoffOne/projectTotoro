@@ -18,6 +18,7 @@ public abstract class BaseController<V, M> : IGUIController<V, M>
     public M Model { get; }
 
     public abstract void UpdateView();
+    public abstract void HidePanel();
 
     void IController.AddView<T>(T view)
     {

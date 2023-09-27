@@ -16,6 +16,16 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         }
     }
 
+    public override void HidePanel()
+    {
+        for (int i = 0; i < View.Panels.Count; i++)
+        {
+            View.Panels[i].Buttons.ForEach(button => button.onClick.RemoveAllListeners());
+        }
+
+        View.PauseButton.onClick.RemoveAllListeners();
+    }
+
     // Происходит основная линковка
     protected override void OnShow()
     {
@@ -31,16 +41,6 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         View.GameOverPanel.ExitMenuButton.onClick.AddListener(() => Exit(View.GameOverPanel.gameObject));
         
         View.PauseButton.onClick.AddListener(Pause);
-    }
-
-    public void HideElments()
-    {
-        for (int i = 0; i < View.Panels.Count; i++)
-        {
-            View.Panels[i].Buttons.ForEach(button => button.onClick.RemoveAllListeners());
-        }
-
-        View.PauseButton.onClick.RemoveAllListeners();
     }
 
     // Методы реагирующие на нажатия
@@ -82,4 +82,6 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         Model.Exit();
         Close(panel);
     }
+
+    
 }

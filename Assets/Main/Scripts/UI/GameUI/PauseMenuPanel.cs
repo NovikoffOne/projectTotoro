@@ -12,7 +12,7 @@ internal class PauseMenuPanel : MonoBehaviour, IPanel
     [SerializeField] private Button _closeButton;
     [SerializeField] private Button _reloadButton;
 
-    private List<Button> _buttons;
+    private List<Button> _buttons = new List<Button>();
 
     public Button PlayButton => _playButton;
     public Button CloseButton => _closeButton;
