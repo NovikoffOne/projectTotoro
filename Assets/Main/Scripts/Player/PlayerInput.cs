@@ -57,8 +57,6 @@ public class PlayerInput :
                 _canInput = false;
                 break;
 
-            //case GameAction.Pause
-
             default:
                 _canInput = true;
                 break;

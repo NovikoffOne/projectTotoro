@@ -39,10 +39,10 @@ internal class GameCanvasModel : IModel, IEventReceiver<OpenGameOverPanel>
         EventBus.Raise(new ClickGameActionEvent(GameAction.ClickReload));
     }
 
-    public void Pause(bool isPause) // Нужен ли этот метод если добавить свич в PlayerInput GameAction.Pause
+    public void Pause(bool isPause) 
     {
         Time.timeScale = isPause? 0 : 1;
-        EventBus.Raise(new OpenPauseMenu(isPause));
+        EventBus.Raise(new OpenPauseMenu(!isPause)); // Нужен ли этот метод если добавить свич в PlayerInput GameAction.Pause
     }
 
     public void Exit()

@@ -43,6 +43,7 @@ public class PlayerView : MonoBehaviour
 
     public void ResetPosition()
     {
+        transform.DOComplete();
         transform.position = new Vector3(0, 0, transform.position.z);
     }
 }

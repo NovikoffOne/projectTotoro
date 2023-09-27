@@ -7,64 +7,44 @@ using UnityEngine.SceneManagement;
 using IJunior.TypedScenes;
 using System.Dynamic;
 
-public class MapManager : MonoBehaviour, IDisposable,
+public class MapManager :
     IEventReceiver<EnergyChangeEvent>,
     IEventReceiver<ClickGameActionEvent>
 {
-    [SerializeField] private List<GridData> _gridData; 
-    [SerializeField] private GridGenerator _gridPrefab; // Вынести в гриддату
+    private Player _player; // Вынести в гриддату
 
-    [SerializeField] private Player _player; // Вынести в гриддату
+    private int _numberPassengersCarried = 0; // Вынести в гриддату
 
-    [SerializeField] private int _minNumberPassengersCarried; // Вынести в гриддату
-    [SerializeField] private int _numberPassengersCarried = 0; // Вынести в гриддату
+    private int _gridIndex = 0; // 
 
-    [SerializeField] private int GridIndex = 0; // 
+    private MapManagerData _mapManagerData;
 
     private PoolMono<Player> _playerPool;
 
     private GridGenerator _grid;
 
-    private bool _canTransition => _numberPassengersCarried >= _minNumberPassengersCarried;
-
-    private void Start()
+    public MapManager(MapManagerData mapManagerData, PoolMono<Player> poolPlayer)
     {
-        Init();
+        _grid = new GridGenerator();
 
-        NewLevel(GridIndex);
+        _mapManagerData = mapManagerData;
+        _playerPool = poolPlayer;
 
         SubscribeAll();
     }
 
-    private void OnEnable()
-    {
-        Init();
+    private bool IsCanTransition => _numberPassengersCarried >= _mapManagerData.MinNumberPassengersCarried;
 
-        _grid.gameObject.SetActive(true);
-    }
-
-    private void OnDisable()
-    {
-        GridIndex = 0;
-        _playerPool?.DeSpawnAll();
-        _grid?.gameObject.SetActive(false);
-    }
-
-    private void OnDestroy()
-    {
-        UnsubscribeAll();
-    }
-
-    public void NewLevel(int index)
+    public void NewLevel(int index=0)
     {
         _player = _playerPool.Spawn();
 
         _numberPassengersCarried = 0;
 
-        GridIndex += index;
+        _gridIndex += index;
 
-        if (_gridData.Count > GridIndex)
-            _grid.NewGrid(_gridData[GridIndex]);
+        if (_mapManagerData.GridData.Count > _gridIndex)
+            _grid.NewGrid(_mapManagerData.GridData[_gridIndex]);
         else 
         {
             DespawnPlayer();
@@ -74,6 +54,7 @@ public class MapManager : MonoBehaviour, IDisposable,
 
     public void DespawnPlayer()
     {
+        _player.Movement.ResetPosition();
         _playerPool?.DeSpawn(_player);
     }
 
@@ -82,37 +63,14 @@ public class MapManager : MonoBehaviour, IDisposable,
         if (var.IsChargeChange)
             _numberPassengersCarried++;
 
-        if (_canTransition)
+        if (IsCanTransition)
             Debug.Log("Ворота открыты");
-    }
-
-    private void Init()
-    {
-        if (_playerPool == null)
-            _playerPool = new PoolPlayer<Player>(_player);
-
-        if (_grid == null)
-        {
-            _grid = Instantiate(_gridPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            _grid.Init(Camera.main);
-        }
     }
 
     private void SubscribeAll()
     {
         this.Subscribe<EnergyChangeEvent>();
         this.Subscribe<ClickGameActionEvent>();
-    }
-
-    private void UnsubscribeAll()
-    {
-        this.Unsubscribe<EnergyChangeEvent>();
-        this.Unsubscribe<ClickGameActionEvent>();
-    }
-
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
     }
 
     public void OnEvent(ClickGameActionEvent var)
@@ -134,10 +92,10 @@ public class MapManager : MonoBehaviour, IDisposable,
                 break;
 
             case GameAction.Completed:
-                if (_canTransition)
+                if (IsCanTransition)
                 {
                     DespawnPlayer();
-                    //OpenMenu(_interLevelMenu); не нужно, так как контроллер напрямую узнает о том что плеер дошел
+                    //OpenMenu(_interLevelMenu);
                 }
                 else
                     Debug.Log("Нет питания");

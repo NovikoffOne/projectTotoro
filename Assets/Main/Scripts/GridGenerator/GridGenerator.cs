@@ -5,20 +5,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
-public partial class GridGenerator : MonoBehaviour
+public partial class GridGenerator
 {
-    [SerializeField] private Tile _tilePrefab;
-
-    [SerializeField] private Camera _camera;
-
-    [SerializeField] private float _cameraPositionY;
-    [SerializeField] private float _cameraPositionZ;
-
-    [SerializeField] private Transform _tilePoolPosition;
-    [SerializeField] private Transform _triggerZonePoolPosition;
-
     private GridData _gridData;
-    
     private PoolMono<Tile> _tilePool;
     
     private List<PoolMono<TriggerZone>> _trigerZonePools = new List<PoolMono<TriggerZone>>();
@@ -29,20 +18,6 @@ public partial class GridGenerator : MonoBehaviour
     private PoolMono<TriggerZone> _triggerZoneLanding;
     private PoolMono<TriggerZone> _triggerZoneLoading;
     private PoolMono<TriggerZone> _triggerZoneLevelTransition;
-
-    private void OnDisable()
-    {
-        _tilePool.DeSpawnAll();
-
-        _trigerZonePools.ForEach(temp => temp.DeSpawnAll());
-    }
-
-    public void Init(Camera camera)
-    {
-        _camera = camera;
-        DontDestroyOnLoad(this.gameObject);
-        DontDestroyOnLoad(_camera);
-    }
 
     public void NewGrid(GridData gridData)
     {
@@ -67,10 +42,10 @@ public partial class GridGenerator : MonoBehaviour
             _trigerZonePools.Add(_triggerZoneLevelTransition);
         }
 
-        if(_tilePool != null)
+        if (_tilePool != null)
             _tilePool.DeSpawnAll();
         else
-            _tilePool = new PoolMono<Tile>(_tilePrefab);
+            _tilePool = new PoolMono<Tile>(_gridData.TilePrefab);
 
         GenerateGrid();
     }
@@ -103,7 +78,7 @@ public partial class GridGenerator : MonoBehaviour
 
                 var tempTile = _tilePool.Spawn();
 
-                tempTile.transform.position = new Vector3(x, y, transform.position.z);
+                tempTile.transform.position = new Vector3(x, y, 0);
 
                 tempTile.Init(isOffset);
 
@@ -118,20 +93,20 @@ public partial class GridGenerator : MonoBehaviour
 
         SetPositionsTriggerZones();
 
-        _camera.transform.position = new Vector3(((float)_gridData.Width / 2 - 0.5f), _cameraPositionY, _cameraPositionZ);
+        Camera.main.transform.position = new Vector3(((float)_gridData.Width / 2 - 0.5f), _gridData.CameraPositionY, _gridData.CameraPositionZ);
     }
 
     private void SetPositionsTriggerZones()
     {
-        SetPositionTriggerZone(_gridData.BarriersPosition, _triggerZoneBarrier, _triggerZonePoolPosition);
-        SetPositionTriggerZone(_gridData.AcceleratorPosition, _triggerZoneAccelerartor, _triggerZonePoolPosition);
-        SetPositionTriggerZone(_gridData.RepulsorPosition, _triggerZoneRepulsor, _triggerZonePoolPosition);
-        SetPositionTriggerZone(_gridData.LandingPlacePosition, _triggerZoneLanding, _triggerZonePoolPosition);
-        SetPositionTriggerZone(_gridData.LoadingPlacePosition, _triggerZoneLoading, _triggerZonePoolPosition);
-        SetPositionTriggerZone(_gridData.LevelTransitionPosition, _triggerZoneLevelTransition, _triggerZonePoolPosition);
+        SetPositionTriggerZone(_gridData.BarriersPosition, _triggerZoneBarrier);
+        SetPositionTriggerZone(_gridData.AcceleratorPosition, _triggerZoneAccelerartor);
+        SetPositionTriggerZone(_gridData.RepulsorPosition, _triggerZoneRepulsor);
+        SetPositionTriggerZone(_gridData.LandingPlacePosition, _triggerZoneLanding);
+        SetPositionTriggerZone(_gridData.LoadingPlacePosition, _triggerZoneLoading);
+        SetPositionTriggerZone(_gridData.LevelTransitionPosition, _triggerZoneLevelTransition);
     }
 
-    private void SetPositionTriggerZone(IReadOnlyList<Vector3> zonePositions, PoolMono<TriggerZone> triggerZones, Transform poolContainer)
+    private void SetPositionTriggerZone(IReadOnlyList<Vector3> zonePositions, PoolMono<TriggerZone> triggerZones)
     {
         if (zonePositions != null && zonePositions.Count > 0)
         {

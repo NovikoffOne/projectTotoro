@@ -16,7 +16,10 @@ public class GridData : ScriptableObject
     [SerializeField] private List<Vector3> _loadingPlacePosition;
     [SerializeField] private List<Vector3> _levelTransitionPosition;
 
-    //[SerializeField] private Canvas _canvas;
+    [SerializeField] private Tile _tilePrefab;
+
+    [SerializeField] private float _cameraPositionY;
+    [SerializeField] private float _cameraPositionZ;
 
     [SerializeField] private int _width;
     [SerializeField] private int _height;
@@ -27,7 +30,11 @@ public class GridData : ScriptableObject
     public IReadOnlyList<Vector3> LandingPlacePosition => _landingPlacePosition;
     public IReadOnlyList<Vector3> LoadingPlacePosition => _loadingPlacePosition;
     public IReadOnlyList<Vector3> LevelTransitionPosition => _levelTransitionPosition;
-    //public Canvas Canvas => _canvas;
+
+    public Tile TilePrefab => _tilePrefab;
+
+    public float CameraPositionY => _cameraPositionY;
+    public float CameraPositionZ => _cameraPositionZ;
 
     public int Width => _width;
     public int Height => _height;

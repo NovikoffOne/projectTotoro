@@ -14,6 +14,9 @@ internal class GameCanvas : MonoBehaviour, IView
     [SerializeField] private PauseMenuPanel _pauseMenuPanel;
     [SerializeField] private GameOverPanel _gameOverPanel;
 
+    private List<IPanel> _panels;
+
+    public IReadOnlyList<IPanel> Panels => _panels;
 
     public Button PauseButton => _pauseButton;
 
@@ -21,5 +24,9 @@ internal class GameCanvas : MonoBehaviour, IView
     public PauseMenuPanel PauseMenuPanel => _pauseMenuPanel;
     public GameOverPanel GameOverPanel => _gameOverPanel;
 
-
+    private void Start()
+    {
+        this.AddController<GameCanvasController>();
+        _panels.Add(_interLevelPanel);
+    }
 }

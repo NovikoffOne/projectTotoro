@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2190313989922148210}
-  - component: {fileID: 6509589000600777075}
   m_Layer: 0
   m_Name: MapManagerT
   m_TagString: Untagged
@@ -32,23 +31,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6509589000600777075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095378988377542177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 102d8aa529705884bbf76eced42bb3d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gridData:
-  - {fileID: 11400000, guid: 45b9086317468774dbdc0d25cb3858ef, type: 2}
-  - {fileID: 11400000, guid: 40471ade58c759745a479096e0840cf9, type: 2}
-  _gridPrefab: {fileID: 5659824441662197093, guid: b99ef5385c3c5bf4b8f9950459b17b97, type: 3}
-  _player: {fileID: 4911128802128145529, guid: ff432a8d04622e348907011a7bc1e75a, type: 3}
-  _minNumberPassengersCarried: 1
-  _numberPassengersCarried: 0
-  GridIndex: 0

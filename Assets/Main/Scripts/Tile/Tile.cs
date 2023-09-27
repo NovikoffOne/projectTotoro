@@ -30,11 +30,17 @@ public class Tile : MonoBehaviour
 
     public void OnMouseEnter()
     {
+        if (Time.timeScale == 0)
+            return;
+
         Highlight(_highlightingTile);
     }
 
     public void OnMouseExit()
     {
+        if (Time.timeScale == 0)
+            return;
+
         RevertBase(_highlightingTile);
     }
 

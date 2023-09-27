@@ -33,6 +33,16 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         View.PauseButton.onClick.AddListener(Pause);
     }
 
+    public void HideElments()
+    {
+        for (int i = 0; i < View.Panels.Count; i++)
+        {
+            View.Panels[i].Buttons.ForEach(button => button.onClick.RemoveAllListeners());
+        }
+
+        View.PauseButton.onClick.RemoveAllListeners();
+    }
+
     // Методы реагирующие на нажатия
 
     private void Play(GameObject panel)
@@ -49,7 +59,7 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
 
     private void Close(GameObject panel)
     {
-        Model.Pause(true);
+        Model.Pause(false);
         View.PauseButton.gameObject.SetActive(true);
         panel.SetActive(false);
     }
@@ -62,7 +72,7 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
 
     private void Pause()
     {
-        Model.Pause(false);
+        Model.Pause(true);
         View.PauseMenuPanel.gameObject.SetActive(true);
         View.PauseButton.gameObject.SetActive(false);
     }
