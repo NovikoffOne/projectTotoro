@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-internal class GameCanvas : MonoBehaviour, IView
+public class GameCanvas : MonoBehaviour, IView
 {
     [SerializeField] private Button _pauseButton;
 

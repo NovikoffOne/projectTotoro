@@ -10,6 +10,7 @@ public class MainMenuPanel : MonoBehaviour, IPanel
     [SerializeField] private Button _settingsButton;
 
     private List<Button> _buttons = new List<Button>();
+
     public Button PlayButton => _playButton;
     public Button LiderBoardButton => _liderBoardButton;
     public Button SettingsButton => _settingsButton;

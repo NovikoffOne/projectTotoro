@@ -11,7 +11,7 @@ public class Bootstrap : MonoBehaviour
 
     private void Start()
     {
-        SceneManager.LoadScene(nameof(SampleScene8x5));
+        SceneManager.LoadScene(nameof(MainMenu));
         SceneManager.sceneLoaded += StartNewGame;
     }
 

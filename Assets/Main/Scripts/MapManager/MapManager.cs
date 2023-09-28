@@ -9,6 +9,7 @@ using System.Dynamic;
 
 public class MapManager :
     IEventReceiver<EnergyChangeEvent>,
+    IEventReceiver<OnPlayerInsided>,
     IEventReceiver<ClickGameActionEvent>
 {
     private Player _player; // Вынести в гриддату
@@ -71,16 +72,13 @@ public class MapManager :
     {
         this.Subscribe<EnergyChangeEvent>();
         this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<OnPlayerInsided>();
     }
 
     public void OnEvent(ClickGameActionEvent var)
     {
         switch (var.GameAction)
         {
-            case GameAction.ClickPlay:
-
-                break;
-
             case GameAction.ClickReload:
                 DespawnPlayer();
                 NewLevel(0);
@@ -91,16 +89,6 @@ public class MapManager :
                 NewLevel(1);
                 break;
 
-            case GameAction.Completed:
-                if (IsCanTransition)
-                {
-                    DespawnPlayer();
-                    //OpenMenu(_interLevelMenu);
-                }
-                else
-                    Debug.Log("Нет питания");
-                break;
-
             case GameAction.GameOver:
                 DespawnPlayer();
                 break;
@@ -109,11 +97,19 @@ public class MapManager :
                 IJunior.TypedScenes.MainMenu.Load();
                 break;
 
-            case GameAction.Start:
-                break;
-
             default:
                 break;
         }
+    }
+
+    public void OnEvent(OnPlayerInsided var)
+    {
+        if (IsCanTransition)
+        {
+            EventBus.Raise(new ClickGameActionEvent(GameAction.Completed));
+            DespawnPlayer();
+        }
+        else
+            Debug.Log("Нет питания");
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-internal class InterLevelPanel : MonoBehaviour, IPanel
+public class InterLevelPanel : MonoBehaviour, IPanel
 {
     [SerializeField] private Button _newLevelButton;
     [SerializeField] private Button _exitMenuButton;

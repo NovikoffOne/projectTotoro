@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
@@ -22,30 +23,40 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
         View.MenuPanel.PlayButton.onClick.AddListener(() => Play());
         View.MenuPanel.LiderBoardButton.onClick.AddListener(() => LiderBoard());
         View.MenuPanel.SettingsButton.onClick.AddListener(() => Settings());
+
+        View.LiderBoardPanel.Close.onClick.AddListener(() => Close(View.LiderBoardPanel.gameObject));
+
+        View.LevelSelectionPanel.LevelButton.onClick.AddListener(() => LevelButton());
     }
 
     private void Play()
     {
         Model.Play();
-        Close();
+        View.LevelSelectionPanel.gameObject.SetActive(true);
+        Close(View.MenuPanel.gameObject);
+    }
+
+    private void LevelButton()
+    {
+        Model.LevelButton();
     }
 
     private void LiderBoard()
     {
         Model.LiderBoard();
-        Close();
+        View.LiderBoardPanel.gameObject.SetActive(true);
+        Close(View.MenuPanel.gameObject);
     }
 
     private void Settings()
     {
         Model.Settings();
-        Close();
+        Close(View.MenuPanel.gameObject);
     }
 
-    private void Close()
+    private void Close(GameObject panel)
     {
-        View.MenuPanel.gameObject.SetActive(false);
+        View.MenuPanel.gameObject.SetActive(true);
+        panel.SetActive(false);
     }
-
-
 }

@@ -22,11 +22,6 @@ public static class MVCConnecter
         }
     }
 
-    //public static void RemoveController<T>(T updateController) where T : class, IUpdatebleController // ?
-    //{
-    //    OnControllerUpdate -= updateController.UpdateController;
-    //}
-
     public static void UpdateController<T>() where T : class, IUpdatebleController => UpdateController(typeof(T).Name);
 
     public static void UpdateController(string tag)

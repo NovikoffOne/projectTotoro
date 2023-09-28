@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-internal class GameOverPanel : MonoBehaviour, IPanel
+public class GameOverPanel : MonoBehaviour, IPanel
 {
     [SerializeField] private Button _exitMenuButton;
     [SerializeField] private Button _reloadButton;

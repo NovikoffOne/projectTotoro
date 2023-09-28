@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanvasModel>
+internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanvasModel>,
+    IEventReceiver<ClickGameActionEvent>
 {
     public override void UpdateView()
     {
@@ -29,6 +30,8 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
     // Происходит основная линковка
     protected override void OnShow()
     {
+        EventBus.Subscribe(this);
+
         View.PauseMenuPanel.CloseButton.onClick.AddListener(() => Close(View.PauseMenuPanel.gameObject));
         View.PauseMenuPanel.ReloadButton.onClick.AddListener(() => Reload(View.PauseMenuPanel.gameObject));
         View.PauseMenuPanel.PlayButton.onClick.AddListener(() => Play(View.PauseMenuPanel.gameObject));
@@ -83,5 +86,12 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         Close(panel);
     }
 
-    
+    public void OnEvent(ClickGameActionEvent var)
+    {
+        if(var.GameAction == GameAction.Completed)
+        {
+            View.InterLevelPanel.gameObject.SetActive(true);
+            Model.Pause(true);
+        }
+    }
 }
