@@ -35,6 +35,8 @@ public class MainMenuModel : IModel
 
     public void LevelButton()
     {
+        EventBus.Raise(new OpenPauseMenu(true));
+        EventBus.Raise(new StartGame(true));
         SceneManager.LoadScene("SampleScene8x5");
     }
 }

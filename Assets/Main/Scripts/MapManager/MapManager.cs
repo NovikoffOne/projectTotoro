@@ -10,7 +10,8 @@ using System.Dynamic;
 public class MapManager :
     IEventReceiver<EnergyChangeEvent>,
     IEventReceiver<OnPlayerInsided>,
-    IEventReceiver<ClickGameActionEvent>
+    IEventReceiver<ClickGameActionEvent>,
+    IEventReceiver<StartGame>
 {
     private Player _player; // Вынести в гриддату
 
@@ -38,11 +39,12 @@ public class MapManager :
 
     public void NewLevel(int index=0)
     {
-        _player = _playerPool.Spawn();
+        if(_player == null || _player.gameObject.activeSelf == false)
+            _player = _playerPool.Spawn();
 
         _numberPassengersCarried = 0;
 
-        _gridIndex += index;
+        _gridIndex = index;
 
         if (_mapManagerData.GridData.Count > _gridIndex)
             _grid.NewGrid(_mapManagerData.GridData[_gridIndex]);
@@ -68,11 +70,9 @@ public class MapManager :
             Debug.Log("Ворота открыты");
     }
 
-    private void SubscribeAll()
+    public void OnEvent(StartGame var)
     {
-        this.Subscribe<EnergyChangeEvent>();
-        this.Subscribe<ClickGameActionEvent>();
-        this.Subscribe<OnPlayerInsided>();
+        NewLevel();
     }
 
     public void OnEvent(ClickGameActionEvent var)
@@ -111,5 +111,13 @@ public class MapManager :
         }
         else
             Debug.Log("Нет питания");
+    }
+
+    private void SubscribeAll()
+    {
+        this.Subscribe<EnergyChangeEvent>();
+        this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<OnPlayerInsided>();
+        this.Subscribe<StartGame>();
     }
 }

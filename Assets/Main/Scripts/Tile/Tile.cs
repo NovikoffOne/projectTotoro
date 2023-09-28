@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using TMPro.EditorUtilities;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour,
+    IEventReceiver<OpenPauseMenu>
 {
     [SerializeField] private GameObject _baseTile;
     [SerializeField] private GameObject _offsetTile;
     [SerializeField] private GameObject _highlightingTile;
 
     private GameObject _currentTile;
-    
+
+    private bool _canInput;
+
     public Vector3 Position => transform.position;
 
     public void Init(bool isOffset)
@@ -26,11 +29,13 @@ public class Tile : MonoBehaviour
             _baseTile.SetActive(true);
             _currentTile = _baseTile;
         }
+
+        this.Subscribe<OpenPauseMenu>();
     }
 
     public void OnMouseEnter()
     {
-        if (Time.timeScale == 0)
+        if (Time.timeScale == 0 || !_canInput)
             return;
 
         Highlight(_highlightingTile);
@@ -38,10 +43,17 @@ public class Tile : MonoBehaviour
 
     public void OnMouseExit()
     {
-        if (Time.timeScale == 0)
-            return;
-
         RevertBase(_highlightingTile);
+    }
+
+    public void OnEvent(OpenPauseMenu var)
+    {
+        _canInput = var.CanInput;
+    }
+
+    private void OnDestroy()
+    {
+        this.Unsubscribe<OpenPauseMenu>();
     }
 
     private void RevertBase(GameObject tile)

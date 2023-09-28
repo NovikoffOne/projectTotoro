@@ -27,6 +27,9 @@ public class GameCanvas : MonoBehaviour, IView
     private void Start()
     {
         this.AddController<GameCanvasController>();
+
         _panels.Add(_interLevelPanel);
+        _panels.Add(_pauseMenuPanel);
+        _panels.Add(_gameOverPanel);
     }
 }

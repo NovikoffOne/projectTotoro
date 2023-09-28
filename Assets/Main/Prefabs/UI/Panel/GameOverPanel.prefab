@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1862167669706550407}
   - component: {fileID: 8057895444073611452}
   - component: {fileID: 1679981333161603006}
-  - component: {fileID: 5182590839639122433}
   m_Layer: 5
   m_Name: GameOverPanel
   m_TagString: Untagged
@@ -32,7 +31,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6757272083727705785}
-  - {fileID: 7158903826147452731}
+  - {fileID: 6239814259363765994}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -79,18 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5182590839639122433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7072174203056754347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad536e7af58b19c449b31c7a09514f12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7158903826147452730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -220,10 +207,6 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7009132416893337466, guid: 60ef08bd37d8343afa2c22bb368cfec2, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 5182590839639122433}
-    - target: {fileID: 7009132416893337466, guid: 60ef08bd37d8343afa2c22bb368cfec2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -264,7 +247,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60ef08bd37d8343afa2c22bb368cfec2, type: 3}
---- !u!224 &7158903826147452731 stripped
+--- !u!224 &6239814259363765994 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3873604873605839312, guid: 60ef08bd37d8343afa2c22bb368cfec2, type: 3}
   m_PrefabInstance: {fileID: 7158903826147452730}
@@ -397,10 +380,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 7009132416893337466, guid: 60ef08bd37d8343afa2c22bb368cfec2, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 5182590839639122433}
     - target: {fileID: 7009132416893337466, guid: 60ef08bd37d8343afa2c22bb368cfec2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2

@@ -11,7 +11,7 @@ public class GameOverPanel : MonoBehaviour, IPanel
     [SerializeField] private Button _exitMenuButton;
     [SerializeField] private Button _reloadButton;
 
-    private List<Button> _buttons;
+    private List<Button> _buttons = new List<Button>();
 
     public Button ExitMenuButton => _exitMenuButton;
     public Button ReloadButton => _reloadButton;
@@ -20,7 +20,7 @@ public class GameOverPanel : MonoBehaviour, IPanel
 
     private void Start()
     {
-        _buttons.Add(ReloadButton);
-        _buttons.Add(ExitMenuButton);
+        _buttons.Add(_reloadButton);
+        _buttons.Add(_exitMenuButton);
     }
 }

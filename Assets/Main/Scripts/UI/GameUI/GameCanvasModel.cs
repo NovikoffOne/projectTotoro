@@ -5,14 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-internal class GameCanvasModel : IModel, IEventReceiver<OpenGameOverPanel>
+internal class GameCanvasModel : IModel, 
+    IEventReceiver<ClickGameActionEvent>
 {
     public GameCanvasModel()
     {
-
+        this.Subscribe<ClickGameActionEvent>();
     }
 
-    public bool IsGameOver { get; private set; }
+    public bool IsGameOver { get; private set; } = false;
+    public bool IsCompleted { get; private set; } = false;
 
     public void GetData()
     {
@@ -22,6 +24,7 @@ internal class GameCanvasModel : IModel, IEventReceiver<OpenGameOverPanel>
     public void UpdateData()
     {
         IsGameOver = false;
+        IsCompleted = false;
     }
 
     public void PlayNextLevel()
@@ -50,11 +53,24 @@ internal class GameCanvasModel : IModel, IEventReceiver<OpenGameOverPanel>
         EventBus.Raise(new ClickGameActionEvent(GameAction.Exit));
     }
 
-    public void OnEvent(OpenGameOverPanel var)
+    public void OnEvent(ClickGameActionEvent var)
     {
-        EventBus.Raise(new ClickGameActionEvent(GameAction.GameOver));
-        IsGameOver = true;
-        Time.timeScale = 0;
-        MVCConnecter.UpdateController<GameCanvasController>();
+        switch (var.GameAction)
+        {
+            case GameAction.Completed:
+                IsCompleted = true;
+                MVCConnecter.UpdateController<GameCanvasController>();
+                Time.timeScale = 0;
+                break;
+
+            case GameAction.GameOver:
+                IsGameOver = true;
+                MVCConnecter.UpdateController<GameCanvasController>();
+                Time.timeScale = 0;
+                break;
+
+            default:
+                break;
+        }
     }
 }
