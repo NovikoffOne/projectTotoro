@@ -24,6 +24,8 @@ public class GameCanvas : MonoBehaviour, IView
     public PauseMenuPanel PauseMenuPanel => _pauseMenuPanel;
     public GameOverPanel GameOverPanel => _gameOverPanel;
 
+    public event Action OnDestroyded;
+
     private void Start()
     {
         this.AddController<GameCanvasController>();
@@ -31,5 +33,10 @@ public class GameCanvas : MonoBehaviour, IView
         _panels.Add(_interLevelPanel);
         _panels.Add(_pauseMenuPanel);
         _panels.Add(_gameOverPanel);
+    }
+
+    private void OnDestroy()
+    {
+        OnDestroyded?.Invoke();
     }
 }

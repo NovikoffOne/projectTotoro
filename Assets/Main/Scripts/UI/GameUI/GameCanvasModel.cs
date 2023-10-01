@@ -45,7 +45,7 @@ internal class GameCanvasModel : IModel,
     public void Pause(bool isPause) 
     {
         Time.timeScale = isPause? 0 : 1;
-        EventBus.Raise(new OpenPauseMenu(!isPause)); 
+        EventBus.Raise(new PlayerCanInput(!isPause)); 
     }
 
     public void Exit()
@@ -72,5 +72,10 @@ internal class GameCanvasModel : IModel,
             default:
                 break;
         }
+    }
+
+    public void Unscribe()
+    {
+        EventBus.Unsubscribe(this);
     }
 }

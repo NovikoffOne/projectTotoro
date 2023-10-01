@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor.SearchService;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine.SceneManagement;
 
 public class MainMenuModel : IModel
 {
     public void GetData()
     {
-        
+
     }
 
     public void UpdateData()
     {
-        
+
     }
 
     public void Play()
@@ -33,10 +27,10 @@ public class MainMenuModel : IModel
         EventBus.Raise(new ClickSettingsButtonInMenu());
     }
 
-    public void LevelButton()
+    public void LevelButton(int index)
     {
-        EventBus.Raise(new OpenPauseMenu(true));
-        EventBus.Raise(new StartGame(true));
+        EventBus.Raise(new PlayerCanInput(true));
+        EventBus.Raise(new NewGame(index));
         SceneManager.LoadScene("SampleScene8x5");
     }
 }

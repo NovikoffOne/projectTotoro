@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,13 +21,26 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
 
     protected override void OnShow()
     {
-        View.MenuPanel.PlayButton.onClick.AddListener(() => Play());
-        View.MenuPanel.LiderBoardButton.onClick.AddListener(() => LiderBoard());
-        View.MenuPanel.SettingsButton.onClick.AddListener(() => Settings());
+        View.MenuPanel.PlayButton.onClick.AddListener(Play);
+        View.MenuPanel.LiderBoardButton.onClick.AddListener(LiderBoard);
+        View.MenuPanel.SettingsButton.onClick.AddListener(Settings);
 
         View.LiderBoardPanel.Close.onClick.AddListener(() => Close(View.LiderBoardPanel.gameObject));
+        View.LevelSelectionPanel.CloseButton.onClick.AddListener(() => Close(View.LevelSelectionPanel.gameObject));
 
-        View.LevelSelectionPanel.LevelButton.onClick.AddListener(() => LevelButton());
+        for (var i = 0; i < View.LevelSelectionPanel.Buttons.Count; ++i)
+        {
+            var starsFillers = View.LevelSelectionPanel.GetComponentsInChildren<StarFiller>().ToList();
+
+            var index = i;
+            View.LevelSelectionPanel.Buttons[i].onClick.AddListener(() => LevelButton(index));
+            View.LevelSelectionPanel.Buttons[i].GetComponentInChildren<TMP_Text>().text = $"{index + 1}";
+
+            if (starsFillers.Count > i)
+                starsFillers[i].SetLevelIndex(index);
+        }
+         
+        
     }
 
     private void Play()
@@ -36,9 +50,9 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
         Close(View.MenuPanel.gameObject);
     }
 
-    private void LevelButton()
+    private void LevelButton(int index)
     {
-        Model.LevelButton();
+        Model.LevelButton(index);
     }
 
     private void LiderBoard()

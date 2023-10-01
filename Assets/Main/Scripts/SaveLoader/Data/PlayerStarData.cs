@@ -1,17 +1,12 @@
 ﻿using System;
 
-namespace Assets.Main.DataSaver
+public class PlayerStarData : IData
 {
-    [Serializable]
-    public class PlayerStarData : IData
+    public int Count;
+    public int LevelIndex;
+
+    public void Dispose()
     {
-        public int Count;
-
-        public PlayerStarData() { } 
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
+        GC.SuppressFinalize(this);
     }
 }

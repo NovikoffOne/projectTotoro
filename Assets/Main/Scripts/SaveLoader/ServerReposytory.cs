@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public struct ServerReposytory : IReposytory
+public class ServerReposytory : IReposytory
 {
     public void Save<T>(T data, string fileName)
     where T : IData

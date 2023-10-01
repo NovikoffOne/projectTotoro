@@ -6,18 +6,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using IJunior.TypedScenes;
 using System.Dynamic;
+using System.Xml.Schema;
 
 public class MapManager :
     IEventReceiver<EnergyChangeEvent>,
     IEventReceiver<OnPlayerInsided>,
     IEventReceiver<ClickGameActionEvent>,
-    IEventReceiver<StartGame>
+    IEventReceiver<NewGame>
 {
-    private Player _player; // Вынести в гриддату
+    private Player _player; 
 
-    private int _numberPassengersCarried = 0; // Вынести в гриддату
+    private int _numberPassengersCarried = 0; 
 
-    private int _gridIndex = 0; // 
+    private int _gridIndex = 0;
 
     private MapManagerData _mapManagerData;
 
@@ -70,9 +71,9 @@ public class MapManager :
             Debug.Log("Ворота открыты");
     }
 
-    public void OnEvent(StartGame var)
+    public void OnEvent(NewGame var)
     {
-        NewLevel();
+        NewLevel(var.IndexLevel);
     }
 
     public void OnEvent(ClickGameActionEvent var)
@@ -81,12 +82,12 @@ public class MapManager :
         {
             case GameAction.ClickReload:
                 DespawnPlayer();
-                NewLevel(0);
+                NewLevel(_gridIndex);
                 break;
 
             case GameAction.ClickNextLevel:
                 DespawnPlayer();
-                NewLevel(1);
+                NewLevel(++_gridIndex);
                 break;
 
             case GameAction.GameOver:
@@ -118,6 +119,6 @@ public class MapManager :
         this.Subscribe<EnergyChangeEvent>();
         this.Subscribe<ClickGameActionEvent>();
         this.Subscribe<OnPlayerInsided>();
-        this.Subscribe<StartGame>();
+        this.Subscribe<NewGame>();
     }
 }

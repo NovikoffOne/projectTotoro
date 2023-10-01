@@ -31,11 +31,15 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         }
 
         View.PauseButton.onClick.RemoveAllListeners();
+        View.OnDestroyded -= HidePanel;
+        Model.Unsubscribe();
     }
 
     // Происходит основная линковка
     protected override void OnShow()
     {
+        View.OnDestroyded += HidePanel;
+
         View.PauseMenuPanel.CloseButton.onClick.AddListener(() => Close(View.PauseMenuPanel.gameObject));
         View.PauseMenuPanel.ReloadButton.onClick.AddListener(() => Reload(View.PauseMenuPanel.gameObject));
         View.PauseMenuPanel.PlayButton.onClick.AddListener(() => Play(View.PauseMenuPanel.gameObject));

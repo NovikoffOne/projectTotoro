@@ -1,14 +1,16 @@
 using UnityEngine;
 
 public class PlayerInput : 
-    IEventReceiver<OpenPauseMenu>, 
-    IEventReceiver<ClickGameActionEvent>
+    IEventReceiver<PlayerCanInput>,
+    IEventReceiver<NewGame>
+    //IEventReceiver<ClickGameActionEvent>
 {
     private Player _player;
 
     private LayerMask _ignorLayer = 3;
 
     private bool _canInput = true;
+    private bool _firstClick = true;
 
     private float _rayDistance = 20;
 
@@ -16,7 +18,7 @@ public class PlayerInput :
     {
         _player = player;
 
-        EventBus.Subscribe((IEventReceiver<OpenPauseMenu>)this);
+        this.Subscribe<PlayerCanInput>();
     }
 
     public void Update()
@@ -25,9 +27,9 @@ public class PlayerInput :
             _player.Movement.Move(GetMouseColision());
     }
 
-    public void OnEvent(OpenPauseMenu var)
+    public void OnEvent(PlayerCanInput var)
     {
-        _canInput = var.CanInput;
+        _canInput = var.IsCanInput;
     }
 
     private Vector2 GetMouseColision()
@@ -38,6 +40,12 @@ public class PlayerInput :
           && _player.Movement.CurrentPosition != tile.Position)
         {
             _player.EnergyTank.SpendGas();
+
+            if (_firstClick)
+            {
+                EventBus.Raise(new StartGame());
+                _firstClick = false;
+            }
             
             return tile.Position;
         }
@@ -45,21 +53,26 @@ public class PlayerInput :
             return _player.Movement.CurrentPosition;
     }
 
-    public void OnEvent(ClickGameActionEvent var) // Вот так лучше?
+    public void OnEvent(NewGame var)
     {
-        switch (var.GameAction)
-        {
-            case GameAction.Completed:
-                _canInput = false;
-                break;
-
-            case GameAction.GameOver:
-                _canInput = false;
-                break;
-
-            default:
-                _canInput = true;
-                break;
-        }
+        _firstClick = true;
     }
+
+    //public void OnEvent(ClickGameActionEvent var)
+    //{
+    //    switch (var.GameAction)
+    //    {
+    //        case GameAction.Completed:
+    //            _canInput = false;
+    //            break;
+
+    //        case GameAction.GameOver:
+    //            _canInput = false;
+    //            break;
+
+    //        default:
+    //            _canInput = true;
+    //            break;
+    //    }
+    //}
 }
