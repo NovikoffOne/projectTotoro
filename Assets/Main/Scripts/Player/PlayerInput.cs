@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerInput : 
     IEventReceiver<PlayerCanInput>,
     IEventReceiver<NewGame>
-    //IEventReceiver<ClickGameActionEvent>
 {
     private Player _player;
 
@@ -57,22 +56,4 @@ public class PlayerInput :
     {
         _firstClick = true;
     }
-
-    //public void OnEvent(ClickGameActionEvent var)
-    //{
-    //    switch (var.GameAction)
-    //    {
-    //        case GameAction.Completed:
-    //            _canInput = false;
-    //            break;
-
-    //        case GameAction.GameOver:
-    //            _canInput = false;
-    //            break;
-
-    //        default:
-    //            _canInput = true;
-    //            break;
-    //    }
-    //}
 }

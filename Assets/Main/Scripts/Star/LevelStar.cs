@@ -1,90 +1,63 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Threading;
 using UnityEngine;
 
-public class LevelStar : MonoBehaviour,
+public class LevelStar :
     IEventReceiver<ClickGameActionEvent>,
-    IEventReceiver<StartGame>,
-    IEventReceiver<NewGame>,
-    IEventReceiver<PlayerCanInput>
+    IEventReceiver<StartGame>
 {
-    private int _count;
-    private int _levelIndex;
+    private readonly MapManager MapManager;
 
-    private float _allTime = 60;
-    private float _time = 0;
+    private float _startTime;
 
-    private bool _timerOn = false;
-    public float Count => _count;
-
-    private void Start()
+    public LevelStar(MapManager mapManager)
     {
+        MapManager = mapManager;
+
         this.Subscribe<ClickGameActionEvent>();
         this.Subscribe<StartGame>();
-        this.Subscribe<PlayerCanInput>();
     }
-
-    private void Update()
-    {
-        if (_timerOn)
-            Timer();
-    }
+    private int LevelIndex => MapManager.GridIndex;
 
     public void OnEvent(ClickGameActionEvent var)
     {
         if(var.GameAction == GameAction.Completed)
         {
-            _timerOn = false;
+            Debug.Log($"Save {LevelIndex}");
 
-            _count = CalculateStar();
+            var oldData = PlayerPrefs.GetInt($"Level {LevelIndex}");
+            var currentData = CalculateStar(Time.time);
 
-            var data = new PlayerStarData()
-            {
-                Count = _count,
-                LevelIndex = _levelIndex
-            };
-
-            //RepositoryHelper.Save(data, new ServerReposytory(), $"Level {_levelIndex}");
-            RepositoryHelper.Save(data, new LocalReposytory(), $"Level {_levelIndex}");
-
-            _time = 0;
+            if(oldData < currentData)
+                PlayerPrefs.SetInt($"Level {LevelIndex}", CalculateStar(Time.time));
         }
     }
 
     public void OnEvent(StartGame var)
     {
-        _timerOn = true;
+        _startTime = Time.time;
     }
 
-    public void Timer()
+    private int CalculateStar(float finishTime)
     {
-        _time += Time.deltaTime;
-    }
+        var time = finishTime - _startTime;
 
-    public void OnEvent(PlayerCanInput var)
-    {
-        _timerOn = var.IsCanInput;
-    }
-
-    private int CalculateStar()
-    {
-        if (_time > _allTime)
-            return 0;
-        else if (_time >= 50)
-            return 1;
-        else if (_time >= 40)
-            return 2;
-        else if (_time < 40)
+        if (time <= 30)
             return 3;
+
+        if (time <= 40)
+            return 2;
+        
+        if (time <= 50)
+            return 1;
+
+        if (time > 50)
+            return 0;
 
         return 0;
     }
 
-    public void OnEvent(NewGame var)
-    {
-        _levelIndex = var.IndexLevel;
-        Debug.Log(var.IndexLevel);
-    }
 }

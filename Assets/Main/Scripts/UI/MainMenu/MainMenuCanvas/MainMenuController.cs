@@ -33,14 +33,13 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
             var starsFillers = View.LevelSelectionPanel.GetComponentsInChildren<StarFiller>().ToList();
 
             var index = i;
-            View.LevelSelectionPanel.Buttons[i].onClick.AddListener(() => LevelButton(index));
-            View.LevelSelectionPanel.Buttons[i].GetComponentInChildren<TMP_Text>().text = $"{index + 1}";
+
+            View.LevelSelectionPanel.Buttons[index].onClick.AddListener(() => LevelButton(index));
+            View.LevelSelectionPanel.Buttons[index].GetComponentInChildren<TMP_Text>().text = $"{index + 1}";
 
             if (starsFillers.Count > i)
-                starsFillers[i].SetLevelIndex(index);
+                starsFillers[index].FiilStars(index);
         }
-         
-        
     }
 
     private void Play()

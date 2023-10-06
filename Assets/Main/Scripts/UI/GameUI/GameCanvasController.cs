@@ -12,12 +12,14 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         if (Model.IsGameOver)
         {
             View.GameOverPanel.gameObject.SetActive(true);
+            View.PauseButton.gameObject.SetActive(false);
             Model.UpdateData();
         }
 
         if (Model.IsCompleted)
         {
             View.InterLevelPanel.gameObject.SetActive(true);
+            View.PauseButton.gameObject.SetActive(false);
             Model.Pause(true);
             Model.UpdateData();
         }
@@ -35,7 +37,6 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         Model.Unsubscribe();
     }
 
-    // Происходит основная линковка
     protected override void OnShow()
     {
         View.OnDestroyded += HidePanel;
@@ -53,8 +54,6 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         
         View.PauseButton.onClick.AddListener(Pause);
     }
-
-    // Методы реагирующие на нажатия
 
     private void Play(GameObject panel)
     {

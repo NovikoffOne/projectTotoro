@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine;
 
@@ -17,10 +18,17 @@ public class LocalReposytory : IReposytory
         where T : IData
 
     {
-        var dataJson = File.ReadAllText(Application.persistentDataPath + $"/{fileName}.json");
+        if (File.Exists(Application.persistentDataPath + $"/{fileName}.json"))
+        {
+            var dataJson = File.ReadAllText(Application.persistentDataPath + $"/{fileName}.json");
 
-        var data = JsonUtility.FromJson<T>(dataJson);
+            var data = JsonUtility.FromJson<T>(dataJson);
 
-        return data;
+            return data;
+        }
+        else
+        {
+            return Activator.CreateInstance<T>();
+        }
     }
 }

@@ -16,9 +16,9 @@ public class MapManager :
 {
     private Player _player; 
 
-    private int _numberPassengersCarried = 0; 
+    private int _numberPassengersCarried; 
 
-    private int _gridIndex = 0;
+    private int _gridIndex;
 
     private MapManagerData _mapManagerData;
 
@@ -37,6 +37,7 @@ public class MapManager :
     }
 
     private bool IsCanTransition => _numberPassengersCarried >= _mapManagerData.MinNumberPassengersCarried;
+    public int GridIndex => _gridIndex;
 
     public void NewLevel(int index=0)
     {
@@ -48,7 +49,9 @@ public class MapManager :
         _gridIndex = index;
 
         if (_mapManagerData.GridData.Count > _gridIndex)
+        {
             _grid.NewGrid(_mapManagerData.GridData[_gridIndex]);
+        }
         else 
         {
             DespawnPlayer();

@@ -28,5 +28,6 @@ public class Bootstrap : MonoBehaviour
         mapManager.NewLevel();
         EventBus.Raise(new PlayerCanInput(false));
         SceneManager.sceneLoaded -= StartNewGame;
+        new LevelStar(mapManager);
     }
 }
