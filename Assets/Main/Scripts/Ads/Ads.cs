@@ -12,55 +12,49 @@ using System.Collections;
 public class Ads : MonoBehaviour,
     IEventReceiver<ClickGameActionEvent>
 {
-    [SerializeField]
-    private Text _authorizationStatusText;
+    //[SerializeField]
+    //private Text _authorizationStatusText;
 
-    [SerializeField]
-    private Text _personalProfileDataPermissionStatusText;
+    //[SerializeField]
+    //private Text _personalProfileDataPermissionStatusText;
 
-    [SerializeField]
-    private InputField _cloudSaveDataInputField;
+    //[SerializeField]
+    //private InputField _cloudSaveDataInputField;
 
     private void Awake()
     {
-        YandexGamesSdk.CallbackLogging = true;
         PlayerAccount.AuthorizedInBackground += OnAuthorizedInBackground;
         this.Subscribe<ClickGameActionEvent>();
     }
 
-    private void OnAuthorizedInBackground()
-    {
-        Debug.Log($"{nameof(OnAuthorizedInBackground)} {PlayerAccount.IsAuthorized}");
-    }
+//    private IEnumerator Start()
+//    {
+//#if !UNITY_WEBGL || UNITY_EDITOR
+//        yield break;
+//#endif
 
-    private IEnumerator Start()
-    {
-#if !UNITY_WEBGL || UNITY_EDITOR
-        yield break;
-#endif
+//        // Always wait for it if invoking something immediately in the first scene.
+//        yield return YandexGamesSdk.Initialize();
 
-        // Always wait for it if invoking something immediately in the first scene.
-        yield return YandexGamesSdk.Initialize();
+        //if (PlayerAccount.IsAuthorized == false)
+        //    PlayerAccount.StartAuthorizationPolling(1500);
 
-        if (PlayerAccount.IsAuthorized == false)
-            PlayerAccount.StartAuthorizationPolling(1500);
+        //while (true)
+        //{
+        //    _authorizationStatusText.color = PlayerAccount.IsAuthorized ? Color.green : Color.red;
 
-        while (true)
-        {
-            _authorizationStatusText.color = PlayerAccount.IsAuthorized ? Color.green : Color.red;
+        //    if (PlayerAccount.IsAuthorized)
+        //        _personalProfileDataPermissionStatusText.color = PlayerAccount.HasPersonalProfileDataPermission ? Color.green : Color.red;
+        //    else
+        //        _personalProfileDataPermissionStatusText.color = Color.red;
 
-            if (PlayerAccount.IsAuthorized)
-                _personalProfileDataPermissionStatusText.color = PlayerAccount.HasPersonalProfileDataPermission ? Color.green : Color.red;
-            else
-                _personalProfileDataPermissionStatusText.color = Color.red;
-
-            yield return new WaitForSecondsRealtime(0.25f);
-        }
-    }
+        //    yield return new WaitForSecondsRealtime(0.25f);
+        //}
+    //}
 
     private void OnDestroy()
     {
-        PlayerAccount.AuthorizedInBackground -= OnAuthorizedInBackground;
+        //PlayerAccount.AuthorizedInBackground -= OnAuthorizedInBackground;
         this.Unsubscribe<ClickGameActionEvent>();
     }
 
@@ -136,15 +130,15 @@ public class Ads : MonoBehaviour,
         });
     }
 
-    public void OnSetCloudSaveDataButtonClick()
-    {
-        PlayerAccount.SetCloudSaveData(_cloudSaveDataInputField.text);
-    }
+    //public void OnSetCloudSaveDataButtonClick()
+    //{
+    //    PlayerAccount.SetCloudSaveData(_cloudSaveDataInputField.text);
+    //}
 
-    public void OnGetCloudSaveDataButtonClick()
-    {
-        PlayerAccount.GetCloudSaveData((data) => _cloudSaveDataInputField.text = data);
-    }
+    //public void OnGetCloudSaveDataButtonClick()
+    //{
+    //    PlayerAccount.GetCloudSaveData((data) => _cloudSaveDataInputField.text = data);
+    //}
 
     public void OnGetEnvironmentButtonClick()
     {
@@ -195,5 +189,10 @@ public class Ads : MonoBehaviour,
             default:
                 break;
         }
+    }
+
+    private void OnAuthorizedInBackground()
+    {
+        Debug.Log($"{nameof(OnAuthorizedInBackground)} {PlayerAccount.IsAuthorized}");
     }
 }
