@@ -13,11 +13,14 @@ public class ChargeChanger : MonoBehaviour
 
     public Charge InstantiateCharge()
     {
+        if (_charge != null && _charge.Index == 0)
+            return _charge;
+
         _charge = Instantiate(_chargePrefab, TargetPosition.position, Quaternion.Euler(-90, 0, 0), TargetPosition);
         
         _charge.transform.position = TargetPosition.position;
 
-        _charge.Init(0);
+        _charge.Init();
 
         return _charge;
     }

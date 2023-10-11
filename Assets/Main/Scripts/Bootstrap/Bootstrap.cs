@@ -29,5 +29,6 @@ public class Bootstrap : MonoBehaviour
         EventBus.Raise(new PlayerCanInput(false));
         SceneManager.sceneLoaded -= StartNewGame;
         new LevelStar(mapManager);
+        new LiderBoard();
     }
 }

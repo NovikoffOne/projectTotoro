@@ -15,7 +15,6 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
 
     private void OnEnable()
     {
-        _charge = Instantiate(_chargeRed, _chargePostion);
         _basePlatform.SetActive(true);
     }
 
@@ -31,8 +30,6 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
 
         if (charge != null)
         {
-            Destroy(_charge.gameObject);
-
             _charge = charge;
 
             EventBus.Raise(new EnergyChangeEvent(true));

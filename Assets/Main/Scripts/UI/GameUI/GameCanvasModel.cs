@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 internal class GameCanvasModel : IModel, 
-    IEventReceiver<ClickGameActionEvent>
+    IEventReceiver<ClickGameActionEvent>,
+    IEventReceiver<IsRewarded>
 {
     public GameCanvasModel()
     {
         this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<IsRewarded>();
     }
 
     public bool IsGameOver { get; private set; } = false;
     public bool IsCompleted { get; private set; } = false;
+    public bool IsRewarded { get; private set; } = false;
 
     public void GetData()
     {
@@ -25,6 +28,7 @@ internal class GameCanvasModel : IModel,
     {
         IsGameOver = false;
         IsCompleted = false;
+        IsRewarded = false;
     }
 
     public void PlayNextLevel()
@@ -76,6 +80,18 @@ internal class GameCanvasModel : IModel,
 
     public void Unscribe()
     {
-        EventBus.Unsubscribe(this);
+        this.Unsubscribe<ClickGameActionEvent>();
+        this.Unsubscribe<IsRewarded>();
+    }
+
+    public void Reward()
+    {
+        EventBus.Raise(new ClickGameActionEvent(GameAction.ClickReward));
+    }
+
+    public void OnEvent(IsRewarded var)
+    {
+        IsRewarded = true;
+        MVCConnecter.UpdateController<GameCanvasController>();
     }
 }

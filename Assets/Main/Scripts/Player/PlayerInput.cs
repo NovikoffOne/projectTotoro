@@ -31,6 +31,11 @@ public class PlayerInput :
         _canInput = var.IsCanInput;
     }
 
+    public void OnEvent(NewGame var)
+    {
+        _firstClick = true;
+    }
+
     private Vector2 GetMouseColision()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -50,10 +55,5 @@ public class PlayerInput :
         }
         else
             return _player.Movement.CurrentPosition;
-    }
-
-    public void OnEvent(NewGame var)
-    {
-        _firstClick = true;
     }
 }

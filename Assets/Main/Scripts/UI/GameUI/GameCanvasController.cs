@@ -23,6 +23,11 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
             Model.Pause(true);
             Model.UpdateData();
         }
+
+        if (Model.IsRewarded)
+        {
+            Close(View.GameOverPanel.gameObject);
+        }
     }
 
     public override void HidePanel()
@@ -34,7 +39,7 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
 
         View.PauseButton.onClick.RemoveAllListeners();
         View.OnDestroyded -= HidePanel;
-        Model.Unsubscribe();
+        Model.Unscribe();
     }
 
     protected override void OnShow()
@@ -51,6 +56,7 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         
         View.GameOverPanel.ReloadButton.onClick.AddListener(() => Reload(View.GameOverPanel.gameObject));
         View.GameOverPanel.ExitMenuButton.onClick.AddListener(() => Exit(View.GameOverPanel.gameObject));
+        View.GameOverPanel.RewardButton.onClick.AddListener(Reward);
         
         View.PauseButton.onClick.AddListener(Pause);
     }
@@ -91,5 +97,10 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
     {
         Model.Exit();
         Close(panel);
+    }
+
+    private void Reward()
+    {
+        Model.Reward();
     }
 }

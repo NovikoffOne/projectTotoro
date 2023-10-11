@@ -12,7 +12,7 @@ public class Charge : MonoBehaviour
 
     public event Action<Vector3> PositionChanged;
 
-    public void Init(int index)
+    public void Init(int index=0)
     {
         _index = index;
     }

@@ -444,8 +444,15 @@ PlayerSettings:
   openGLRequireES32: 0
   m_TemplateCustomTags:
     MOBILE_RENDER_SCALE: 1.6
+    OVERLAY_BACKGROUND_COLOR: 
     PRODUCT_DESCRIPTION: 
+    PROGRESS_BAR_BACKGROUND_COLOR: 
+    PROGRESS_BAR_BORDER_COLOR: 
+    PROGRESS_BAR_FILL_COLOR: 
+    PROJECT_ID: 8014
     RENDER_SCALE: 2.0
+    SHOW_PRELOADER_AD: true
+    TOKEN: nv9eVB7v6ZMiSr1DAN9GlZoW0Txe6njD
   mobileMTRendering:
     Android: 1
     iPhone: 1
@@ -713,16 +720,16 @@ PlayerSettings:
   spritePackerPolicy: 
   webGLMemorySize: 16
   webGLExceptionSupport: 1
-  webGLNameFilesAsHashes: 0
+  webGLNameFilesAsHashes: 1
   webGLShowDiagnostics: 1
-  webGLDataCaching: 1
+  webGLDataCaching: 0
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
   webGLTemplate: PROJECT:FullscreenWindow
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
-  webGLCompressionFormat: 2
+  webGLCompressionFormat: 0
   webGLWasmArithmeticExceptions: 0
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0

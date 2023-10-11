@@ -11,6 +11,8 @@ public class PlayerMovement
 
     private readonly float Speed;
 
+    private Queue<Vector3> _positions = new Queue<Vector3>();
+
     public Vector3 CurrentPosition { get; private set; }
     public Vector3 LastPosition { get; private set; }
 
@@ -27,7 +29,7 @@ public class PlayerMovement
         LastPosition = CurrentPosition;
 
         CurrentPosition = newPosition;
-
+        
         PlayerView.ChangePosition(CurrentPosition);
     }
 

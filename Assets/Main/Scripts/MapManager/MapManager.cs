@@ -12,7 +12,8 @@ public class MapManager :
     IEventReceiver<EnergyChangeEvent>,
     IEventReceiver<OnPlayerInsided>,
     IEventReceiver<ClickGameActionEvent>,
-    IEventReceiver<NewGame>
+    IEventReceiver<NewGame>,
+    IEventReceiver<IsRewarded>
 {
     private Player _player; 
 
@@ -65,6 +66,11 @@ public class MapManager :
         _playerPool?.DeSpawn(_player);
     }
 
+    public void OnEvent(IsRewarded var)
+    {
+        EventBus.Raise(new PlayerCanInput(true));
+    }
+
     public void OnEvent(EnergyChangeEvent var)
     {
         if (var.IsChargeChange)
@@ -94,7 +100,7 @@ public class MapManager :
                 break;
 
             case GameAction.GameOver:
-                DespawnPlayer();
+                EventBus.Raise(new PlayerCanInput(false));
                 break;
 
             case GameAction.Exit:
@@ -123,5 +129,6 @@ public class MapManager :
         this.Subscribe<ClickGameActionEvent>();
         this.Subscribe<OnPlayerInsided>();
         this.Subscribe<NewGame>();
+        this.Subscribe<IsRewarded>();
     }
 }

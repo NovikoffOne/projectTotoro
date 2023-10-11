@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
-public abstract class EnergyReserve
+public abstract class EnergyReserve : IEventReceiver<RewardAddGas>
 {
     private int _startValue;
     private const int _baseMileage = 1;
@@ -18,7 +18,12 @@ public abstract class EnergyReserve
     {
         CurrentValue = _startValue = startValue;
 
-        //EventBus.Raise(new OnTankValueChange(ValueNormalized));
+        this.Subscribe<RewardAddGas>();
+    }
+
+    ~EnergyReserve()
+    {
+        this.Unsubscribe<RewardAddGas>();
     }
 
     public virtual void SpendGas(int mileage = _baseMileage)
@@ -40,5 +45,10 @@ public abstract class EnergyReserve
         CurrentValue = value;
 
         EventBus.Raise(new OnTankValueChange(ValueNormalized));
+    }
+
+    public void OnEvent(RewardAddGas var)
+    {
+        AddGas(var.Value);
     }
 }

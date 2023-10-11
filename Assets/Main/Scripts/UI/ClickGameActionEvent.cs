@@ -13,7 +13,8 @@ public enum GameAction
     Completed,
     GameOver,
     Exit,
-    Start
+    Start,
+    ClickReward
 }
 
 public readonly struct ClickGameActionEvent : IEvent

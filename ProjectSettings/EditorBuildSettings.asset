@@ -5,25 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Level/Level_1.unity
-    guid: 29807e066b7ab3844bc3e82b4d4463c9
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/Scenes/Level_1.unity
-    guid: 4b921d19100bc1d46a6e1bca3c9050ec
+  - enabled: 1
+    path: Assets/Scenes/BootStrap.unity
+    guid: 727ff68b3ac73564bbc12fb5f9964a0b
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: fb72596421821de4a8a69565ddaa288a
-  - enabled: 0
-    path: Assets/UI Kit Pro - Casual Glossy/Scenes/UI_Kit.unity
-    guid: 0027efb44f6d90741bbc33d50a292dc1
   - enabled: 1
     path: Assets/Scenes/SampleScene8x5.unity
     guid: 839383c6a47d2a741b53c6591fbe9cf8
   - enabled: 1
-    path: Assets/Scenes/BootStrap.unity
-    guid: 727ff68b3ac73564bbc12fb5f9964a0b
+    path: Assets/Samples/Code Coverage/1.2.4/Code Coverage Tutorial/Asteroids/Scenes/Asteroids.unity
+    guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects: {}
