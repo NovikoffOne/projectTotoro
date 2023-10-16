@@ -3,55 +3,75 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Agava;
+using UnityEngine.UI;
+using Unity.VisualScripting;
+using System.Net.Configuration;
 
 public class LiderBoard :
-    IEventReceiver<ClickLiderBoardButtonInMenu>,
     IEventReceiver<ClickGameActionEvent>
 {
+    public static LiderBoard Instance;
+
     public LiderBoard()
     {
-        this.Subscribe<ClickLiderBoardButtonInMenu>();
+        if (Instance == null)
+            Instance = this;
+        
+        this.Subscribe<ClickGameActionEvent>();
     }
 
     ~LiderBoard()
     {
-        this.Unsubscribe<ClickLiderBoardButtonInMenu>();
-    }
-
-    public void OnEvent(ClickLiderBoardButtonInMenu var)
-    {
-        //GP_Leaderboard.OnFetchSuccess += OnFetch;
-        //GP_Leaderboard.OnFetchError += () => Debug.Log("Fetch Error");
-
-
-        //GP_Leaderboard.Open("Liderboard");
-        //GP_Leaderboard.Fetch("Liderboard");
-        //Debug.Log("Open liderboards");
+        this.Unsubscribe<ClickGameActionEvent>();
     }
 
     public void OnEvent(ClickGameActionEvent var)
     {
         if (var.GameAction == GameAction.Completed)
         {
-            //GP_Player.AddScore(50);
-            //GP_Player.Sync();
+            OnSetLeaderboardScore();
         }
     }
 
-    //private void OnFetch(string tag, GP_Data data)
-    //{
-    //    var result = data.GetList<TestData>();
+    private void OnSetLeaderboardScore()
+    {
+        Leaderboard.GetPlayerEntry("Score", (result) =>
+        {
+            Debug.Log("@@@Записать 100 очков");
 
-    //    result.ForEach(data => Debug.Log(data.test));
+            if (result == null)
+            {
+                Debug.Log("");
+                return;
+            }
+            else
+            {
+                Debug.Log($"@@@ result {result.score + 100}");
+                Leaderboard.SetScore("Score", result.score + 100);
+            }
+        });
+    }
 
-    //    GP_Leaderboard.OnFetchSuccess -= OnFetch;
-    //}
+    public void OnClickLiderBoard(Action<int, string, int> drawPlayers)
+    {
+        Debug.Log("@@@ OnClickLiderBoard");
+        
+        Leaderboard.GetEntries("Score", (result) =>
+        {
+            for (int i = 0; i < result.entries.Length; i++)
+            {
+                var index = i;
+                var entry = result.entries[index];
+                var name = entry.player.publicName;
 
-}
+                if (string.IsNullOrEmpty(entry.player.publicName))
+                    name = "Anonymous";
 
-[Serializable]
-
-public class TestData
-{
-    public int test;
+                drawPlayers?.Invoke(entry.rank, entry.player.publicName, entry.score);
+            }
+        },
+        onErrorCallback: msg => Debug.Log(msg)
+        ); ;
+    }
 }

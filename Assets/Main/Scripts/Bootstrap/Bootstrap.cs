@@ -19,6 +19,9 @@ public class Bootstrap : MonoBehaviour
     private IEnumerator Start()
     {
 #if !UNITY_WEBGL || UNITY_EDITOR
+        SceneManager.LoadScene(nameof(MainMenu));
+        SceneManager.sceneLoaded += StartNewGame;
+        
         yield break;
 #endif
 
@@ -28,6 +31,7 @@ public class Bootstrap : MonoBehaviour
         if (PlayerAccount.IsAuthorized == false)
             PlayerAccount.StartAuthorizationPolling(1500);
 
+        PlayerAccount.RequestPersonalProfileDataPermission();
         SceneManager.LoadScene(nameof(MainMenu));
         SceneManager.sceneLoaded += StartNewGame;
     }

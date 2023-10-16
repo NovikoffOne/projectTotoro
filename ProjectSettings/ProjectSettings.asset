@@ -723,13 +723,13 @@ PlayerSettings:
   webGLNameFilesAsHashes: 1
   webGLShowDiagnostics: 1
   webGLDataCaching: 0
-  webGLDebugSymbols: 0
+  webGLDebugSymbols: 1
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
   webGLTemplate: PROJECT:FullscreenWindow
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
-  webGLCompressionFormat: 0
+  webGLCompressionFormat: 2
   webGLWasmArithmeticExceptions: 0
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0

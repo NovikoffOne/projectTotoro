@@ -12,45 +12,11 @@ using System.Collections;
 public class Ads : MonoBehaviour,
     IEventReceiver<ClickGameActionEvent>
 {
-    //[SerializeField]
-    //private Text _authorizationStatusText;
-
-    //[SerializeField]
-    //private Text _personalProfileDataPermissionStatusText;
-
-    //[SerializeField]
-    //private InputField _cloudSaveDataInputField;
-
     private void Awake()
     {
-        PlayerAccount.AuthorizedInBackground += OnAuthorizedInBackground;
+       // PlayerAccount.AuthorizedInBackground += OnAuthorizedInBackground;
         this.Subscribe<ClickGameActionEvent>();
     }
-
-//    private IEnumerator Start()
-//    {
-//#if !UNITY_WEBGL || UNITY_EDITOR
-//        yield break;
-//#endif
-
-//        // Always wait for it if invoking something immediately in the first scene.
-//        yield return YandexGamesSdk.Initialize();
-
-        //if (PlayerAccount.IsAuthorized == false)
-        //    PlayerAccount.StartAuthorizationPolling(1500);
-
-        //while (true)
-        //{
-        //    _authorizationStatusText.color = PlayerAccount.IsAuthorized ? Color.green : Color.red;
-
-        //    if (PlayerAccount.IsAuthorized)
-        //        _personalProfileDataPermissionStatusText.color = PlayerAccount.HasPersonalProfileDataPermission ? Color.green : Color.red;
-        //    else
-        //        _personalProfileDataPermissionStatusText.color = Color.red;
-
-        //    yield return new WaitForSecondsRealtime(0.25f);
-        //}
-    //}
 
     private void OnDestroy()
     {
@@ -65,105 +31,49 @@ public class Ads : MonoBehaviour,
 
     public void OnShowVideoButtonClick()
     {
-        VideoAd.Show();
+        VideoAd.Show(onRewardedCallback:OnRewardedCallback);
     }
 
-    public void OnShowStickyAdButtonClick()
-    {
-        StickyAd.Show();
-    }
-
-    public void OnHideStickyAdButtonClick()
-    {
-        StickyAd.Hide();
-    }
-
-    public void OnAuthorizeButtonClick()
-    {
-        PlayerAccount.Authorize();
-    }
-
-    public void OnRequestPersonalProfileDataPermissionButtonClick()
-    {
-        PlayerAccount.RequestPersonalProfileDataPermission();
-    }
-
-    public void OnGetProfileDataButtonClick()
-    {
-        PlayerAccount.GetProfileData((result) =>
-        {
-            string name = result.publicName;
-            if (string.IsNullOrEmpty(name))
-                name = "Anonymous";
-            Debug.Log($"My id = {result.uniqueID}, name = {name}");
-        });
-    }
-
-    public void OnSetLeaderboardScoreButtonClick()
-    {
-        Leaderboard.SetScore("PlaytestBoard", UnityEngine.Random.Range(1, 100));
-    }
-
-    public void OnGetLeaderboardEntriesButtonClick()
-    {
-        Leaderboard.GetEntries("PlaytestBoard", (result) =>
-        {
-            Debug.Log($"My rank = {result.userRank}");
-            foreach (var entry in result.entries)
-            {
-                string name = entry.player.publicName;
-                if (string.IsNullOrEmpty(name))
-                    name = "Anonymous";
-                Debug.Log(name + " " + entry.score);
-            }
-        });
-    }
-
-    public void OnGetLeaderboardPlayerEntryButtonClick()
-    {
-        Leaderboard.GetPlayerEntry("PlaytestBoard", (result) =>
-        {
-            if (result == null)
-                Debug.Log("Player is not present in the leaderboard.");
-            else
-                Debug.Log($"My rank = {result.rank}, score = {result.score}");
-        });
-    }
-
-    //public void OnSetCloudSaveDataButtonClick()
+    //public void OnAuthorizeButtonClick()
     //{
-    //    PlayerAccount.SetCloudSaveData(_cloudSaveDataInputField.text);
+    //    PlayerAccount.Authorize();
     //}
 
-    //public void OnGetCloudSaveDataButtonClick()
+    //public void OnRequestPersonalProfileDataPermissionButtonClick()
     //{
-    //    PlayerAccount.GetCloudSaveData((data) => _cloudSaveDataInputField.text = data);
+    //    PlayerAccount.RequestPersonalProfileDataPermission();
     //}
 
-    public void OnGetEnvironmentButtonClick()
-    {
-        Debug.Log($"Environment = {JsonUtility.ToJson(YandexGamesSdk.Environment)}");
-    }
+    //public void OnGetProfileDataButtonClick()
+    //{
+    //    PlayerAccount.GetProfileData((result) =>
+    //    {
+    //        string name = result.publicName;
+    //        if (string.IsNullOrEmpty(name))
+    //            name = "Anonymous";
+    //        Debug.Log($"My id = {result.uniqueID}, name = {name}");
+    //    });
+    //}
 
-    public void OnCallGameReadyButtonClick()
-    {
-        YandexGamesSdk.GameReady();
-    }
+    //public void OnCallGameReadyButtonClick()
+    //{
+    //    YandexGamesSdk.GameReady();
+    //}
 
-    public void OnSuggestShortcutButtonClick()
-    {
-        Shortcut.Suggest();
-    }
+    //public void OnSuggestShortcutButtonClick()
+    //{
+    //    Shortcut.Suggest();
+    //}
 
     public void OnRequestReviewButtonClick()
     {
         ReviewPopup.Open();
     }
 
-    public void OnCanSuggestShortcutButtonClick()
-    {
-        Shortcut.CanSuggest(result => { });
-    }
+    //public void OnCanSuggestShortcutButtonClick()
+    //{
+    //    Shortcut.CanSuggest(result => { });
+    //}
 
     public void OnCanRequestReviewButtonClick()
     {
@@ -182,8 +92,8 @@ public class Ads : MonoBehaviour,
                 break;
 
             case GameAction.ClickReward:
-                OnShowInterstitialButtonClick();
-                Debug.Log("InterstitalAd");
+                OnShowVideoButtonClick();
+                Debug.Log("Reward");
                 break;
 
             default:
@@ -194,5 +104,11 @@ public class Ads : MonoBehaviour,
     private void OnAuthorizedInBackground()
     {
         Debug.Log($"{nameof(OnAuthorizedInBackground)} {PlayerAccount.IsAuthorized}");
+    }
+
+    private void OnRewardedCallback()
+    {
+        EventBus.Raise(new IsRewarded());
+        EventBus.Raise(new RewardAddGas(20));
     }
 }

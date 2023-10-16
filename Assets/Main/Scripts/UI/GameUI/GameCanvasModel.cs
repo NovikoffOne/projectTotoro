@@ -11,6 +11,7 @@ internal class GameCanvasModel : IModel,
 {
     public GameCanvasModel()
     {
+        Debug.Log("Reward Complete");
         this.Subscribe<ClickGameActionEvent>();
         this.Subscribe<IsRewarded>();
     }
