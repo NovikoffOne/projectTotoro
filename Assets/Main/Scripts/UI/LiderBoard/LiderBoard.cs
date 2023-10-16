@@ -59,6 +59,8 @@ public class LiderBoard :
         
         Leaderboard.GetEntries("Score", (result) =>
         {
+            Debug.Log($"@@@ Result count = {result.entries.Length}");
+
             for (int i = 0; i < result.entries.Length; i++)
             {
                 var index = i;
@@ -68,10 +70,25 @@ public class LiderBoard :
                 if (string.IsNullOrEmpty(entry.player.publicName))
                     name = "Anonymous";
 
+                Debug.Log($"@@@ Result count = {result.entries.Length}");
                 drawPlayers?.Invoke(entry.rank, entry.player.publicName, entry.score);
             }
         },
         onErrorCallback: msg => Debug.Log(msg)
         ); ;
+    }
+
+    public void OnGetLeaderboardPlayerEntry(Action<int, string, int> drawPlayer)
+    {
+        Leaderboard.GetPlayerEntry("PlaytestBoard", (result) =>
+        {
+            if (result == null)
+                Debug.Log("Player is not present in the leaderboard.");
+            else
+            {
+                Debug.Log($"My rank = {result.rank}, score = {result.score}");
+                drawPlayer?.Invoke(result.rank, result.player.publicName, result.score);
+            }
+        });
     }
 }
