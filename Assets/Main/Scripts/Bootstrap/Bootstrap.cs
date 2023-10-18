@@ -28,10 +28,10 @@ public class Bootstrap : MonoBehaviour
         // Always wait for it if invoking something immediately in the first scene.
         yield return YandexGamesSdk.Initialize();
 
-        if (PlayerAccount.IsAuthorized == false)
-            PlayerAccount.StartAuthorizationPolling(1500);
+        //if (PlayerAccount.IsAuthorized == false)
+        //    PlayerAccount.StartAuthorizationPolling(1500);
 
-        PlayerAccount.RequestPersonalProfileDataPermission();
+        //PlayerAccount.RequestPersonalProfileDataPermission();
         SceneManager.LoadScene(nameof(MainMenu));
         SceneManager.sceneLoaded += StartNewGame;
     }
@@ -51,6 +51,5 @@ public class Bootstrap : MonoBehaviour
         SceneManager.sceneLoaded -= StartNewGame;
         new LevelStar(mapManager);
         new LiderBoard();
-        //YandexGamesSdk.Initialize();    
     }
 }

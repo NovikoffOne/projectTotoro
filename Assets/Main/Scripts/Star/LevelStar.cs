@@ -12,6 +12,7 @@ public class LevelStar :
     private readonly MapManager MapManager;
 
     private float _startTime;
+    
 
     public LevelStar(MapManager mapManager)
     {
@@ -26,13 +27,13 @@ public class LevelStar :
     {
         if(var.GameAction == GameAction.Completed)
         {
-            Debug.Log($"Save {LevelIndex}");
+            PlayerPrefs.SetInt($"LevelPassed {LevelIndex}", 1);
 
-            var oldData = PlayerPrefs.GetInt($"Level {LevelIndex}");
+            var oldData = PlayerPrefs.GetInt($"LevelStar {LevelIndex}");
             var currentData = CalculateStar(Time.time);
 
-            if(oldData < currentData)
-                PlayerPrefs.SetInt($"Level {LevelIndex}", CalculateStar(Time.time));
+            if (oldData < currentData)
+                PlayerPrefs.SetInt($"LevelStar {LevelIndex}", CalculateStar(Time.time));
         }
     }
 
@@ -59,5 +60,4 @@ public class LevelStar :
 
         return 0;
     }
-
 }

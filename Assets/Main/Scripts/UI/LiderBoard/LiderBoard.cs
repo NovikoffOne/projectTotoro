@@ -38,12 +38,10 @@ public class LiderBoard :
     {
         Leaderboard.GetPlayerEntry("Score", (result) =>
         {
-            Debug.Log("@@@Записать 100 очков");
-
             if (result == null)
             {
-                Debug.Log("");
-                return;
+                Debug.Log($"@@@ result {100}");
+                Leaderboard.SetScore("Score", 100);
             }
             else
             {
@@ -55,8 +53,6 @@ public class LiderBoard :
 
     public void OnClickLiderBoard(Action<int, string, int> drawPlayers)
     {
-        Debug.Log("@@@ OnClickLiderBoard");
-        
         Leaderboard.GetEntries("Score", (result) =>
         {
             Debug.Log($"@@@ Result count = {result.entries.Length}");
@@ -71,6 +67,7 @@ public class LiderBoard :
                     name = "Anonymous";
 
                 Debug.Log($"@@@ Result count = {result.entries.Length}");
+
                 drawPlayers?.Invoke(entry.rank, entry.player.publicName, entry.score);
             }
         },
@@ -80,13 +77,13 @@ public class LiderBoard :
 
     public void OnGetLeaderboardPlayerEntry(Action<int, string, int> drawPlayer)
     {
-        Leaderboard.GetPlayerEntry("PlaytestBoard", (result) =>
+        Leaderboard.GetPlayerEntry("Score", (result) =>
         {
             if (result == null)
-                Debug.Log("Player is not present in the leaderboard.");
+                Debug.Log("@@@Player is not present in the leaderboard.");
             else
             {
-                Debug.Log($"My rank = {result.rank}, score = {result.score}");
+                Debug.Log($"@@@My rank = {result.rank}, score = {result.score}");
                 drawPlayer?.Invoke(result.rank, result.player.publicName, result.score);
             }
         });

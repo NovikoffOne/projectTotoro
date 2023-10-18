@@ -1,4 +1,5 @@
-﻿using UnityEngine.SceneManagement;
+﻿using Agava.YandexGames;
+using UnityEngine.SceneManagement;
 
 public class MainMenuModel : IModel
 {
@@ -17,7 +18,7 @@ public class MainMenuModel : IModel
         EventBus.Raise(new ClickButtonPlayInMenu());
     }
 
-    public void LiderBoard()
+    public void LiderboardButtonClick()
     {
         EventBus.Raise(new ClickLiderBoardButtonInMenu());
     }

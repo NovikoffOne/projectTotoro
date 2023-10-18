@@ -77,7 +77,7 @@ public class MapManager :
             _numberPassengersCarried++;
 
         if (IsCanTransition)
-            Debug.Log("Ворота открыты");
+            EventBus.Raise(new OpenLevelTransition());
     }
 
     public void OnEvent(NewGame var)
