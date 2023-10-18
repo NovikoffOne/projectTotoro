@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Agava.YandexGames;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ using UnityEngine;
 
 public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
 {
+    private bool _isNotAutorization = false;
+
     public override void UpdateView()
     {
         Model.UpdateData();
@@ -22,8 +25,11 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
     protected override void OnShow()
     {
         View.MenuPanel.PlayButton.onClick.AddListener(Play);
-        View.MenuPanel.LiderBoardButton.onClick.AddListener(LiderBoard);
+        View.MenuPanel.LiderBoardButton.onClick.AddListener(AuthorizePanel);
         View.MenuPanel.SettingsButton.onClick.AddListener(Settings);
+
+        View.AuthorizePanel.AuthorizeButton.onClick.AddListener(AutorizeButtonClick);
+        View.AuthorizePanel.DontAuthorizeButton.onClick.AddListener(DontAutorizeButtonClick);
 
         View.LiderBoardPanel.Close.onClick.AddListener(() => Close(View.LiderBoardPanel.gameObject));
         View.LevelSelectionPanel.CloseButton.onClick.AddListener(() => Close(View.LevelSelectionPanel.gameObject));
@@ -54,11 +60,60 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
         Model.LevelButton(index);
     }
 
-    private void LiderBoard()
+    private void LiderboardButtonClick()
     {
-        Model.LiderBoard();
-        View.LiderBoardPanel.gameObject.SetActive(true);
-        Close(View.MenuPanel.gameObject);
+        if (View.AuthorizePanel.gameObject.activeSelf == true)
+            View.AuthorizePanel.gameObject.SetActive(false);
+
+        if (PlayerAccount.IsAuthorized == true)
+        {
+            LiderBoard.Instance.OnClickLiderBoard(DrawLiders);
+            LiderBoard.Instance.OnGetLeaderboardPlayerEntry(DrawPlayerRank);
+
+            Model.LiderboardButtonClick();
+            View.LiderBoardPanel.gameObject.SetActive(true);
+            Close(View.MenuPanel.gameObject);
+        }
+    }
+
+    private void AuthorizePanel()
+    {
+        Debug.Log($"@@@ AuthorizePanel");
+
+        if (PlayerAccount.IsAuthorized == false && _isNotAutorization == false)
+        {
+            Debug.Log($"@@@ Open AuthorizePanel");
+            View.AuthorizePanel.gameObject.SetActive(true);
+            Close(View.MenuPanel.gameObject);
+            return;
+        }
+
+        if (PlayerAccount.IsAuthorized == true)
+        {
+            Debug.Log($"@@@ PlayerAccount.IsAuthorized == true");
+            LiderboardButtonClick();
+            Close(View.MenuPanel.gameObject);
+        }
+
+        if(PlayerAccount.IsAuthorized == false && _isNotAutorization == true)
+        {
+            Debug.Log($"@@@ PlayerAccount.IsAuthorized == false _isDontAutorization == true");
+            return;
+        }
+    }
+
+    private void AutorizeButtonClick()
+    {
+        PlayerAccount.Authorize(() => PlayerAccount.RequestPersonalProfileDataPermission(), 
+            (msg) => Debug.Log($"@@@  PlayerAccount.Authorize == Error"));
+
+        Close(View.AuthorizePanel.gameObject);
+    }
+
+    private void DontAutorizeButtonClick()
+    {
+        _isNotAutorization = true;
+        Close(View.AuthorizePanel.gameObject);
     }
 
     private void Settings()
@@ -71,5 +126,38 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
     {
         View.MenuPanel.gameObject.SetActive(true);
         panel.SetActive(false);
+    }
+
+    public void OnGetProfileDataButtonClick()
+    {
+        PlayerAccount.GetProfileData((result) =>
+        {
+            string name = result.publicName;
+
+            if (string.IsNullOrEmpty(name))
+                name = "Anonymous";
+
+            Debug.Log($"My id = {result.uniqueID}, name = {name}");
+        });
+    }
+
+    private void DrawLiders(int rank, string name, int score)
+    {
+        View.LiderBoardPanel.PlayersStrings[rank - 1].gameObject.SetActive(true);
+
+        View.LiderBoardPanel.PlayersStrings[rank-1].PlayerRank.text = rank.ToString();
+        View.LiderBoardPanel.PlayersStrings[rank-1].PlayerName.text = name;
+        View.LiderBoardPanel.PlayersStrings[rank-1].PlayerScore.text = score.ToString();
+    }
+
+    private void DrawPlayerRank(int rank, string name, int score)
+    {
+        View.LiderBoardPanel.CurrentPlayerScore.gameObject.SetActive(true);
+
+        Debug.Log($"@@@ MY : {rank} {name} {score}");
+
+        View.LiderBoardPanel.CurrentPlayerScore.PlayerRank.text = rank.ToString();
+        View.LiderBoardPanel.CurrentPlayerScore.PlayerName.text = name;
+        View.LiderBoardPanel.CurrentPlayerScore.PlayerScore.text = score.ToString();
     }
 }

@@ -119,7 +119,7 @@ public partial class GridGenerator
             }
         }
         else
-            throw new System.NullReferenceException("список пуст");
+            Debug.Log("СписокПуст");
         return;
     }
 }

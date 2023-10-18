@@ -11,6 +11,25 @@ public class Bootstrap : MonoBehaviour
 
     private void Start()
     {
+        YandexGamesSdk.CallbackLogging = true;
+    }
+
+    private IEnumerator Start()
+    {
+#if !UNITY_WEBGL || UNITY_EDITOR
+        SceneManager.LoadScene(nameof(MainMenu));
+        SceneManager.sceneLoaded += StartNewGame;
+        
+        yield break;
+#endif
+
+        // Always wait for it if invoking something immediately in the first scene.
+        yield return YandexGamesSdk.Initialize();
+
+        //if (PlayerAccount.IsAuthorized == false)
+        //    PlayerAccount.StartAuthorizationPolling(1500);
+
+        //PlayerAccount.RequestPersonalProfileDataPermission();
         SceneManager.LoadScene(nameof(MainMenu));
         SceneManager.sceneLoaded += StartNewGame;
     }
@@ -29,5 +48,6 @@ public class Bootstrap : MonoBehaviour
         EventBus.Raise(new PlayerCanInput(false));
         SceneManager.sceneLoaded -= StartNewGame;
         new LevelStar(mapManager);
+        new LiderBoard();
     }
 }

@@ -13,4 +13,9 @@ public class LevelSelectionPanel : MonoBehaviour, IPanel
 
     public Button CloseButton => _closeButton;
     public List<Button> Buttons => _buttons;
+
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
 }
