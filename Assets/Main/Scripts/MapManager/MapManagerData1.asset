@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MapManagerData1
   m_EditorClassIdentifier: 
   _gridData:
+  - {fileID: 11400000, guid: 8754a95f383961b49b6c5331afdde1f4, type: 2}
   - {fileID: 11400000, guid: 45b9086317468774dbdc0d25cb3858ef, type: 2}
   - {fileID: 11400000, guid: 40471ade58c759745a479096e0840cf9, type: 2}
   - {fileID: 11400000, guid: f6c9b2586842d914988cb4f1c9def168, type: 2}
