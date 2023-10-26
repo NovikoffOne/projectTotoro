@@ -7,18 +7,20 @@ using UnityEngine;
 
 internal class GameCanvasModel : IModel, 
     IEventReceiver<ClickGameActionEvent>,
-    IEventReceiver<IsRewarded>
+    IEventReceiver<IsRewarded>,
+    IEventReceiver<ChangeTutorialState>
 {
     public GameCanvasModel()
     {
-        Debug.Log("Reward Complete");
         this.Subscribe<ClickGameActionEvent>();
         this.Subscribe<IsRewarded>();
+        this.Subscribe<ChangeTutorialState>();
     }
 
     public bool IsGameOver { get; private set; } = false;
     public bool IsCompleted { get; private set; } = false;
     public bool IsRewarded { get; private set; } = false;
+    public int TutorialState { get; private set; }
 
     public void GetData()
     {
@@ -83,6 +85,7 @@ internal class GameCanvasModel : IModel,
     {
         this.Unsubscribe<ClickGameActionEvent>();
         this.Unsubscribe<IsRewarded>();
+        this.Unsubscribe<ChangeTutorialState>();
     }
 
     public void Reward()
@@ -94,5 +97,19 @@ internal class GameCanvasModel : IModel,
     {
         IsRewarded = true;
         MVCConnecter.UpdateController<GameCanvasController>();
+    }
+
+    public void OnEvent(ChangeTutorialState var)
+    {
+        TutorialState = var.TutorialState;
+        MVCConnecter.UpdateController<GameCanvasController>();
+    }
+
+    public void SetActiveTutorialState(int state)
+    {
+        if(TutorialState < state)
+        {
+            TutorialState = state;
+        }
     }
 }

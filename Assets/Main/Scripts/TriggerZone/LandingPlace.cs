@@ -40,6 +40,6 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
             _completPlatform.SetActive(true);
         }
         else
-            throw new Exception("Не тот заряд!");
+            return;
     }
 }

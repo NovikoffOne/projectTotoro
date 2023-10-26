@@ -9,18 +9,16 @@ using UnityEngine.UIElements.Experimental;
 using Agava.YandexGames;
 using System.Collections;
 
-public class Ads : MonoBehaviour,
+public class Ads :
     IEventReceiver<ClickGameActionEvent>
 {
-    private void Awake()
+    public Ads()
     {
-       // PlayerAccount.AuthorizedInBackground += OnAuthorizedInBackground;
         this.Subscribe<ClickGameActionEvent>();
     }
 
-    private void OnDestroy()
+    ~Ads()
     {
-        //PlayerAccount.AuthorizedInBackground -= OnAuthorizedInBackground;
         this.Unsubscribe<ClickGameActionEvent>();
     }
 
@@ -34,46 +32,10 @@ public class Ads : MonoBehaviour,
         VideoAd.Show(onRewardedCallback:OnRewardedCallback);
     }
 
-    //public void OnAuthorizeButtonClick()
-    //{
-    //    PlayerAccount.Authorize();
-    //}
-
-    //public void OnRequestPersonalProfileDataPermissionButtonClick()
-    //{
-    //    PlayerAccount.RequestPersonalProfileDataPermission();
-    //}
-
-    //public void OnGetProfileDataButtonClick()
-    //{
-    //    PlayerAccount.GetProfileData((result) =>
-    //    {
-    //        string name = result.publicName;
-    //        if (string.IsNullOrEmpty(name))
-    //            name = "Anonymous";
-    //        Debug.Log($"My id = {result.uniqueID}, name = {name}");
-    //    });
-    //}
-
-    //public void OnCallGameReadyButtonClick()
-    //{
-    //    YandexGamesSdk.GameReady();
-    //}
-
-    //public void OnSuggestShortcutButtonClick()
-    //{
-    //    Shortcut.Suggest();
-    //}
-
     public void OnRequestReviewButtonClick()
     {
         ReviewPopup.Open();
     }
-
-    //public void OnCanSuggestShortcutButtonClick()
-    //{
-    //    Shortcut.CanSuggest(result => { });
-    //}
 
     public void OnCanRequestReviewButtonClick()
     {
@@ -88,12 +50,12 @@ public class Ads : MonoBehaviour,
 
             case GameAction.ClickReload:
                 OnShowInterstitialButtonClick();
-                Debug.Log("InterstitalAd");
+                Debug.Log("@@@ InterstitalAd");
                 break;
 
             case GameAction.ClickReward:
                 OnShowVideoButtonClick();
-                Debug.Log("Reward");
+                Debug.Log("@@@ Reward");
                 break;
 
             default:

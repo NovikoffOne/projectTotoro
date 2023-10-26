@@ -13,6 +13,7 @@ public class GameCanvas : MonoBehaviour, IView
     [SerializeField] private InterLevelPanel _interLevelPanel;
     [SerializeField] private PauseMenuPanel _pauseMenuPanel;
     [SerializeField] private GameOverPanel _gameOverPanel;
+    [SerializeField] private TutorialPanel _tutorialPanel;
 
     private List<IPanel> _panels = new List<IPanel>();
 
@@ -23,6 +24,7 @@ public class GameCanvas : MonoBehaviour, IView
     public InterLevelPanel InterLevelPanel => _interLevelPanel;
     public PauseMenuPanel PauseMenuPanel => _pauseMenuPanel;
     public GameOverPanel GameOverPanel => _gameOverPanel;
+    public TutorialPanel TutorialPanel => _tutorialPanel;
 
     public event Action OnDestroyded;
 
@@ -33,6 +35,7 @@ public class GameCanvas : MonoBehaviour, IView
         _panels.Add(_interLevelPanel);
         _panels.Add(_pauseMenuPanel);
         _panels.Add(_gameOverPanel);
+        _panels.Add(_tutorialPanel);
     }
 
     private void OnDestroy()

@@ -48,6 +48,7 @@ public class PlayerInput :
             if (_firstClick)
             {
                 EventBus.Raise(new StartGame());
+                
                 _firstClick = false;
             }
             

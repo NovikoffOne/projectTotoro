@@ -15,7 +15,7 @@ public class PauseMenuPanel : MonoBehaviour, IPanel
     private List<Button> _buttons = new List<Button>();
 
     public Button PlayButton => _playButton;
-    public Button CloseButton => _closeButton;
+    public Button ExitMenuButton => _closeButton;
     public Button ReloadButton => _reloadButton;
 
     public List<Button> Buttons => _buttons;

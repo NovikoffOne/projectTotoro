@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanvasModel>
@@ -28,6 +29,12 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         {
             Close(View.GameOverPanel.gameObject);
         }
+
+        if(Model.TutorialState < View.TutorialPanel.Texts.Count)
+        {
+            Debug.Log($"@@@ Set Active Text {Model.TutorialState}");
+            SetActiveText(View.TutorialPanel.Texts[Model.TutorialState]);
+        }
     }
 
     public override void HidePanel()
@@ -46,7 +53,9 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
     {
         View.OnDestroyded += HidePanel;
 
-        View.PauseMenuPanel.CloseButton.onClick.AddListener(() => Close(View.PauseMenuPanel.gameObject));
+        View.TutorialPanel.NextButton.onClick.AddListener(NextButton);
+
+        View.PauseMenuPanel.ExitMenuButton.onClick.AddListener(() => Exit(View.PauseMenuPanel.gameObject));
         View.PauseMenuPanel.ReloadButton.onClick.AddListener(() => Reload(View.PauseMenuPanel.gameObject));
         View.PauseMenuPanel.PlayButton.onClick.AddListener(() => Play(View.PauseMenuPanel.gameObject));
         
@@ -59,6 +68,38 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
         View.GameOverPanel.RewardButton.onClick.AddListener(Reward);
         
         View.PauseButton.onClick.AddListener(Pause);
+    }
+
+    private void SetActiveText(TMP_Text text)
+    {
+        View.TutorialPanel.SetActiveText(text);
+        View.TutorialPanel.gameObject.SetActive(true);
+        Debug.Log($"@@@ Active Tutorial panel & text {Model.TutorialState}");
+        Model.Pause(true);
+    }
+
+    private void NextButton()
+    {
+        View.TutorialPanel.Texts.ForEach(text => text.gameObject.SetActive(false));
+        Close(View.TutorialPanel.gameObject);
+
+        if (Model.TutorialState == 1)
+        {
+            SetActiveText(View.TutorialPanel.Texts[2]);
+            Model.SetActiveTutorialState(2);
+        }
+
+        if(Model.TutorialState == 3)
+        {
+            SetActiveText(View.TutorialPanel.Texts[4]);
+            Model.SetActiveTutorialState(4);
+        }
+
+        if (Model.TutorialState == 0)
+        {
+            SetActiveText(View.TutorialPanel.Texts[1]);
+            Model.SetActiveTutorialState(1);
+        }
     }
 
     private void Play(GameObject panel)

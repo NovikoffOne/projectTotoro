@@ -19,7 +19,8 @@ MonoBehaviour:
   - {fileID: 1387622390844753608, guid: 92085fb73c2572f468d5ed768f4949ba, type: 3}
   - {fileID: 1387622390844753608, guid: cc9cf36cc90245d45abb9b6e86a4333f, type: 3}
   - {fileID: -5841227113074744809, guid: 30607161f7f5c86439d4ab8acb6bf280, type: 3}
-  _acceleratorPosition: []
+  _acceleratorPosition:
+  - {x: 4, y: 1, z: 0}
   _barriersPosition:
   - {x: 1, y: 1, z: 0}
   - {x: 6, y: 3, z: 0}

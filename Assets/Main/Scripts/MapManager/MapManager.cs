@@ -13,6 +13,7 @@ public class MapManager :
     IEventReceiver<OnPlayerInsided>,
     IEventReceiver<ClickGameActionEvent>,
     IEventReceiver<NewGame>,
+    IEventReceiver<StartGame>,
     IEventReceiver<IsRewarded>
 {
     private Player _player; 
@@ -48,7 +49,7 @@ public class MapManager :
         _numberPassengersCarried = 0;
 
         _gridIndex = index;
-
+        
         if (_mapManagerData.GridData.Count > _gridIndex)
         {
             _grid.NewGrid(_mapManagerData.GridData[_gridIndex]);
@@ -73,11 +74,23 @@ public class MapManager :
 
     public void OnEvent(EnergyChangeEvent var)
     {
+        if (!var.IsChargeChange && _gridIndex == 0)
+        {
+            EventBus.Raise(new ChangeTutorialState(3));
+        }
+
         if (var.IsChargeChange)
+        {
             _numberPassengersCarried++;
+        }
 
         if (IsCanTransition)
+        {
             EventBus.Raise(new OpenLevelTransition());
+
+            if (_gridIndex == 0)
+                EventBus.Raise(new ChangeTutorialState(5));
+        }
     }
 
     public void OnEvent(NewGame var)
@@ -130,5 +143,12 @@ public class MapManager :
         this.Subscribe<OnPlayerInsided>();
         this.Subscribe<NewGame>();
         this.Subscribe<IsRewarded>();
+        this.Subscribe<StartGame>();
+    }
+
+    public void OnEvent(StartGame var)
+    {
+        if(_gridIndex == 0)
+            EventBus.Raise(new ChangeTutorialState(0));
     }
 }

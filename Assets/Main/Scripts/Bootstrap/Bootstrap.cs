@@ -51,5 +51,6 @@ public class Bootstrap : MonoBehaviour
         SceneManager.sceneLoaded -= StartNewGame;
         new LevelStar(mapManager);
         new LiderBoard();
+        new Ads();
     }
 }
