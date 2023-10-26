@@ -32,7 +32,6 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
 
         if(Model.TutorialState < View.TutorialPanel.Texts.Count)
         {
-            Debug.Log($"@@@ Set Active Text {Model.TutorialState}");
             SetActiveText(View.TutorialPanel.Texts[Model.TutorialState]);
         }
     }
@@ -74,31 +73,39 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
     {
         View.TutorialPanel.SetActiveText(text);
         View.TutorialPanel.gameObject.SetActive(true);
-        Debug.Log($"@@@ Active Tutorial panel & text {Model.TutorialState}");
         Model.Pause(true);
     }
 
     private void NextButton()
     {
         View.TutorialPanel.Texts.ForEach(text => text.gameObject.SetActive(false));
+        
         Close(View.TutorialPanel.gameObject);
 
-        if (Model.TutorialState == 1)
-        {
-            SetActiveText(View.TutorialPanel.Texts[2]);
-            Model.SetActiveTutorialState(2);
-        }
+        ActiveNewTutorial(Model.TutorialState);
+    }
 
-        if(Model.TutorialState == 3)
-        {
-            SetActiveText(View.TutorialPanel.Texts[4]);
-            Model.SetActiveTutorialState(4);
-        }
+    private void ActiveNewTutorial(int state)
+    {
+        var nextState = state + 1;
 
-        if (Model.TutorialState == 0)
+        switch (state)
         {
-            SetActiveText(View.TutorialPanel.Texts[1]);
-            Model.SetActiveTutorialState(1);
+            case 1:
+                
+            case 3:
+
+            case 0:
+                SetActiveText(View.TutorialPanel.Texts[nextState]);
+                Model.SetActiveTutorialState(nextState);
+                break;
+
+            case 5:
+                Model.SetActiveTutorialState(7);
+                break;
+
+            default:
+                break;
         }
     }
 
@@ -117,8 +124,8 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
     private void Close(GameObject panel)
     {
         Model.Pause(false);
-        View.PauseButton.gameObject.SetActive(true);
         panel.SetActive(false);
+        View.PauseButton.gameObject.SetActive(true);
     }
 
     private void Reload(GameObject panel)

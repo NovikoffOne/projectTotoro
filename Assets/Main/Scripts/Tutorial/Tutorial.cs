@@ -4,17 +4,28 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class Tutorial : MonoBehaviour,
-    IEventReceiver<ChangeTutorialState>
+    IEventReceiver<ChangeTutorialState>,
+    IEventReceiver<NewGame>
 {
     [SerializeField] private Light _pointLight;
+
+    private bool _isTurorial;
 
     private void Start()
     {
         this.Subscribe<ChangeTutorialState>();
+        this.Subscribe<NewGame>();
+        _pointLight.gameObject.SetActive(false);
     }
 
     public void OnEvent(ChangeTutorialState var)
     {
+        if (!_isTurorial)
+        {
+            this.gameObject.SetActive(false);
+            return;
+        }
+
         switch (var.TutorialState)
         {
             case 0:
@@ -34,5 +45,10 @@ public class Tutorial : MonoBehaviour,
                 _pointLight.gameObject.SetActive(false);
                 break;
         }
+    }
+
+    public void OnEvent(NewGame var)
+    {
+        _isTurorial = var.IndexLevel == 0;
     }
 }
