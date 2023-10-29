@@ -34,4 +34,19 @@ public class MainMenuModel : IModel
         EventBus.Raise(new NewGame(index));
         SceneManager.LoadScene("SampleScene8x5");
     }
+
+    public void EnButton()
+    {
+        Lean.Localization.LeanLocalization.SetCurrentLanguageAll("English");
+    }
+
+    public void RuButton()
+    {
+        Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Russian");
+    }
+
+    public void TuButton()
+    {
+        Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Turkish");
+    }
 }

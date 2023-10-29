@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Samples/Web Utility/3.0.0/Playtesting Sample/PlaytestingScene.unity
     guid: f217115a68ee0f9459dd5bd77192cdae
+  - enabled: 1
+    path: Assets/Plugins/CW/LeanLocalization/Examples/_13_Debug.unity
+    guid: 9ba974b138a05924f89b9e69135d7cde
   m_configObjects: {}

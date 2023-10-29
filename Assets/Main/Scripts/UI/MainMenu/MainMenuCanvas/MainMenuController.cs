@@ -22,6 +22,19 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
         View.MenuPanel.Buttons.ForEach(button => button.onClick.RemoveAllListeners());
     }
 
+    public void OnGetProfileDataButtonClick()
+    {
+        PlayerAccount.GetProfileData((result) =>
+        {
+            string name = result.publicName;
+
+            if (string.IsNullOrEmpty(name))
+                name = "Anonymous";
+
+            Debug.Log($"My id = {result.uniqueID}, name = {name}");
+        });
+    }
+
     protected override void OnShow()
     {
         View.MenuPanel.PlayButton.onClick.AddListener(Play);
@@ -33,6 +46,11 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
 
         View.LiderBoardPanel.Close.onClick.AddListener(() => Close(View.LiderBoardPanel.gameObject));
         View.LevelSelectionPanel.CloseButton.onClick.AddListener(() => Close(View.LevelSelectionPanel.gameObject));
+
+        View.SettingsPanel.Close.onClick.AddListener(() => Close(View.SettingsPanel.gameObject));
+        View.SettingsPanel.EnButton.onClick.AddListener(EnButton);
+        View.SettingsPanel.RuButton.onClick.AddListener(RuButton);
+        View.SettingsPanel.TuButton.onClick.AddListener(TuButton);
 
         for (var i = 0; i < View.LevelSelectionPanel.Buttons.Count; ++i)
         {
@@ -46,6 +64,21 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
             if (starsFillers.Count > i)
                 starsFillers[index].FiilStars(index);
         }
+    }
+
+    private void EnButton()
+    {
+        Model.EnButton() ;
+    }
+
+    private void RuButton()
+    {
+        Model.RuButton();
+    }
+
+    private void TuButton()
+    {
+        Model.TuButton();
     }
 
     private void Play()
@@ -78,26 +111,22 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
 
     private void AuthorizePanel()
     {
-        Debug.Log($"@@@ AuthorizePanel");
-
         if (PlayerAccount.IsAuthorized == false && _isNotAutorization == false)
         {
-            Debug.Log($"@@@ Open AuthorizePanel");
             View.AuthorizePanel.gameObject.SetActive(true);
             Close(View.MenuPanel.gameObject);
+        
             return;
         }
 
         if (PlayerAccount.IsAuthorized == true)
         {
-            Debug.Log($"@@@ PlayerAccount.IsAuthorized == true");
             LiderboardButtonClick();
             Close(View.MenuPanel.gameObject);
         }
 
         if(PlayerAccount.IsAuthorized == false && _isNotAutorization == true)
         {
-            Debug.Log($"@@@ PlayerAccount.IsAuthorized == false _isDontAutorization == true");
             return;
         }
     }
@@ -119,6 +148,7 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
     private void Settings()
     {
         Model.Settings();
+        View.SettingsPanel.gameObject.SetActive(true);
         Close(View.MenuPanel.gameObject);
     }
 
@@ -126,19 +156,6 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
     {
         View.MenuPanel.gameObject.SetActive(true);
         panel.SetActive(false);
-    }
-
-    public void OnGetProfileDataButtonClick()
-    {
-        PlayerAccount.GetProfileData((result) =>
-        {
-            string name = result.publicName;
-
-            if (string.IsNullOrEmpty(name))
-                name = "Anonymous";
-
-            Debug.Log($"My id = {result.uniqueID}, name = {name}");
-        });
     }
 
     private void DrawLiders(int rank, string name, int score)
@@ -153,8 +170,6 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
     private void DrawPlayerRank(int rank, string name, int score)
     {
         View.LiderBoardPanel.CurrentPlayerScore.gameObject.SetActive(true);
-
-        Debug.Log($"@@@ MY : {rank} {name} {score}");
 
         View.LiderBoardPanel.CurrentPlayerScore.PlayerRank.text = rank.ToString();
         View.LiderBoardPanel.CurrentPlayerScore.PlayerName.text = name;

@@ -21,34 +21,28 @@ public class StarFiller : MonoBehaviour
     {
         if (index == 0 && PlayerPrefs.HasKey($"LevelStar {index}") == true)
         {
-            Debug.Log($"@@@{index} == 0 && PlayerPrefs.HasKey(LevelStar {index}) == true");
             DrawStars(PlayerPrefs.GetInt($"LevelStar {index}"));
             return;
         }
         else if(index == 0 && PlayerPrefs.HasKey($"LevelStar {index}") == false)
         {
-            Debug.Log($"@@@{index} == 0 && PlayerPrefs.HasKey(LevelStar {index}) == false");
             DrawStars(0);
             return;
         }
 
         var key = PlayerPrefs.GetInt($"LevelPassed {index-1}");
 
-        Debug.Log($"@@@Level Passed = {key} index = {index}");
-
         switch (key)
         {
             case 1:
                 if (PlayerPrefs.HasKey($"LevelStar {index}"))
                 {
-                    Debug.Log($"@@@Case 1");
                     _levelPanel.SetActive(true);
                     _lock.HidePanel();
                     DrawStars(PlayerPrefs.GetInt($"LevelStar {index}"));
                 }
                 else
                 {
-                    Debug.Log($"@@@Else Case 1");
                     _levelPanel.SetActive(true);
                     _lock.HidePanel();
                     DrawStars(0);
@@ -56,13 +50,11 @@ public class StarFiller : MonoBehaviour
                 break;
 
             case 0:
-                Debug.Log($"@@@Case 0");
                 _levelPanel.SetActive(false);
                 _text.gameObject.SetActive(false);
                 break;
 
             default:
-                Debug.Log($"@@@Case Default");
                 _levelPanel.SetActive(false);
                 _text.gameObject.SetActive(false);
                 break;

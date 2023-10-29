@@ -52,5 +52,29 @@ public class Bootstrap : MonoBehaviour
         new LevelStar(mapManager);
         new LiderBoard();
         new Ads();
+
+        DetectedLanguage(YandexGamesSdk.Environment.i18n.lang);
+    }
+
+    private void DetectedLanguage(string key)
+    {
+        switch (key)
+        {
+            case "en":
+                Lean.Localization.LeanLocalization.SetCurrentLanguageAll("English");
+                break;
+
+            case "ru":
+                Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Russian");
+                break;
+
+            case "tu":
+                Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Turkish");
+                break;
+
+            default:
+                Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Russian");
+                break;
+        }
     }
 }
