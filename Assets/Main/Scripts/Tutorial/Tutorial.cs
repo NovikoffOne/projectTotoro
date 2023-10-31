@@ -5,26 +5,28 @@ using UnityEngine;
 
 public class Tutorial : MonoBehaviour,
     IEventReceiver<ChangeTutorialState>,
-    IEventReceiver<NewGame>
+    IEventReceiver<StartGame>
 {
     [SerializeField] private Light _pointLight;
 
-    private bool _isTurorial;
+    private bool _isTurorial = true;
 
     private void Start()
     {
         this.Subscribe<ChangeTutorialState>();
-        this.Subscribe<NewGame>();
-        _pointLight.gameObject.SetActive(false);
+        this.Subscribe<StartGame>();
     }
 
     public void OnEvent(ChangeTutorialState var)
     {
-        if (!_isTurorial)
+        if (_isTurorial == false)
         {
-            this.gameObject.SetActive(false);
+            _pointLight.gameObject.SetActive(false);
+            Debug.Log("Is tutorial == false");
             return;
         }
+
+        Debug.Log($"@@@ is tutorial == {_isTurorial}");
 
         switch (var.TutorialState)
         {
@@ -34,21 +36,29 @@ public class Tutorial : MonoBehaviour,
                 break;
 
             case 3:
+                _pointLight.gameObject.SetActive(true);
                 _pointLight.transform.position = new Vector3(7, 1, -.3f);
                 break;
 
             case 5:
+                _pointLight.gameObject.SetActive(true);
                 _pointLight.transform.position = new Vector3(7, 2, -.3f);
                 break;
 
             default:
-                _pointLight.gameObject.SetActive(false);
                 break;
         }
     }
 
-    public void OnEvent(NewGame var)
+    public void OnEvent(StartGame var)
     {
-        _isTurorial = var.IndexLevel == 0;
+        if (var.LevelIndex == 0)
+            _isTurorial = true;
+        else
+        {
+            _isTurorial = false;
+        }
+
+        Debug.Log($"@@@ is Tutorial == {_isTurorial}  index {var.LevelIndex}");
     }
 }

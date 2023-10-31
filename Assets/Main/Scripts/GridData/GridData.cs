@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class GridData : ScriptableObject
 {
-    [SerializeField] private List<TriggerZone> _zonePrefabs;
+    [SerializeField] private List<TriggerZoneEnter> _zonePrefabs;
 
     [SerializeField] private List<Vector3> _acceleratorPosition;
     [SerializeField] private List<Vector3> _barriersPosition;
@@ -39,12 +39,12 @@ public class GridData : ScriptableObject
     public int Width => _width;
     public int Height => _height;
 
-    public TriggerZone GetTriggerZone(ZoneIndex zone)
+    public TriggerZoneEnter GetTriggerZone(ZoneIndex zone)
     {
         var triggerZone = _zonePrefabs.Find(element => element.ZoneIndex == zone);
 
         if (triggerZone == null)
-            throw new System.NullReferenceException("список пуст");
+            Debug.Log("Список пуст");
 
         return triggerZone;
     }

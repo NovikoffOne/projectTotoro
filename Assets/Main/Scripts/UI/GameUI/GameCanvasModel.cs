@@ -8,19 +8,26 @@ using UnityEngine;
 internal class GameCanvasModel : IModel, 
     IEventReceiver<ClickGameActionEvent>,
     IEventReceiver<IsRewarded>,
-    IEventReceiver<ChangeTutorialState>
+    IEventReceiver<ChangeTutorialState>,
+    IEventReceiver<CalculateCountStar>,
+    IEventReceiver<ReturnPlayerPoints>
 {
     public GameCanvasModel()
     {
         this.Subscribe<ClickGameActionEvent>();
         this.Subscribe<IsRewarded>();
         this.Subscribe<ChangeTutorialState>();
+        this.Subscribe<CalculateCountStar>();
+        this.Subscribe<ReturnPlayerPoints>();
     }
 
     public bool IsGameOver { get; private set; } = false;
     public bool IsCompleted { get; private set; } = false;
     public bool IsRewarded { get; private set; } = false;
     public int TutorialState { get; private set; }
+
+    public int PlayerPoint { get; private set; }
+    public int CountStar { get; private set; }
 
     public void GetData()
     {
@@ -32,6 +39,9 @@ internal class GameCanvasModel : IModel,
         IsGameOver = false;
         IsCompleted = false;
         IsRewarded = false;
+
+        PlayerPoint = 0;
+        CountStar = 0;
     }
 
     public void PlayNextLevel()
@@ -86,6 +96,8 @@ internal class GameCanvasModel : IModel,
         this.Unsubscribe<ClickGameActionEvent>();
         this.Unsubscribe<IsRewarded>();
         this.Unsubscribe<ChangeTutorialState>();
+        this.Unsubscribe<ReturnPlayerPoints>();
+        this.Unsubscribe<CalculateCountStar>();
     }
 
     public void Reward()
@@ -96,6 +108,7 @@ internal class GameCanvasModel : IModel,
     public void OnEvent(IsRewarded var)
     {
         IsRewarded = true;
+        IsGameOver = false;
         MVCConnecter.UpdateController<GameCanvasController>();
     }
 
@@ -111,5 +124,17 @@ internal class GameCanvasModel : IModel,
         {
             TutorialState = state;
         }
+    }
+
+    public void OnEvent(ReturnPlayerPoints var)
+    {
+        PlayerPoint = var.Point;
+        MVCConnecter.UpdateController<GameCanvasController>();
+    }
+
+    public void OnEvent(CalculateCountStar var)
+    {
+        CountStar = var.Count;
+        MVCConnecter.UpdateController<GameCanvasController>();
     }
 }

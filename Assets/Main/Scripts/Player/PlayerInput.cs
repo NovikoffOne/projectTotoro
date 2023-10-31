@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class PlayerInput : 
     IEventReceiver<PlayerCanInput>,
-    IEventReceiver<NewGame>
+    IEventReceiver<StartGame>
 {
     private Player _player;
 
     private LayerMask _ignorLayer = 3;
 
-    private bool _canInput = true;
+    private bool _canInput;
     private bool _firstClick = true;
 
     private float _rayDistance = 20;
@@ -18,6 +18,7 @@ public class PlayerInput :
         _player = player;
 
         this.Subscribe<PlayerCanInput>();
+        this.Subscribe<StartGame>();
     }
 
     public void Update()
@@ -31,9 +32,10 @@ public class PlayerInput :
         _canInput = var.IsCanInput;
     }
 
-    public void OnEvent(NewGame var)
+    public void OnEvent(StartGame var)
     {
         _firstClick = true;
+        Debug.Log($"Player input new game index == {var.LevelIndex}");
     }
 
     private Vector2 GetMouseColision()
@@ -47,9 +49,11 @@ public class PlayerInput :
 
             if (_firstClick)
             {
-                EventBus.Raise(new StartGame());
+                EventBus.Raise(new ClickGameActionEvent(GameAction.Start));
                 
                 _firstClick = false;
+
+                Debug.Log($"@@@ FirstClick = {_firstClick}");
             }
             
             return tile.Position;

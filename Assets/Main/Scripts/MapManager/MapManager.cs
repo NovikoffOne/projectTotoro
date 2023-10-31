@@ -13,7 +13,7 @@ public class MapManager :
     IEventReceiver<OnPlayerInsided>,
     IEventReceiver<ClickGameActionEvent>,
     IEventReceiver<NewGame>,
-    IEventReceiver<StartGame>,
+    //IEventReceiver<StartGame>,
     IEventReceiver<IsRewarded>
 {
     private Player _player; 
@@ -95,7 +95,9 @@ public class MapManager :
 
     public void OnEvent(NewGame var)
     {
+        Debug.Log($"Map Manager New Game index == {var.IndexLevel}");
         NewLevel(var.IndexLevel);
+        EventBus.Raise(new StartGame(_gridIndex));
     }
 
     public void OnEvent(ClickGameActionEvent var)
@@ -114,6 +116,11 @@ public class MapManager :
 
             case GameAction.GameOver:
                 EventBus.Raise(new PlayerCanInput(false));
+                break;
+
+            case GameAction.Start:
+                if (_gridIndex == 0)
+                    EventBus.Raise(new ChangeTutorialState(0));
                 break;
 
             case GameAction.Exit:
@@ -143,12 +150,12 @@ public class MapManager :
         this.Subscribe<OnPlayerInsided>();
         this.Subscribe<NewGame>();
         this.Subscribe<IsRewarded>();
-        this.Subscribe<StartGame>();
+        //this.Subscribe<StartGame>();
     }
 
-    public void OnEvent(StartGame var)
-    {
-        if(_gridIndex == 0)
-            EventBus.Raise(new ChangeTutorialState(0));
-    }
+    //public void OnEvent(StartGame var)
+    //{
+    //    if(_gridIndex == 0)
+    //        EventBus.Raise(new ChangeTutorialState(0));
+    //}
 }

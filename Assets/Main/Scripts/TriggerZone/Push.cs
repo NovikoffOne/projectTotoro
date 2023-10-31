@@ -9,5 +9,6 @@ public class Push : MonoBehaviour, ITriggerZone
     public void ApplyEffect(Player player)
     {
         player.Movement.Move(player.Movement.CurrentPosition + _direction);
+        EventBus.Raise<PlayerCanInput>(new PlayerCanInput(false));
     }
 }

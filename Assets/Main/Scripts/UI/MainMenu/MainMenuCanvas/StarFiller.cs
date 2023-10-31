@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-//using PlayerPrefs = Agava.YandexGames.PlayerPrefs;
 
 public class StarFiller : MonoBehaviour
 {

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2339228354741550240}
   - component: {fileID: 2838843693683803220}
-  - component: {fileID: 1387622390844753608}
   - component: {fileID: 4194220235114210469}
+  - component: {fileID: 3010820059214874981}
   m_Layer: 3
   m_Name: LandingPlaceBase
   m_TagString: Untagged
@@ -58,19 +58,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3, y: 0.3, z: 0.22524512}
   m_Center: {x: 0, y: 0, z: -0.26}
---- !u!114 &1387622390844753608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3037552578467522104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c610738859cd4c340adbc1801121292d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _zoneIndex: 3
 --- !u!114 &4194220235114210469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +75,19 @@ MonoBehaviour:
   _completPlatform: {fileID: 3594503505535259870}
   _chargePostion: {fileID: 7492557042343100787}
   _index: 1
+--- !u!114 &3010820059214874981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037552578467522104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4167d00c13f3dab4cad4cb597fd5e3b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Index: 3
 --- !u!1 &8076554226083435630
 GameObject:
   m_ObjectHideFlags: 0

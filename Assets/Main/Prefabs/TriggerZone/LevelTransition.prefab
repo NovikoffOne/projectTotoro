@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2339228354741550240}
   - component: {fileID: 2838843693683803220}
-  - component: {fileID: -5841227113074744809}
   - component: {fileID: -3498884013110358540}
+  - component: {fileID: 2286708992304929101}
   m_Layer: 3
   m_Name: LevelTransition
   m_TagString: Untagged
@@ -59,19 +59,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3, y: 0.3, z: 0.5}
   m_Center: {x: 0, y: 0, z: -0.2856287}
---- !u!114 &-5841227113074744809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3037552578467522104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c610738859cd4c340adbc1801121292d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _zoneIndex: 5
 --- !u!114 &-3498884013110358540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,6 +74,19 @@ MonoBehaviour:
   _door: {fileID: 1335554644774829376}
   _particle: {fileID: -3253947782491088398, guid: 6fed2523294299a4cb99fa83972c17ef, type: 3}
   _particlePosition: {fileID: 70599472284232689}
+--- !u!114 &2286708992304929101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037552578467522104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4167d00c13f3dab4cad4cb597fd5e3b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Index: 5
 --- !u!1 &3466697473362032141
 GameObject:
   m_ObjectHideFlags: 0

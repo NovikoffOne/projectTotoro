@@ -5,25 +5,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.Timeline.TimelineAsset;
 
-public class PlayerMovement
+public class PlayerMovement :
+    IEventReceiver<ClickGameActionEvent>
 {
     private readonly PlayerView PlayerView;
 
     private readonly float Speed;
 
-    private Queue<Vector3> _positions = new Queue<Vector3>();
-
     public Vector3 CurrentPosition { get; private set; }
     public Vector3 LastPosition { get; private set; }
+
+    private bool _isGame;
 
     public PlayerMovement(PlayerView playerView, float speed = 1f)
     {
         PlayerView = playerView;
         Speed = speed;
+
+        this.Subscribe<ClickGameActionEvent>();
+    }
+
+    ~PlayerMovement()
+    {
+        this.Unsubscribe<ClickGameActionEvent>();
     }
 
     public void Move(Vector3 newPosition)
     {
+        if (_isGame == false)
+            return;
+
         newPosition = ClampingMoveDirection(newPosition);
 
         LastPosition = CurrentPosition;
@@ -51,5 +62,26 @@ public class PlayerMovement
         newPosition.y = CurrentPosition.y + Mathf.Clamp(deltaY, -Speed, Speed);
 
         return newPosition;
+    }
+
+    public void OnEvent(ClickGameActionEvent var)
+    {
+        switch (var.GameAction)
+        {
+            case GameAction.Start:
+                _isGame = true;
+                break;
+
+            case GameAction.Completed:
+                _isGame = false;
+                break;
+
+            case GameAction.ClickNextLevel:
+                _isGame = true;
+                break;
+
+            default:
+                break;
+        }
     }
 }

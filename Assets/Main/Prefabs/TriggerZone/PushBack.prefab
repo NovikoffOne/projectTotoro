@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2339228354741550240}
   - component: {fileID: 2838843693683803220}
-  - component: {fileID: -713045024945801954}
   - component: {fileID: -86156902301753128}
+  - component: {fileID: 1659744577371738248}
   m_Layer: 3
   m_Name: PushBack
   m_TagString: Untagged
@@ -56,19 +56,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3526852, y: 0.37182713, z: 0.81387293}
   m_Center: {x: 0, y: 0, z: -0.09306355}
---- !u!114 &-713045024945801954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3037552578467522104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c610738859cd4c340adbc1801121292d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _zoneIndex: 2
 --- !u!114 &-86156902301753128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,6 +69,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _direction: {x: -1, y: 0, z: 0}
+--- !u!114 &1659744577371738248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037552578467522104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4167d00c13f3dab4cad4cb597fd5e3b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Index: 2
 --- !u!1 &6109966244164027101
 GameObject:
   m_ObjectHideFlags: 0

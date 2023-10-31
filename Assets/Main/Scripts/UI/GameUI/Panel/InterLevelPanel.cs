@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class InterLevelPanel : MonoBehaviour, IPanel
 {
+    [SerializeField] private StarFillerGameUI _starFiller;
+
     [SerializeField] private Button _newLevelButton;
     [SerializeField] private Button _exitMenuButton;
     [SerializeField] private Button _reloadButton;
@@ -16,6 +18,7 @@ public class InterLevelPanel : MonoBehaviour, IPanel
     public Button NewLevelButton => _newLevelButton;
     public Button ExitMenuButton => _exitMenuButton;
     public Button ReloadButton => _reloadButton;
+    public StarFillerGameUI StarFiller => _starFiller;
 
     public List<Button> Buttons => _buttons;
 

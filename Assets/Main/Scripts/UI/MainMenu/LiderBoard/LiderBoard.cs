@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using System.Net.Configuration;
 
 public class LiderBoard :
-    IEventReceiver<ClickGameActionEvent>
+    IEventReceiver<ReturnPlayerPoints>
 {
     public static LiderBoard Instance;
 
@@ -18,36 +18,28 @@ public class LiderBoard :
         if (Instance == null)
             Instance = this;
         
-        this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<ReturnPlayerPoints>();
     }
 
     ~LiderBoard()
     {
-        this.Unsubscribe<ClickGameActionEvent>();
+        this.Unsubscribe<ReturnPlayerPoints>();
     }
 
-    public void OnEvent(ClickGameActionEvent var)
+    public void OnEvent(ReturnPlayerPoints var)
     {
-        if (var.GameAction == GameAction.Completed)
-        {
-            OnSetLeaderboardScore();
-        }
+        OnSetLeaderboardScore(var.Point);
     }
 
-    private void OnSetLeaderboardScore()
+    
+    private void OnSetLeaderboardScore(int point)
     {
         Leaderboard.GetPlayerEntry("Score", (result) =>
         {
             if (result == null)
-            {
-                Debug.Log($"@@@ result {100}");
-                Leaderboard.SetScore("Score", 100);
-            }
+                Leaderboard.SetScore("Score", point);
             else
-            {
-                Debug.Log($"@@@ result {result.score + 100}");
-                Leaderboard.SetScore("Score", result.score + 100);
-            }
+                Leaderboard.SetScore("Score", result.score + point);
         });
     }
 
@@ -55,8 +47,6 @@ public class LiderBoard :
     {
         Leaderboard.GetEntries("Score", (result) =>
         {
-            Debug.Log($"@@@ Result count = {result.entries.Length}");
-
             for (int i = 0; i < result.entries.Length; i++)
             {
                 var index = i;
@@ -64,9 +54,7 @@ public class LiderBoard :
                 var name = entry.player.publicName;
 
                 if (string.IsNullOrEmpty(entry.player.publicName))
-                    name = "Anonymous";
-
-                Debug.Log($"@@@ Result count = {result.entries.Length}");
+                    return;
 
                 drawPlayers?.Invoke(entry.rank, entry.player.publicName, entry.score);
             }
@@ -83,7 +71,6 @@ public class LiderBoard :
                 Debug.Log("@@@Player is not present in the leaderboard.");
             else
             {
-                Debug.Log($"@@@My rank = {result.rank}, score = {result.score}");
                 drawPlayer?.Invoke(result.rank, result.player.publicName, result.score);
             }
         });

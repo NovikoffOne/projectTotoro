@@ -4,10 +4,14 @@ using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
-public abstract class EnergyReserve : IEventReceiver<RewardAddGas>
+public abstract class EnergyReserve : 
+    IEventReceiver<RewardAddGas>,
+    IEventReceiver<ClickGameActionEvent>
 {
+    private const int BaseMilage = 1;
+    private const int PointMultiplier = 10;
+
     private int _startValue;
-    private const int _baseMileage = 1;
 
     protected int CurrentValue;
 
@@ -19,14 +23,16 @@ public abstract class EnergyReserve : IEventReceiver<RewardAddGas>
         CurrentValue = _startValue = startValue;
 
         this.Subscribe<RewardAddGas>();
+        this.Subscribe<ClickGameActionEvent>();
     }
 
     ~EnergyReserve()
     {
         this.Unsubscribe<RewardAddGas>();
+        this.Unsubscribe<ClickGameActionEvent>();
     }
 
-    public virtual void SpendGas(int mileage = _baseMileage)
+    public virtual void SpendGas(int mileage = BaseMilage)
     {
         CurrentValue -= mileage;
 
@@ -50,5 +56,17 @@ public abstract class EnergyReserve : IEventReceiver<RewardAddGas>
     public void OnEvent(RewardAddGas var)
     {
         AddGas(var.Value);
+    }
+
+    public void OnEvent(ClickGameActionEvent var)
+    {
+        if(var.GameAction == GameAction.Completed)
+        {
+            var temp = CurrentValue * PointMultiplier;
+
+            Debug.Log($"@@@ Count Point = {temp}");
+
+            EventBus.Raise(new ReturnPlayerPoints(temp));
+        }
     }
 }

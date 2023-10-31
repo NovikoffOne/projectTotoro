@@ -9,14 +9,14 @@ public partial class GridGenerator
     private GridData _gridData;
     private PoolMono<Tile> _tilePool;
     
-    private List<PoolMono<TriggerZone>> _trigerZonePools = new List<PoolMono<TriggerZone>>();
+    private List<PoolMono<TriggerZoneEnter>> _trigerZonePools = new List<PoolMono<TriggerZoneEnter>>();
 
-    private PoolMono<TriggerZone> _triggerZoneBarrier;
-    private PoolMono<TriggerZone> _triggerZoneAccelerartor;
-    private PoolMono<TriggerZone> _triggerZoneRepulsor;
-    private PoolMono<TriggerZone> _triggerZoneLanding;
-    private PoolMono<TriggerZone> _triggerZoneLoading;
-    private PoolMono<TriggerZone> _triggerZoneLevelTransition;
+    private PoolMono<TriggerZoneEnter> _triggerZoneBarrier;
+    private PoolMono<TriggerZoneEnter> _triggerZoneAccelerartor;
+    private PoolMono<TriggerZoneEnter> _triggerZoneRepulsor;
+    private PoolMono<TriggerZoneEnter> _triggerZoneLanding;
+    private PoolMono<TriggerZoneEnter> _triggerZoneLoading;
+    private PoolMono<TriggerZoneEnter> _triggerZoneLevelTransition;
 
     public void NewGrid(GridData gridData)
     {
@@ -26,12 +26,12 @@ public partial class GridGenerator
             _trigerZonePools.ForEach(pool => pool.DeSpawnAll());
         else
         {
-            _triggerZoneBarrier = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Barier));
-            _triggerZoneAccelerartor = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Accelerartor));
-            _triggerZoneRepulsor = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Repulsor));
-            _triggerZoneLanding = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Landing));
-            _triggerZoneLoading = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.Loading));
-            _triggerZoneLevelTransition = new PoolMono<TriggerZone>(_gridData.GetTriggerZone(ZoneIndex.LevelTransition));
+            _triggerZoneBarrier = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Barier));
+            _triggerZoneAccelerartor = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Accelerartor));
+            _triggerZoneRepulsor = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Repulsor));
+            _triggerZoneLanding = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Landing));
+            _triggerZoneLoading = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Loading));
+            _triggerZoneLevelTransition = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.LevelTransition));
 
             _trigerZonePools.Add(_triggerZoneBarrier);
             _trigerZonePools.Add(_triggerZoneAccelerartor);
@@ -49,9 +49,9 @@ public partial class GridGenerator
         GenerateGrid();
     }
 
-    public List<TriggerZone> GetLandingPlaces()
+    public List<TriggerZoneEnter> GetLandingPlaces()
     {
-        var landingPlaces = new List<TriggerZone>();
+        var landingPlaces = new List<TriggerZoneEnter>();
         
         foreach (var landing in _triggerZoneLanding.Pool)
         {
@@ -105,7 +105,7 @@ public partial class GridGenerator
         SetPositionTriggerZone(_gridData.LevelTransitionPosition, _triggerZoneLevelTransition);
     }
 
-    private void SetPositionTriggerZone(IReadOnlyList<Vector3> zonePositions, PoolMono<TriggerZone> triggerZones)
+    private void SetPositionTriggerZone(IReadOnlyList<Vector3> zonePositions, PoolMono<TriggerZoneEnter> triggerZones)
     {
         if (zonePositions != null && zonePositions.Count > 0)
         {

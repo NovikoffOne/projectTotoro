@@ -221,15 +221,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}
+  m_sharedMaterial: {fileID: 942589445191879500, guid: 02fea1fb776e0ad43a5e684a1ab0ce9e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 3539992575
-  m_fontColor: {r: 1, g: 1, b: 1, a: 0.8235294}
+    rgba: 4060086271
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0.94509804}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -377,6 +377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2693bc2493d0c8f499bdf305bc54dc4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _button: {fileID: 1529812672885655132}
 --- !u!1 &4547285845016116175
 GameObject:
   m_ObjectHideFlags: 0
