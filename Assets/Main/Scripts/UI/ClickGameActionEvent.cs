@@ -20,11 +20,9 @@ public enum GameAction
 public readonly struct ClickGameActionEvent : IEvent
 {
     public readonly GameAction GameAction;
-    //public readonly int LevelIndex;
 
     public ClickGameActionEvent(GameAction gameAction)
     {
         GameAction = gameAction;
-        //LevelIndex = levelIndex;
     }
 }

@@ -1,7 +1,4 @@
-using DG.Tweening;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Charge : MonoBehaviour
@@ -12,7 +9,7 @@ public class Charge : MonoBehaviour
 
     public event Action<Vector3> PositionChanged;
 
-    public void Init(int index=0)
+    public void Init(int index = 0)
     {
         _index = index;
     }

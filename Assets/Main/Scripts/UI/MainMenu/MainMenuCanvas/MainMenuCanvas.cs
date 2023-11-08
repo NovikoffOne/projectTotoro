@@ -9,7 +9,6 @@ public class MainMenuCanvas : MonoBehaviour, IView
     [SerializeField] private LiderBoardPanel _liderBoardPanel;
     [SerializeField] private LevelSelectionPanel _levelSelectionPanel;
     [SerializeField] private AuthorizePanel _authorizePanel;
-    [SerializeField] private SettingsPanel _settingsPanel;
 
     private List<IPanel> _panels = new List<IPanel>();
 
@@ -17,7 +16,6 @@ public class MainMenuCanvas : MonoBehaviour, IView
     public MainMenuPanel MenuPanel => _menuPanel;
     public LevelSelectionPanel LevelSelectionPanel => _levelSelectionPanel;
     public AuthorizePanel AuthorizePanel => _authorizePanel;
-    public SettingsPanel SettingsPanel => _settingsPanel;
 
     public List<IPanel> Panels => _panels;
 
@@ -29,6 +27,5 @@ public class MainMenuCanvas : MonoBehaviour, IView
         _panels.Add(_levelSelectionPanel);
         _panels.Add(_liderBoardPanel);
         _panels.Add(_authorizePanel);
-        _panels.Add(_settingsPanel);
     }
 }

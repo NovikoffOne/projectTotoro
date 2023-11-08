@@ -24,6 +24,7 @@ internal class GameCanvasModel : IModel,
     public bool IsGameOver { get; private set; } = false;
     public bool IsCompleted { get; private set; } = false;
     public bool IsRewarded { get; private set; } = false;
+    public bool IsTutorial { get; private set; } = false;
     public int TutorialState { get; private set; }
 
     public int PlayerPoint { get; private set; }
@@ -82,6 +83,7 @@ internal class GameCanvasModel : IModel,
 
             case GameAction.GameOver:
                 IsGameOver = true;
+                IsTutorial = false;
                 MVCConnecter.UpdateController<GameCanvasController>();
                 Time.timeScale = 0;
                 break;
@@ -114,16 +116,24 @@ internal class GameCanvasModel : IModel,
 
     public void OnEvent(ChangeTutorialState var)
     {
-        TutorialState = var.TutorialState;
-        MVCConnecter.UpdateController<GameCanvasController>();
+        if(var.IsTutorial == true)
+        {
+            IsTutorial = true;
+            TutorialState = var.TutorialState;
+            MVCConnecter.UpdateController<GameCanvasController>();
+        }
     }
 
     public void SetActiveTutorialState(int state)
     {
-        if(TutorialState < state)
-        {
-            TutorialState = state;
-        }
+        TutorialState = state;
+        MVCConnecter.UpdateController<GameCanvasController>();
+    }
+
+    public void CompleteTutorial()
+    {
+        EventBus.Raise(new TutorialCompletd());
+        IsTutorial = false;
     }
 
     public void OnEvent(ReturnPlayerPoints var)

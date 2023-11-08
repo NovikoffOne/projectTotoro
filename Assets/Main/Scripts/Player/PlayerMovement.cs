@@ -6,21 +6,25 @@ using UnityEngine;
 using static UnityEngine.Timeline.TimelineAsset;
 
 public class PlayerMovement :
-    IEventReceiver<ClickGameActionEvent>
+    IEventReceiver<ClickGameActionEvent>,
+    IEventReceiver<StartGame>
 {
     private readonly PlayerView PlayerView;
 
     private readonly float Speed;
 
+    private bool _isGame;
+
     public Vector3 CurrentPosition { get; private set; }
     public Vector3 LastPosition { get; private set; }
 
-    private bool _isGame;
+    public bool IsApplyAffect { get; private set; }
 
     public PlayerMovement(PlayerView playerView, float speed = 1f)
     {
         PlayerView = playerView;
         Speed = speed;
+        IsApplyAffect = true;
 
         this.Subscribe<ClickGameActionEvent>();
     }
@@ -34,6 +38,8 @@ public class PlayerMovement :
     {
         if (_isGame == false)
             return;
+
+        IsApplyAffect = true;
 
         newPosition = ClampingMoveDirection(newPosition);
 
@@ -51,6 +57,8 @@ public class PlayerMovement :
         LastPosition = new Vector3(0, 0, 0);
 
         PlayerView.ResetPosition();
+
+        IsApplyAffect = true;
     }
 
     private Vector2 ClampingMoveDirection(Vector2 newPosition)
@@ -80,8 +88,34 @@ public class PlayerMovement :
                 _isGame = true;
                 break;
 
+            case GameAction.ClickReload:
+                _isGame = true;
+                break;
+            
+            case GameAction.ClickPlay:
+                _isGame = true;
+                break;
+
+            case GameAction.Exit:
+                _isGame = false;
+                break;
+
+            case GameAction.GameOver:
+                _isGame = false;
+                break;
+
+            case GameAction.ClickReward:
+                _isGame = true;
+                IsApplyAffect = false;
+                break;
+
             default:
                 break;
         }
+    }
+
+    public void OnEvent(StartGame var)
+    {
+        _isGame = true;
     }
 }

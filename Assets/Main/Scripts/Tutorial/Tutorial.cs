@@ -4,45 +4,61 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class Tutorial : MonoBehaviour,
-    IEventReceiver<ChangeTutorialState>,
-    IEventReceiver<StartGame>
+    IEventReceiver<ChangeTutorialState>
 {
-    [SerializeField] private Light _pointLight;
+    [SerializeField] private Light _pointLightPrefab;
+    
+    private Light _pointLight;
+    private bool _isFirst;
 
-    private bool _isTurorial = true;
+    private void Awake()
+    {
+        _isFirst = true;
+    }
 
     private void Start()
     {
         this.Subscribe<ChangeTutorialState>();
-        this.Subscribe<StartGame>();
+    }
+
+    private void OnDisable()
+    {
+        if (_pointLight == null)
+            return;
+
+        Debug.Log("OnDisable");
+        _pointLight.gameObject.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        this.gameObject.SetActive(false);
+        this.Unsubscribe<ChangeTutorialState>();
     }
 
     public void OnEvent(ChangeTutorialState var)
     {
-        if (_isTurorial == false)
-        {
-            _pointLight.gameObject.SetActive(false);
-            Debug.Log("Is tutorial == false");
+        Debug.Log($"ChangaeTutorialState");
+        
+        if (var.IsTutorial == false || _isFirst == false)
             return;
-        }
 
-        Debug.Log($"@@@ is tutorial == {_isTurorial}");
+        if(_pointLight == null)
+            _pointLight = Instantiate(_pointLightPrefab, new Vector3(3, 1, -.3f), Quaternion.identity);
 
         switch (var.TutorialState)
         {
             case 0:
-                _pointLight.gameObject.SetActive(true);
                 _pointLight.transform.position = new Vector3(3, 1, -.3f);
                 break;
 
             case 3:
-                _pointLight.gameObject.SetActive(true);
                 _pointLight.transform.position = new Vector3(7, 1, -.3f);
                 break;
 
             case 5:
-                _pointLight.gameObject.SetActive(true);
                 _pointLight.transform.position = new Vector3(7, 2, -.3f);
+                _isFirst = false;
                 break;
 
             default:
@@ -50,15 +66,15 @@ public class Tutorial : MonoBehaviour,
         }
     }
 
-    public void OnEvent(StartGame var)
-    {
-        if (var.LevelIndex == 0)
-            _isTurorial = true;
-        else
-        {
-            _isTurorial = false;
-        }
+    //public void OnEvent(StartGame var)
+    //{
+    //    if (var.LevelIndex == 0)
+    //        _isTurorial = true;
+    //    else
+    //    {
+    //        _isTurorial = false;
+    //    }
 
-        Debug.Log($"@@@ is Tutorial == {_isTurorial}  index {var.LevelIndex}");
-    }
+    //    Debug.Log($"@@@ is Tutorial == {_isTurorial}  index {var.LevelIndex}");
+    //}
 }

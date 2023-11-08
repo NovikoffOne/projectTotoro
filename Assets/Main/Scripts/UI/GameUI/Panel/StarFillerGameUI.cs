@@ -8,28 +8,26 @@ using UnityEngine;
 
 public class StarFillerGameUI : MonoBehaviour
 {
-    [SerializeField] private GameObject _star1;
-    [SerializeField] private GameObject _star2;
-    [SerializeField] private GameObject _star3;
-
     [SerializeField] private TMP_Text _point;
+    [SerializeField] private List<GameObject> _stars;
 
-    public void FillStars(int index, int point)
+    private void OnDisable()
     {
-        DrawStars(index);
+        _stars.ForEach(star => star.SetActive(false));
+    }
+
+    public void FillStars(int star, int point)
+    {
+        DrawStars(star);
         DrawPoint(point);
     }
 
     private void DrawStars(int countStars)
     {
-        if (countStars > 0)
-            _star1.SetActive(true);
-
-        if (countStars > 1)
-            _star2.SetActive(true);
-
-        if (countStars > 2)
-            _star3.SetActive(true);
+        for (int i = 0; i < countStars; i++)
+        {
+            _stars[i].SetActive(true);
+        }
     }
 
     private void DrawPoint(int point)

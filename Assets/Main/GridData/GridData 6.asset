@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3310b09e216c99f4295d1b0e10ec3e2c, type: 3}
-  m_Name: GridData 2
+  m_Name: GridData 6
   m_EditorClassIdentifier: 
   _zonePrefabs:
   - {fileID: 3668316251510883953, guid: c0afe4a532dece94886280c551a5e6be, type: 3}
@@ -20,21 +20,36 @@ MonoBehaviour:
   - {fileID: 6769159940865566981, guid: cc9cf36cc90245d45abb9b6e86a4333f, type: 3}
   - {fileID: 2286708992304929101, guid: 30607161f7f5c86439d4ab8acb6bf280, type: 3}
   _acceleratorPosition:
-  - {x: 1, y: 0, z: 0}
+  - {x: 2, y: 2, z: 0}
+  - {x: 4, y: 1, z: 0}
+  - {x: 1, y: 2, z: 0}
+  - {x: 5, y: 4, z: 0}
+  - {x: 6, y: 4, z: 0}
   _barriersPosition:
   - {x: 1, y: 1, z: 0}
-  - {x: 5, y: 4, z: 0}
-  - {x: 3, y: 2, z: 0}
+  - {x: 6, y: 3, z: 0}
+  - {x: 1, y: 0, z: 0}
+  - {x: 0, y: 2, z: 0}
+  - {x: 0, y: 2, z: 0}
+  - {x: 4, y: 0, z: 0}
   - {x: 1, y: 3, z: 0}
-  _repulsorPosition:
+  - {x: 2, y: 3, z: 0}
+  - {x: 2, y: 1, z: 0}
+  - {x: 3, y: 1, z: 0}
+  - {x: 4, y: 2, z: 0}
+  - {x: 4, y: 3, z: 0}
   - {x: 3, y: 4, z: 0}
   - {x: 6, y: 1, z: 0}
+  - {x: 6, y: 2, z: 0}
+  - {x: 7, y: 1, z: 0}
+  _repulsorPosition:
+  - {x: 5, y: 0, z: 0}
   _landingPlacePosition:
-  - {x: 1, y: 4, z: 0}
+  - {x: 7, y: 0, z: 0}
   _loadingPlacePosition:
-  - {x: 6, y: 1, z: 0}
+  - {x: 0, y: 4, z: 0}
   _levelTransitionPosition:
-  - {x: 2, y: 1, z: 0}
+  - {x: 7, y: 2, z: 0}
   _tilePrefab: {fileID: 752333211977425002, guid: d985f2cfee94b244992bd3666d8dec04, type: 3}
   _cameraPositionY: -2
   _cameraPositionZ: -10

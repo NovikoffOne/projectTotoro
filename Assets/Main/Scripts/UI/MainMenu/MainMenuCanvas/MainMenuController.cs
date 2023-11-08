@@ -38,19 +38,14 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
     protected override void OnShow()
     {
         View.MenuPanel.PlayButton.onClick.AddListener(Play);
+
         View.MenuPanel.LiderBoardButton.onClick.AddListener(AuthorizePanel);
-        View.MenuPanel.SettingsButton.onClick.AddListener(Settings);
 
         View.AuthorizePanel.AuthorizeButton.onClick.AddListener(AutorizeButtonClick);
         View.AuthorizePanel.DontAuthorizeButton.onClick.AddListener(DontAutorizeButtonClick);
 
         View.LiderBoardPanel.Close.onClick.AddListener(() => Close(View.LiderBoardPanel.gameObject));
         View.LevelSelectionPanel.CloseButton.onClick.AddListener(() => Close(View.LevelSelectionPanel.gameObject));
-
-        View.SettingsPanel.Close.onClick.AddListener(() => Close(View.SettingsPanel.gameObject));
-        View.SettingsPanel.EnButton.onClick.AddListener(EnButton);
-        View.SettingsPanel.RuButton.onClick.AddListener(RuButton);
-        View.SettingsPanel.TuButton.onClick.AddListener(TuButton);
 
         for (var i = 0; i < View.LevelSelectionPanel.Buttons.Count; ++i)
         {
@@ -64,21 +59,6 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
             if (starsFillers.Count > i)
                 starsFillers[index].FiilStars(index);
         }
-    }
-
-    private void EnButton()
-    {
-        Model.EnButton() ;
-    }
-
-    private void RuButton()
-    {
-        Model.RuButton();
-    }
-
-    private void TuButton()
-    {
-        Model.TuButton();
     }
 
     private void Play()
@@ -143,13 +123,6 @@ public class MainMenuController : BaseController<MainMenuCanvas, MainMenuModel>
     {
         _isNotAutorization = true;
         Close(View.AuthorizePanel.gameObject);
-    }
-
-    private void Settings()
-    {
-        Model.Settings();
-        View.SettingsPanel.gameObject.SetActive(true);
-        Close(View.MenuPanel.gameObject);
     }
 
     private void Close(GameObject panel)

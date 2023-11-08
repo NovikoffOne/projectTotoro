@@ -8,10 +8,13 @@ using UnityEngine.UI;
 using UnityEngine.UIElements.Experimental;
 using Agava.YandexGames;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Ads :
     IEventReceiver<ClickGameActionEvent>
 {
+    private int _amountEnergyPerReward = 20;
+
     public Ads()
     {
         this.Subscribe<ClickGameActionEvent>();
@@ -29,6 +32,11 @@ public class Ads :
 
     public void OnShowVideoButtonClick()
     {
+#if !UNITY_WEBGL || UNITY_EDITOR
+        OnRewardedCallback();
+
+        return;
+#endif
         VideoAd.Show(onRewardedCallback:OnRewardedCallback);
     }
 
@@ -44,18 +52,22 @@ public class Ads :
 
     public void OnEvent(ClickGameActionEvent var)
     {
+#if !UNITY_WEBGL || UNITY_EDITOR
+        if (var.GameAction == GameAction.ClickReward)
+            OnShowVideoButtonClick();
+        
+        return;
+#endif
         switch (var.GameAction)
         {
             case GameAction.ClickNextLevel:
 
             case GameAction.ClickReload:
                 OnShowInterstitialButtonClick();
-                Debug.Log("@@@ InterstitalAd");
                 break;
 
             case GameAction.ClickReward:
                 OnShowVideoButtonClick();
-                Debug.Log("@@@ Reward");
                 break;
 
             default:
@@ -71,6 +83,6 @@ public class Ads :
     private void OnRewardedCallback()
     {
         EventBus.Raise(new IsRewarded());
-        EventBus.Raise(new RewardAddGas(20));
+        EventBus.Raise(new RewardAddGas(_amountEnergyPerReward));
     }
 }

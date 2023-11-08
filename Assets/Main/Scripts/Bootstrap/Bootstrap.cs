@@ -1,15 +1,21 @@
+using Agava.YandexGames;
+using IJunior.TypedScenes;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using IJunior.TypedScenes;
-using Agava;
-using Agava.YandexGames;
 
 public class Bootstrap : MonoBehaviour
 {
     [SerializeField] private MapManagerData _mapManagerData;
     [SerializeField] private Player _playerPrefab;
+
+    private const string EnglishLanguage = "English";
+    private const string RussianLanguage = "Russian";
+    private const string TurkishLanguage = "Turkish";
+
+    private const string AbbreviationEnglishLanguage = "en";
+    private const string AbbreviationRussianLanguage = "ru";
+    private const string AbbreviationTurkishLanguage = "tu";
 
     private void Awake()
     {
@@ -21,22 +27,16 @@ public class Bootstrap : MonoBehaviour
 #if !UNITY_WEBGL || UNITY_EDITOR
         SceneManager.LoadScene(nameof(MainMenu));
         SceneManager.sceneLoaded += StartNewGame;
-        
+
         yield break;
 #endif
-
-        // Always wait for it if invoking something immediately in the first scene.
         yield return YandexGamesSdk.Initialize();
 
-        //if (PlayerAccount.IsAuthorized == false)
-        //    PlayerAccount.StartAuthorizationPolling(1500);
-
-        //PlayerAccount.RequestPersonalProfileDataPermission();
         SceneManager.LoadScene(nameof(MainMenu));
         SceneManager.sceneLoaded += StartNewGame;
     }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 
     private static void Initialize()
     {
@@ -47,11 +47,14 @@ public class Bootstrap : MonoBehaviour
     {
         var mapManager = new MapManager(_mapManagerData, new PoolMono<Player>(_playerPrefab));
         mapManager.NewLevel();
+
         EventBus.Raise(new PlayerCanInput(false));
+
         SceneManager.sceneLoaded -= StartNewGame;
-        new LevelStar(mapManager);
+
         new LiderBoard();
         new Ads();
+        new LevelStar(mapManager);
 
         DetectedLanguage(YandexGamesSdk.Environment.i18n.lang);
     }
@@ -60,20 +63,20 @@ public class Bootstrap : MonoBehaviour
     {
         switch (key)
         {
-            case "en":
-                Lean.Localization.LeanLocalization.SetCurrentLanguageAll("English");
+            case AbbreviationEnglishLanguage:
+                Lean.Localization.LeanLocalization.SetCurrentLanguageAll(EnglishLanguage);
                 break;
 
-            case "ru":
-                Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Russian");
+            case AbbreviationRussianLanguage:
+                Lean.Localization.LeanLocalization.SetCurrentLanguageAll(RussianLanguage);
                 break;
 
-            case "tu":
-                Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Turkish");
+            case AbbreviationTurkishLanguage:
+                Lean.Localization.LeanLocalization.SetCurrentLanguageAll(TurkishLanguage);
                 break;
 
             default:
-                Lean.Localization.LeanLocalization.SetCurrentLanguageAll("Russian");
+                Lean.Localization.LeanLocalization.SetCurrentLanguageAll(RussianLanguage);
                 break;
         }
     }

@@ -15,6 +15,10 @@ public class LiderBoard :
 
     public LiderBoard()
     {
+#if !UNITY_WEBGL || UNITY_EDITOR
+
+        return;
+#endif
         if (Instance == null)
             Instance = this;
         
@@ -28,6 +32,10 @@ public class LiderBoard :
 
     public void OnEvent(ReturnPlayerPoints var)
     {
+#if !UNITY_WEBGL || UNITY_EDITOR
+
+        return;
+#endif
         OnSetLeaderboardScore(var.Point);
     }
 

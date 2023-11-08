@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public readonly struct CalculateStar : IEvent
+public readonly struct TutorialCompletd : IEvent
 {
-    public readonly int CountStar;
 }

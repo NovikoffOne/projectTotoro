@@ -18,6 +18,7 @@ public class LevelStar :
 
         this.Subscribe<ClickGameActionEvent>();
     }
+
     private int LevelIndex => MapManager.GridIndex;
 
     public void OnEvent(ClickGameActionEvent var)
@@ -27,6 +28,8 @@ public class LevelStar :
             PlayerPrefs.SetInt($"LevelPassed {LevelIndex}", 1);
          
             var currentData = CalculateStar(Time.time);
+
+            Debug.Log($"@@@ Current Star = {currentData}");
 
             EventBus.Raise(new CalculateCountStar(currentData));
 

@@ -95,7 +95,6 @@ public class MapManager :
 
     public void OnEvent(NewGame var)
     {
-        Debug.Log($"Map Manager New Game index == {var.IndexLevel}");
         NewLevel(var.IndexLevel);
         EventBus.Raise(new StartGame(_gridIndex));
     }
@@ -121,9 +120,12 @@ public class MapManager :
             case GameAction.Start:
                 if (_gridIndex == 0)
                     EventBus.Raise(new ChangeTutorialState(0));
+                else
+                    EventBus.Raise(new ChangeTutorialState(0, false));
                 break;
 
             case GameAction.Exit:
+                DespawnPlayer();
                 IJunior.TypedScenes.MainMenu.Load();
                 break;
 
@@ -150,12 +152,5 @@ public class MapManager :
         this.Subscribe<OnPlayerInsided>();
         this.Subscribe<NewGame>();
         this.Subscribe<IsRewarded>();
-        //this.Subscribe<StartGame>();
     }
-
-    //public void OnEvent(StartGame var)
-    //{
-    //    if(_gridIndex == 0)
-    //        EventBus.Raise(new ChangeTutorialState(0));
-    //}
 }

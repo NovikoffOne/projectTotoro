@@ -17,4 +17,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8754a95f383961b49b6c5331afdde1f4, type: 2}
   - {fileID: 11400000, guid: 45b9086317468774dbdc0d25cb3858ef, type: 2}
   - {fileID: 11400000, guid: 40471ade58c759745a479096e0840cf9, type: 2}
+  - {fileID: 11400000, guid: b87f9642504277c4daee2ac7738c1c3b, type: 2}
+  - {fileID: 11400000, guid: 5c30cf1277df1f0498c0c61fcbd685aa, type: 2}
+  - {fileID: 11400000, guid: a0e36d327d350c942812775bc3048702, type: 2}
+  - {fileID: 11400000, guid: 41d84c8428e9c9f4497c1ddecfb690f2, type: 2}
+  - {fileID: 11400000, guid: 4f8d90e91cb3f5a4396f5939fe5e87c6, type: 2}
+  - {fileID: 11400000, guid: daeb11c0e98e6d345a16bee12e9f989f, type: 2}
+  - {fileID: 11400000, guid: 41c24ffab9aa03c4bae0152f43b2a5cc, type: 2}
+  - {fileID: 11400000, guid: 2e8fcbedd7ac4a546909b6bcd67285b5, type: 2}
   _minNumberPassengersCarried: 1
