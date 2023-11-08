@@ -1,14 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public partial class GridGenerator
 {
     private GridData _gridData;
+
     private PoolMono<Tile> _tilePool;
-    
+
     private List<PoolMono<TriggerZoneEnter>> _trigerZonePools = new List<PoolMono<TriggerZoneEnter>>();
 
     private PoolMono<TriggerZoneEnter> _triggerZoneBarrier;
@@ -52,13 +50,9 @@ public partial class GridGenerator
     public List<TriggerZoneEnter> GetLandingPlaces()
     {
         var landingPlaces = new List<TriggerZoneEnter>();
-        
-        foreach (var landing in _triggerZoneLanding.Pool)
-        {
-            landingPlaces.Add(landing);
-        }
 
-        Debug.Log(landingPlaces.Count);
+        foreach (var landing in _triggerZoneLanding.Pool)
+            landingPlaces.Add(landing);
 
         return landingPlaces;
     }
@@ -118,8 +112,7 @@ public partial class GridGenerator
                 triggerZone.name = $"{triggerZone.name} {triggerZone.transform.position.x} {triggerZone.transform.position.y}";
             }
         }
-        else
-            Debug.Log("СписокПуст");
+
         return;
     }
 }

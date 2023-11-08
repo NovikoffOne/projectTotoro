@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Push : MonoBehaviour, ITriggerZone 
+public class Push : MonoBehaviour, ITriggerZone
 {
     [SerializeField] private Vector3 _direction;
 
@@ -11,6 +9,7 @@ public class Push : MonoBehaviour, ITriggerZone
         if (player.Movement.IsApplyAffect)
         {
             player.Movement.Move(player.Movement.CurrentPosition + _direction);
+
             EventBus.Raise<PlayerCanInput>(new PlayerCanInput(false));
         }
     }

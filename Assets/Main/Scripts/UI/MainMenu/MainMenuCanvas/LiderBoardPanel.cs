@@ -1,19 +1,12 @@
-﻿using Agava.YandexGames;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Reflection;
-using TMPro;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.EventSystems.EventTrigger;
 
-public class LiderBoardPanel : MonoBehaviour, 
+public class LiderBoardPanel : MonoBehaviour,
     IPanel
 {
     [SerializeField] private Button _close;
-    
+
     [SerializeField] private PlayerStringLiderboard _currentPlayerScore;
 
     [SerializeField] private List<PlayerStringLiderboard> _playerStrings = new List<PlayerStringLiderboard>();
@@ -29,8 +22,8 @@ public class LiderBoardPanel : MonoBehaviour,
     private void Start()
     {
         _buttons.Add(_close);
-    
-         this.gameObject.SetActive(false);
+
+        this.gameObject.SetActive(false);
     }
 }
 

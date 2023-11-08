@@ -1,17 +1,13 @@
 using Agava.YandexGames;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Agava;
-using UnityEngine.UI;
-using Unity.VisualScripting;
-using System.Net.Configuration;
 
 public class LiderBoard :
     IEventReceiver<ReturnPlayerPoints>
 {
     public static LiderBoard Instance;
+
+    private string _liderboardName = "Score";
 
     public LiderBoard()
     {
@@ -21,7 +17,7 @@ public class LiderBoard :
 #endif
         if (Instance == null)
             Instance = this;
-        
+
         this.Subscribe<ReturnPlayerPoints>();
     }
 
@@ -39,26 +35,13 @@ public class LiderBoard :
         OnSetLeaderboardScore(var.Point);
     }
 
-    
-    private void OnSetLeaderboardScore(int point)
-    {
-        Leaderboard.GetPlayerEntry("Score", (result) =>
-        {
-            if (result == null)
-                Leaderboard.SetScore("Score", point);
-            else
-                Leaderboard.SetScore("Score", result.score + point);
-        });
-    }
-
     public void OnClickLiderBoard(Action<int, string, int> drawPlayers)
     {
-        Leaderboard.GetEntries("Score", (result) =>
+        Leaderboard.GetEntries(_liderboardName, (result) =>
         {
             for (int i = 0; i < result.entries.Length; i++)
             {
-                var index = i;
-                var entry = result.entries[index];
+                var entry = result.entries[i];
                 var name = entry.player.publicName;
 
                 if (string.IsNullOrEmpty(entry.player.publicName))
@@ -73,14 +56,23 @@ public class LiderBoard :
 
     public void OnGetLeaderboardPlayerEntry(Action<int, string, int> drawPlayer)
     {
-        Leaderboard.GetPlayerEntry("Score", (result) =>
+        Leaderboard.GetPlayerEntry(_liderboardName, (result) =>
         {
             if (result == null)
-                Debug.Log("@@@Player is not present in the leaderboard.");
+                return;
             else
-            {
                 drawPlayer?.Invoke(result.rank, result.player.publicName, result.score);
-            }
+        });
+    }
+
+    private void OnSetLeaderboardScore(int point)
+    {
+        Leaderboard.GetPlayerEntry(_liderboardName, (result) =>
+        {
+            if (result == null)
+                Leaderboard.SetScore(_liderboardName, point);
+            else
+                Leaderboard.SetScore(_liderboardName, result.score + point);
         });
     }
 }

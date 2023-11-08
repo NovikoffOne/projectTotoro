@@ -56,6 +56,9 @@ public class Bootstrap : MonoBehaviour
         new Ads();
         new LevelStar(mapManager);
 
+#if !UNITY_WEBGL || UNITY_EDITOR
+        return;
+#endif
         DetectedLanguage(YandexGamesSdk.Environment.i18n.lang);
     }
 

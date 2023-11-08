@@ -77,8 +77,6 @@ public class PoolMono<T>
             return true;
         }
         else
-        {
             return false;
-        }
     }
 }

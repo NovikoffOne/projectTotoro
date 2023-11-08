@@ -13,6 +13,24 @@ public class Tile : MonoBehaviour,
 
     public Vector3 Position => transform.position;
 
+    private void OnDestroy()
+    {
+        this.Unsubscribe<PlayerCanInput>();
+    }
+
+    public void OnMouseEnter()
+    {
+        if (Time.timeScale == 0 || !_canInput)
+            return;
+
+        Highlight(_highlightingTile);
+    }
+
+    public void OnMouseExit()
+    {
+        RevertBase(_highlightingTile);
+    }
+
     public void Init(bool isOffset)
     {
         if (isOffset)
@@ -30,27 +48,9 @@ public class Tile : MonoBehaviour,
         this.Subscribe<PlayerCanInput>();
     }
 
-    public void OnMouseEnter()
-    {
-        if (Time.timeScale == 0 || !_canInput)
-            return;
-
-        Highlight(_highlightingTile);
-    }
-
-    public void OnMouseExit()
-    {
-        RevertBase(_highlightingTile);
-    }
-
     public void OnEvent(PlayerCanInput var)
     {
         _canInput = var.IsCanInput;
-    }
-
-    private void OnDestroy()
-    {
-        this.Unsubscribe<PlayerCanInput>();
     }
 
     private void RevertBase(GameObject tile)

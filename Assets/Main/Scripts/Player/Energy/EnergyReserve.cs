@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class EnergyReserve : 
     IEventReceiver<RewardAddGas>,
-    IEventReceiver<ClickGameActionEvent>
+    IEventReceiver<GameActionEvent>
 {
     private const int BaseMilage = 1;
     private const int PointMultiplier = 10;
@@ -23,13 +23,13 @@ public abstract class EnergyReserve :
         CurrentValue = _startValue = startValue;
 
         this.Subscribe<RewardAddGas>();
-        this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<GameActionEvent>();
     }
 
     ~EnergyReserve()
     {
         this.Unsubscribe<RewardAddGas>();
-        this.Unsubscribe<ClickGameActionEvent>();
+        this.Unsubscribe<GameActionEvent>();
     }
 
     public virtual void SpendGas(int mileage = BaseMilage)
@@ -58,13 +58,11 @@ public abstract class EnergyReserve :
         AddGas(var.Value);
     }
 
-    public void OnEvent(ClickGameActionEvent var)
+    public void OnEvent(GameActionEvent var)
     {
         if(var.GameAction == GameAction.Completed)
         {
             var temp = CurrentValue * PointMultiplier;
-
-            Debug.Log($"@@@ Count Point = {temp}");
 
             EventBus.Raise(new ReturnPlayerPoints(temp));
         }

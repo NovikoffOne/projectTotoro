@@ -1,14 +1,13 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LandingPlace : MonoBehaviour, ITriggerZone
 {
     [SerializeField] private Charge _chargeRed;
+    [SerializeField] private Transform _chargePostion;
+
     [SerializeField] private GameObject _basePlatform;
     [SerializeField] private GameObject _completPlatform;
-    [SerializeField] private Transform _chargePostion;
-    
+
     [SerializeField] private int _index;
 
     private Charge _charge;

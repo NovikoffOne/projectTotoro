@@ -82,8 +82,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerView: {fileID: 2257647895800106465}
   _chargePrefab: {fileID: -3253947782491088398, guid: 8ca3e9f5f53771b48ac75a278a4b2059, type: 3}
-  _energyReserve: 20
   _chargeChanger: {fileID: 2819562511576579976}
+  _energyReserve: 20
 --- !u!114 &2257647895800106465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6adecae658ab9ad4db7617188412466c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2906181011523101182, guid: c2a3d945c61fbad4e805e84a6549487a, type: 3}
+  _prefab: {fileID: 2906181011523101182, guid: c2a3d945c61fbad4e805e84a6549487a, type: 3}
   _playerViewPosition: {fileID: 1400062689383674830}
   _durationMove: 0.6
 --- !u!114 &2819562511576579976

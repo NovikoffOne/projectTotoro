@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
@@ -8,9 +6,9 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
 
     [SerializeField] private Charge _chargePrefab;
 
-    [SerializeField] private int _energyReserve = 20;
-
     [SerializeField] private ChargeChanger _chargeChanger;
+
+    [SerializeField] private int _energyReserve = 20;
 
     public PlayerEnergyReserve EnergyTank { get; private set; }
     public ChargeChanger ChargeChanger { get => _chargeChanger; }
@@ -64,6 +62,6 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
     public void OnEvent(OnTankValueChange var)
     {
         if (!EnergyTank.HaveGas)
-            EventBus.Raise(new ClickGameActionEvent(GameAction.GameOver));
+            EventBus.Raise(new GameActionEvent(GameAction.GameOver));
     }
 }

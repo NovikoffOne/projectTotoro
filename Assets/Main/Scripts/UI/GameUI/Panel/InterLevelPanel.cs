@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,12 +11,13 @@ public class InterLevelPanel : MonoBehaviour, IPanel
     [SerializeField] private Button _reloadButton;
 
     private List<Button> _buttons = new List<Button>();
+
+    public List<Button> Buttons => _buttons;
+
     public Button NewLevelButton => _newLevelButton;
     public Button ExitMenuButton => _exitMenuButton;
     public Button ReloadButton => _reloadButton;
     public StarFillerGameUI StarFiller => _starFiller;
-
-    public List<Button> Buttons => _buttons;
 
     private void Start()
     {

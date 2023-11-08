@@ -1,12 +1,7 @@
-using DG.Tweening;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Timeline.TimelineAsset;
 
 public class PlayerMovement :
-    IEventReceiver<ClickGameActionEvent>,
+    IEventReceiver<GameActionEvent>,
     IEventReceiver<StartGame>
 {
     private readonly PlayerView PlayerView;
@@ -15,24 +10,23 @@ public class PlayerMovement :
 
     private bool _isGame;
 
-    public Vector3 CurrentPosition { get; private set; }
-    public Vector3 LastPosition { get; private set; }
-
-    public bool IsApplyAffect { get; private set; }
-
     public PlayerMovement(PlayerView playerView, float speed = 1f)
     {
         PlayerView = playerView;
         Speed = speed;
         IsApplyAffect = true;
 
-        this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<GameActionEvent>();
     }
 
     ~PlayerMovement()
     {
-        this.Unsubscribe<ClickGameActionEvent>();
+        this.Unsubscribe<GameActionEvent>();
     }
+
+    public Vector3 CurrentPosition { get; private set; }
+    public Vector3 LastPosition { get; private set; }
+    public bool IsApplyAffect { get; private set; }
 
     public void Move(Vector3 newPosition)
     {
@@ -46,7 +40,7 @@ public class PlayerMovement :
         LastPosition = CurrentPosition;
 
         CurrentPosition = newPosition;
-        
+
         PlayerView.ChangePosition(CurrentPosition);
     }
 
@@ -61,18 +55,7 @@ public class PlayerMovement :
         IsApplyAffect = true;
     }
 
-    private Vector2 ClampingMoveDirection(Vector2 newPosition)
-    {
-        float deltaX = newPosition.x - CurrentPosition.x;
-        float deltaY = newPosition.y - CurrentPosition.y;
-
-        newPosition.x = CurrentPosition.x + Mathf.Clamp(deltaX, -Speed, Speed);
-        newPosition.y = CurrentPosition.y + Mathf.Clamp(deltaY, -Speed, Speed);
-
-        return newPosition;
-    }
-
-    public void OnEvent(ClickGameActionEvent var)
+    public void OnEvent(GameActionEvent var)
     {
         switch (var.GameAction)
         {
@@ -91,7 +74,7 @@ public class PlayerMovement :
             case GameAction.ClickReload:
                 _isGame = true;
                 break;
-            
+
             case GameAction.ClickPlay:
                 _isGame = true;
                 break;
@@ -117,5 +100,16 @@ public class PlayerMovement :
     public void OnEvent(StartGame var)
     {
         _isGame = true;
+    }
+
+    private Vector2 ClampingMoveDirection(Vector2 newPosition)
+    {
+        float deltaX = newPosition.x - CurrentPosition.x;
+        float deltaY = newPosition.y - CurrentPosition.y;
+
+        newPosition.x = CurrentPosition.x + Mathf.Clamp(deltaX, -Speed, Speed);
+        newPosition.y = CurrentPosition.y + Mathf.Clamp(deltaY, -Speed, Speed);
+
+        return newPosition;
     }
 }

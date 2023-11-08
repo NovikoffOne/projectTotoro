@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,10 +5,11 @@ using UnityEngine.UI;
 
 public class TutorialPanel : MonoBehaviour, IPanel
 {
-    [SerializeField] private Button _nextButton;
     [SerializeField] private List<TMP_Text> _texts = new List<TMP_Text>();
+
+    [SerializeField] private Button _nextButton;
     [SerializeField] private Tutorial _tutorial;
-    
+
     private List<Button> _buttons = new List<Button>();
 
     public Button NextButton => _nextButton;

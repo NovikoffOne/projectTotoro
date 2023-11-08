@@ -1,7 +1,3 @@
-using DG.Tweening.Plugins.Core.PathCore;
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -16,36 +12,33 @@ public class StarFiller : MonoBehaviour
 
     [SerializeField] private TMP_Text _text;
 
+    private const int TrueInt = 1;
+
+    private int _countStar1 = 1;
+    private int _countStar2 = 2;
+
+    private string _levelStarText = "LevelStar ";
+    private string _levelPassedText = "LevelPassed ";
+
     public void FiilStars(int index)
     {
-        if (index == 0 && PlayerPrefs.HasKey($"LevelStar {index}") == true)
+        if (index == 0 && PlayerPrefs.HasKey(_levelStarText + index) == true)
         {
-            DrawStars(PlayerPrefs.GetInt($"LevelStar {index}"));
+            DrawStars(PlayerPrefs.GetInt(_levelStarText + index));
             return;
         }
-        else if(index == 0 && PlayerPrefs.HasKey($"LevelStar {index}") == false)
+        else if (index == 0 && PlayerPrefs.HasKey(_levelStarText + index) == false)
         {
             DrawStars(0);
             return;
         }
 
-        var key = PlayerPrefs.GetInt($"LevelPassed {index-1}");
+        var key = PlayerPrefs.GetInt(_levelPassedText + (index - 1));
 
         switch (key)
         {
-            case 1:
-                if (PlayerPrefs.HasKey($"LevelStar {index}"))
-                {
-                    _levelPanel.SetActive(true);
-                    _lock.HidePanel();
-                    DrawStars(PlayerPrefs.GetInt($"LevelStar {index}"));
-                }
-                else
-                {
-                    _levelPanel.SetActive(true);
-                    _lock.HidePanel();
-                    DrawStars(0);
-                }
+            case TrueInt:
+                DrawStarHandler(index);
                 break;
 
             case 0:
@@ -60,6 +53,17 @@ public class StarFiller : MonoBehaviour
         }
     }
 
+    private void DrawStarHandler(int index)
+    {
+        _levelPanel.SetActive(true);
+        _lock.HidePanel();
+
+        if (PlayerPrefs.HasKey(_levelStarText + index))
+            DrawStars(PlayerPrefs.GetInt(_levelStarText + index));
+        else
+            DrawStars(0);
+    }
+
     private void DrawStars(int countStars)
     {
         _lock.HidePanel();
@@ -67,10 +71,10 @@ public class StarFiller : MonoBehaviour
         if (countStars > 0)
             _star1.SetActive(true);
 
-        if (countStars > 1)
+        if (countStars > _countStar1)
             _star2.SetActive(true);
 
-        if (countStars > 2)
+        if (countStars > _countStar2)
             _star3.SetActive(true);
     }
 }

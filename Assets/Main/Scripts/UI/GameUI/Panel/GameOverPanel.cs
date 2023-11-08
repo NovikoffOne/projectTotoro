@@ -14,11 +14,11 @@ public class GameOverPanel : MonoBehaviour, IPanel
 
     private List<Button> _buttons = new List<Button>();
 
+    public List<Button> Buttons => _buttons;
+
     public Button ExitMenuButton => _exitMenuButton;
     public Button ReloadButton => _reloadButton;
     public Button RewardButton => _rewardButton;
-
-    public List<Button> Buttons => _buttons;
 
     private void Start()
     {

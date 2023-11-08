@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class Tutorial : MonoBehaviour,
     IEventReceiver<ChangeTutorialState>
 {
     [SerializeField] private Light _pointLightPrefab;
-    
+
+    private Vector3 _startLightPosition = new Vector3(3, 1, -.3f);
+    private Vector3 _state3LightPosition = new Vector3(7, 1, -.3f);
+    private Vector3 _state5LightPosition = new Vector3(7, 2, -.3f);
+
     private Light _pointLight;
     private bool _isFirst;
 
@@ -26,7 +27,6 @@ public class Tutorial : MonoBehaviour,
         if (_pointLight == null)
             return;
 
-        Debug.Log("OnDisable");
         _pointLight.gameObject.SetActive(false);
     }
 
@@ -38,26 +38,24 @@ public class Tutorial : MonoBehaviour,
 
     public void OnEvent(ChangeTutorialState var)
     {
-        Debug.Log($"ChangaeTutorialState");
-        
         if (var.IsTutorial == false || _isFirst == false)
             return;
 
-        if(_pointLight == null)
-            _pointLight = Instantiate(_pointLightPrefab, new Vector3(3, 1, -.3f), Quaternion.identity);
+        if (_pointLight == null)
+            _pointLight = Instantiate(_pointLightPrefab, _startLightPosition, Quaternion.identity);
 
         switch (var.TutorialState)
         {
             case 0:
-                _pointLight.transform.position = new Vector3(3, 1, -.3f);
+                _pointLight.transform.position = _startLightPosition;
                 break;
 
             case 3:
-                _pointLight.transform.position = new Vector3(7, 1, -.3f);
+                _pointLight.transform.position = _state3LightPosition;
                 break;
 
             case 5:
-                _pointLight.transform.position = new Vector3(7, 2, -.3f);
+                _pointLight.transform.position = _state5LightPosition;
                 _isFirst = false;
                 break;
 
@@ -65,16 +63,4 @@ public class Tutorial : MonoBehaviour,
                 break;
         }
     }
-
-    //public void OnEvent(StartGame var)
-    //{
-    //    if (var.LevelIndex == 0)
-    //        _isTurorial = true;
-    //    else
-    //    {
-    //        _isTurorial = false;
-    //    }
-
-    //    Debug.Log($"@@@ is Tutorial == {_isTurorial}  index {var.LevelIndex}");
-    //}
 }

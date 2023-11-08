@@ -1,17 +1,12 @@
-﻿using Agava.YandexGames;
-using UnityEngine.SceneManagement;
+﻿using IJunior.TypedScenes;
 
 public class MainMenuModel : IModel
 {
-    public void GetData()
-    {
+    private string _gameScene = "SampleScene8x5";
 
-    }
+    public void GetData() { }
 
-    public void UpdateData()
-    {
-
-    }
+    public void UpdateData() { }
 
     public void Play()
     {
@@ -27,6 +22,7 @@ public class MainMenuModel : IModel
     {
         EventBus.Raise(new PlayerCanInput(true));
         EventBus.Raise(new NewGame(index));
-        SceneManager.LoadScene("SampleScene8x5");
+
+        SampleScene8x5.Load();
     }
 }

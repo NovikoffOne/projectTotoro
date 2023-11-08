@@ -17,11 +17,11 @@ public enum GameAction
     ClickReward
 }
 
-public readonly struct ClickGameActionEvent : IEvent
+public readonly struct GameActionEvent : IEvent
 {
     public readonly GameAction GameAction;
 
-    public ClickGameActionEvent(GameAction gameAction)
+    public GameActionEvent(GameAction gameAction)
     {
         GameAction = gameAction;
     }

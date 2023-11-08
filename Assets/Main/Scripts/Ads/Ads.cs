@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Agava.YandexGames;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements.Experimental;
-using Agava.YandexGames;
-using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class Ads :
-    IEventReceiver<ClickGameActionEvent>
+    IEventReceiver<GameActionEvent>
 {
     private int _amountEnergyPerReward = 20;
 
     public Ads()
     {
-        this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<GameActionEvent>();
     }
 
     ~Ads()
     {
-        this.Unsubscribe<ClickGameActionEvent>();
+        this.Unsubscribe<GameActionEvent>();
     }
 
     public void OnShowInterstitialButtonClick()
@@ -37,7 +28,7 @@ public class Ads :
 
         return;
 #endif
-        VideoAd.Show(onRewardedCallback:OnRewardedCallback);
+        VideoAd.Show(onRewardedCallback: OnRewardedCallback);
     }
 
     public void OnRequestReviewButtonClick()
@@ -50,12 +41,12 @@ public class Ads :
         ReviewPopup.CanOpen((result, reason) => { });
     }
 
-    public void OnEvent(ClickGameActionEvent var)
+    public void OnEvent(GameActionEvent var)
     {
 #if !UNITY_WEBGL || UNITY_EDITOR
         if (var.GameAction == GameAction.ClickReward)
             OnShowVideoButtonClick();
-        
+
         return;
 #endif
         switch (var.GameAction)

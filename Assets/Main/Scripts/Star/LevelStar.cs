@@ -1,14 +1,22 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Threading;
 using UnityEngine;
 
 public class LevelStar :
-    IEventReceiver<ClickGameActionEvent>
+    IEventReceiver<GameActionEvent>
 {
     private readonly MapManager MapManager;
+
+    private const string LevelPassedText = "LevelPassed ";
+    private const string LevelStarText = "LevelStar ";
+
+    private const int TrueInt = 1;
+
+    private const int MinTime = 30;
+    private const int MidleTime = 40;
+    private const int MaxTime = 50;
+
+    private const int MaxCountStar = 3;
+    private const int MidleCountStar = 2;
+    private const int MinCountStar = 1;
 
     private float _startTime;
 
@@ -16,36 +24,33 @@ public class LevelStar :
     {
         MapManager = mapManager;
 
-        this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<GameActionEvent>();
     }
 
     private int LevelIndex => MapManager.GridIndex;
 
-    public void OnEvent(ClickGameActionEvent var)
+    public void OnEvent(GameActionEvent var)
     {
-        if(var.GameAction == GameAction.Completed)
+        if (var.GameAction == GameAction.Completed)
         {
-            PlayerPrefs.SetInt($"LevelPassed {LevelIndex}", 1);
-         
-            var currentData = CalculateStar(Time.time);
+            PlayerPrefs.SetInt(LevelPassedText + LevelIndex, TrueInt);
 
-            Debug.Log($"@@@ Current Star = {currentData}");
+            var currentData = CalculateStar(Time.time);
 
             EventBus.Raise(new CalculateCountStar(currentData));
 
-            if (PlayerPrefs.HasKey($"LevelStar {LevelIndex}"))
+            if (PlayerPrefs.HasKey(LevelStarText + LevelIndex))
             {
-                var oldData = PlayerPrefs.GetInt($"LevelStar {LevelIndex}");
+                var oldData = PlayerPrefs.GetInt(LevelStarText + LevelIndex);
 
                 if (oldData < currentData)
-                    PlayerPrefs.SetInt($"LevelStar {LevelIndex}", CalculateStar(Time.time));
+                    PlayerPrefs.SetInt(LevelStarText + LevelIndex, CalculateStar(Time.time));
             }
             else
-                PlayerPrefs.SetInt($"LevelStar {LevelIndex}", CalculateStar(Time.time));
-
+                PlayerPrefs.SetInt(LevelStarText + LevelIndex, CalculateStar(Time.time));
         }
 
-        if(var.GameAction == GameAction.Start)
+        if (var.GameAction == GameAction.Start)
         {
             _startTime = Time.time;
         }
@@ -55,16 +60,16 @@ public class LevelStar :
     {
         var time = finishTime - _startTime;
 
-        if (time <= 30)
-            return 3;
+        if (time <= MinTime)
+            return MaxCountStar;
 
-        if (time <= 40)
-            return 2;
-        
-        if (time <= 50)
-            return 1;
+        if (time <= MidleTime)
+            return MidleCountStar;
 
-        if (time > 50)
+        if (time <= MaxTime)
+            return MinCountStar;
+
+        if (time > MaxTime)
             return 0;
 
         return 0;

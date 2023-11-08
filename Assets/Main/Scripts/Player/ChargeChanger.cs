@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ChargeChanger : MonoBehaviour
@@ -7,42 +5,43 @@ public class ChargeChanger : MonoBehaviour
     [SerializeField] private Charge _chargePrefab;
     [SerializeField] private Transform _chargePosition;
 
-    private Charge _charge;
-
-    public Transform TargetPosition { get => _chargePosition; }
+    private Charge _currentCharge;
+    private Vector3 _quaternionRotate = new Vector3(-90, 0, 0);
 
     public Charge InstantiateCharge()
     {
-        if (_charge != null && _charge.Index == 0)
-            return _charge;
+        if (_currentCharge != null && _currentCharge.Index == 0)
+            return _currentCharge;
 
-        _charge = Instantiate(_chargePrefab, TargetPosition.position, Quaternion.Euler(-90, 0, 0), TargetPosition);
-        
-        _charge.transform.position = TargetPosition.position;
+        _currentCharge = Instantiate(_chargePrefab, TargetPosition.position, Quaternion.Euler(_quaternionRotate), TargetPosition);
 
-        _charge.Init();
+        _currentCharge.transform.position = TargetPosition.position;
 
-        return _charge;
+        _currentCharge.Init();
+
+        return _currentCharge;
     }
+
+    public Transform TargetPosition { get => _chargePosition; }
 
     public void SetCharge(Charge charge)
     {
-        if(_charge != null)
-            Destroy(_charge.gameObject);
+        if (_currentCharge != null)
+            Destroy(_currentCharge.gameObject);
 
-        _charge = charge;
-        
-        _charge.Move(TargetPosition);
+        _currentCharge = charge;
+
+        _currentCharge.Move(TargetPosition);
     }
 
     public Charge GetCharge(int index)
     {
-        if (index == _charge.Index)
+        if (index == _currentCharge.Index)
         {
-            var charge = _charge;
+            var charge = _currentCharge;
 
-            _charge = InstantiateCharge();
-           
+            _currentCharge = InstantiateCharge();
+
             return charge;
         }
         else

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-internal class GameCanvasModel : IModel, 
-    IEventReceiver<ClickGameActionEvent>,
+internal class GameCanvasModel : IModel,
+    IEventReceiver<GameActionEvent>,
     IEventReceiver<IsRewarded>,
     IEventReceiver<ChangeTutorialState>,
     IEventReceiver<CalculateCountStar>,
@@ -14,11 +9,7 @@ internal class GameCanvasModel : IModel,
 {
     public GameCanvasModel()
     {
-        this.Subscribe<ClickGameActionEvent>();
-        this.Subscribe<IsRewarded>();
-        this.Subscribe<ChangeTutorialState>();
-        this.Subscribe<CalculateCountStar>();
-        this.Subscribe<ReturnPlayerPoints>();
+        SubscribeAll();
     }
 
     public bool IsGameOver { get; private set; } = false;
@@ -32,7 +23,7 @@ internal class GameCanvasModel : IModel,
 
     public void GetData()
     {
-        
+
     }
 
     public void UpdateData()
@@ -47,45 +38,40 @@ internal class GameCanvasModel : IModel,
 
     public void PlayNextLevel()
     {
-        EventBus.Raise(new ClickGameActionEvent(GameAction.ClickNextLevel));
+        EventBus.Raise(new GameActionEvent(GameAction.ClickNextLevel));
     }
 
     public void Play()
     {
-        EventBus.Raise(new ClickGameActionEvent(GameAction.ClickPlay));
+        EventBus.Raise(new GameActionEvent(GameAction.ClickPlay));
     }
 
     public void Reload()
     {
-        EventBus.Raise(new ClickGameActionEvent(GameAction.ClickReload));
+        EventBus.Raise(new GameActionEvent(GameAction.ClickReload));
     }
 
-    public void Pause(bool isPause) 
+    public void Pause(bool isPause)
     {
-        Time.timeScale = isPause? 0 : 1;
-        EventBus.Raise(new PlayerCanInput(!isPause)); 
+        Time.timeScale = isPause ? 0 : 1;
+        EventBus.Raise(new PlayerCanInput(!isPause));
     }
 
     public void Exit()
     {
-        EventBus.Raise(new ClickGameActionEvent(GameAction.Exit));
+        EventBus.Raise(new GameActionEvent(GameAction.Exit));
     }
 
-    public void OnEvent(ClickGameActionEvent var)
+    public void OnEvent(GameActionEvent var)
     {
         switch (var.GameAction)
         {
             case GameAction.Completed:
-                IsCompleted = true;
-                MVCConnecter.UpdateController<GameCanvasController>();
-                Time.timeScale = 0;
+                ActionComplete();
                 break;
 
             case GameAction.GameOver:
-                IsGameOver = true;
-                IsTutorial = false;
-                MVCConnecter.UpdateController<GameCanvasController>();
-                Time.timeScale = 0;
+                ActionGameOver();
                 break;
 
             default:
@@ -93,9 +79,35 @@ internal class GameCanvasModel : IModel,
         }
     }
 
+    public void ActionComplete()
+    {
+        IsCompleted = true;
+
+        MVCConnecter.UpdateController<GameCanvasController>();
+        Time.timeScale = 0;
+    }
+
+    public void ActionGameOver()
+    {
+        IsGameOver = true;
+        IsTutorial = false;
+
+        MVCConnecter.UpdateController<GameCanvasController>();
+        Time.timeScale = 0;
+    }
+
+    public void SubscribeAll()
+    {
+        this.Subscribe<GameActionEvent>();
+        this.Subscribe<IsRewarded>();
+        this.Subscribe<ChangeTutorialState>();
+        this.Subscribe<CalculateCountStar>();
+        this.Subscribe<ReturnPlayerPoints>();
+    }
+
     public void Unscribe()
     {
-        this.Unsubscribe<ClickGameActionEvent>();
+        this.Unsubscribe<GameActionEvent>();
         this.Unsubscribe<IsRewarded>();
         this.Unsubscribe<ChangeTutorialState>();
         this.Unsubscribe<ReturnPlayerPoints>();
@@ -104,7 +116,7 @@ internal class GameCanvasModel : IModel,
 
     public void Reward()
     {
-        EventBus.Raise(new ClickGameActionEvent(GameAction.ClickReward));
+        EventBus.Raise(new GameActionEvent(GameAction.ClickReward));
     }
 
     public void OnEvent(IsRewarded var)
@@ -116,7 +128,7 @@ internal class GameCanvasModel : IModel,
 
     public void OnEvent(ChangeTutorialState var)
     {
-        if(var.IsTutorial == true)
+        if (var.IsTutorial == true)
         {
             IsTutorial = true;
             TutorialState = var.TutorialState;

@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TriggerZoneEnter : MonoBehaviour
 {
     [SerializeField] protected ZoneIndex Index;
-    
+
     protected ITriggerZone EntityTriggerZone;
 
     public ZoneIndex ZoneIndex => Index;

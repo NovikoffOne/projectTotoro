@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = nameof(GridData), menuName = "Data/Create new GridData", order = 51)]
@@ -44,7 +42,7 @@ public class GridData : ScriptableObject
         var triggerZone = _zonePrefabs.Find(element => element.ZoneIndex == zone);
 
         if (triggerZone == null)
-            Debug.Log("Список пуст");
+            Debug.Log("Список пуст!");
 
         return triggerZone;
     }

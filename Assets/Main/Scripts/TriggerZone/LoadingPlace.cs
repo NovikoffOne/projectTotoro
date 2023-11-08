@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LoadingPlace : MonoBehaviour, ITriggerZone
 {
     [SerializeField] private ChargeColor _chargeColler;
     [SerializeField] private Transform _chargePosition;
-    
+
     [SerializeField] private int SiteLandingIndex;
 
     private Charge _charge;
@@ -14,7 +12,7 @@ public class LoadingPlace : MonoBehaviour, ITriggerZone
     private void OnEnable()
     {
         _charge = Instantiate(_chargeColler.GetMaterial(SiteLandingIndex), _chargePosition.position, Quaternion.identity, transform);
-        
+
         _charge.Init(SiteLandingIndex);
     }
 
@@ -26,7 +24,7 @@ public class LoadingPlace : MonoBehaviour, ITriggerZone
 
     public void ApplyEffect(Player player)
     {
-        if(_charge != null)
+        if (_charge != null)
         {
             player.ChargeChanger.SetCharge(_charge);
 

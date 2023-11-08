@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -25,9 +21,7 @@ public class StarFillerGameUI : MonoBehaviour
     private void DrawStars(int countStars)
     {
         for (int i = 0; i < countStars; i++)
-        {
             _stars[i].SetActive(true);
-        }
     }
 
     private void DrawPoint(int point)

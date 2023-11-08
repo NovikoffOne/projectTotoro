@@ -1,32 +1,19 @@
-using LayerLab;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using IJunior.TypedScenes;
-using System.Dynamic;
-using System.Xml.Schema;
 
 public class MapManager :
     IEventReceiver<EnergyChangeEvent>,
     IEventReceiver<OnPlayerInsided>,
-    IEventReceiver<ClickGameActionEvent>,
+    IEventReceiver<GameActionEvent>,
     IEventReceiver<NewGame>,
-    //IEventReceiver<StartGame>,
     IEventReceiver<IsRewarded>
 {
-    private Player _player; 
-
-    private int _numberPassengersCarried; 
-
-    private int _gridIndex;
-
+    private GridGenerator _grid;
+    private Player _player;
     private MapManagerData _mapManagerData;
-
     private PoolMono<Player> _playerPool;
 
-    private GridGenerator _grid;
+    private int _numberPassengersCarried;
+    private int _gridIndex;
 
     public MapManager(MapManagerData mapManagerData, PoolMono<Player> poolPlayer)
     {
@@ -38,26 +25,30 @@ public class MapManager :
         SubscribeAll();
     }
 
+    ~MapManager()
+    {
+        UnsubscribeAll();
+    }
+
     private bool IsCanTransition => _numberPassengersCarried >= _mapManagerData.MinNumberPassengersCarried;
+
     public int GridIndex => _gridIndex;
 
-    public void NewLevel(int index=0)
+    public void NewLevel(int index = 0)
     {
-        if(_player == null || _player.gameObject.activeSelf == false)
+        if (_player == null || _player.gameObject.activeSelf == false)
             _player = _playerPool.Spawn();
 
         _numberPassengersCarried = 0;
 
         _gridIndex = index;
-        
+
         if (_mapManagerData.GridData.Count > _gridIndex)
-        {
             _grid.NewGrid(_mapManagerData.GridData[_gridIndex]);
-        }
-        else 
+        else
         {
             DespawnPlayer();
-            IJunior.TypedScenes.MainMenu.Load(); // Заглушка
+            IJunior.TypedScenes.MainMenu.Load();
         }
     }
 
@@ -75,14 +66,10 @@ public class MapManager :
     public void OnEvent(EnergyChangeEvent var)
     {
         if (!var.IsChargeChange && _gridIndex == 0)
-        {
             EventBus.Raise(new ChangeTutorialState(3));
-        }
 
         if (var.IsChargeChange)
-        {
             _numberPassengersCarried++;
-        }
 
         if (IsCanTransition)
         {
@@ -99,7 +86,7 @@ public class MapManager :
         EventBus.Raise(new StartGame(_gridIndex));
     }
 
-    public void OnEvent(ClickGameActionEvent var)
+    public void OnEvent(GameActionEvent var)
     {
         switch (var.GameAction)
         {
@@ -118,10 +105,7 @@ public class MapManager :
                 break;
 
             case GameAction.Start:
-                if (_gridIndex == 0)
-                    EventBus.Raise(new ChangeTutorialState(0));
-                else
-                    EventBus.Raise(new ChangeTutorialState(0, false));
+                ChangeTutorialState();
                 break;
 
             case GameAction.Exit:
@@ -138,19 +122,36 @@ public class MapManager :
     {
         if (IsCanTransition)
         {
-            EventBus.Raise(new ClickGameActionEvent(GameAction.Completed));
+            EventBus.Raise(new GameActionEvent(GameAction.Completed));
             DespawnPlayer();
         }
         else
             Debug.Log("Нет питания");
     }
 
+    private void ChangeTutorialState()
+    {
+        if (_gridIndex == 0)
+            EventBus.Raise(new ChangeTutorialState(0));
+        else
+            EventBus.Raise(new ChangeTutorialState(0, false));
+    }
+
     private void SubscribeAll()
     {
         this.Subscribe<EnergyChangeEvent>();
-        this.Subscribe<ClickGameActionEvent>();
+        this.Subscribe<GameActionEvent>();
         this.Subscribe<OnPlayerInsided>();
         this.Subscribe<NewGame>();
         this.Subscribe<IsRewarded>();
+    }
+
+    private void UnsubscribeAll()
+    {
+        this.Unsubscribe<EnergyChangeEvent>();
+        this.Unsubscribe<GameActionEvent>();
+        this.Unsubscribe<OnPlayerInsided>();
+        this.Unsubscribe<NewGame>();
+        this.Unsubscribe<IsRewarded>();
     }
 }
