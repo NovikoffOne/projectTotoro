@@ -15,7 +15,7 @@ public class Bootstrap : MonoBehaviour
 
     private const string AbbreviationEnglishLanguage = "en";
     private const string AbbreviationRussianLanguage = "ru";
-    private const string AbbreviationTurkishLanguage = "tu";
+    private const string AbbreviationTurkishLanguage = "tr";
 
     private void Awake()
     {

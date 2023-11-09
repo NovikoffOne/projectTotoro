@@ -2,8 +2,6 @@
 
 public class MainMenuModel : IModel
 {
-    private string _gameScene = "SampleScene8x5";
-
     public void GetData() { }
 
     public void UpdateData() { }
