@@ -1,8 +1,8 @@
 using UnityEngine;
 
 public class PlayerInput : 
-    IEventReceiver<PlayerCanInput>,
-    IEventReceiver<StartGame>
+    IEventReceiver<PlayerCanInputed>,
+    IEventReceiver<GameStarted>
 {
     private Player _player;
     private LayerMask _ignorLayer = 3;
@@ -16,8 +16,8 @@ public class PlayerInput :
     {
         _player = player;
 
-        this.Subscribe<PlayerCanInput>();
-        this.Subscribe<StartGame>();
+        this.Subscribe<PlayerCanInputed>();
+        this.Subscribe<GameStarted>();
     }
 
     public void Update()
@@ -26,12 +26,12 @@ public class PlayerInput :
             _player.Movement.Move(GetMouseColision());
     }
 
-    public void OnEvent(PlayerCanInput var)
+    public void OnEvent(PlayerCanInputed isCanInput)
     {
-        _canInput = var.IsCanInput;
+        _canInput = isCanInput.IsCanInput;
     }
 
-    public void OnEvent(StartGame var)
+    public void OnEvent(GameStarted isStarted)
     {
         _firstClick = true;
     }

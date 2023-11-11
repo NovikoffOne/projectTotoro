@@ -31,6 +31,6 @@ public class PlayerView : MonoBehaviour
     {
         yield return new WaitForSeconds(_durationMove);
 
-        EventBus.Raise(new PlayerCanInput(true));
+        EventBus.Raise(new PlayerCanInputed(true));
     }
 }

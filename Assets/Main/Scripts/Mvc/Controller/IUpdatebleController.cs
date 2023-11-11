@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public interface IUpdatebleController // Представляет рабочий интерфейс котроллера обновляющийся по тегу
+public interface IUpdatebleController
 {
     string Tag { get; }
 
-    void UpdateController(string tag);
+    void Update(string tag);
 }

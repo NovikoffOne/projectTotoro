@@ -8,18 +8,18 @@ public class MainMenuModel : IModel
 
     public void Play()
     {
-        EventBus.Raise(new ClickButtonPlayInMenu());
+        EventBus.Raise(new ButtonPlayInMenuClicked());
     }
 
     public void LiderboardButtonClick()
     {
-        EventBus.Raise(new ClickLiderBoardButtonInMenu());
+        EventBus.Raise(new LiderBoardButtonClicked());
     }
 
     public void LevelButton(int index)
     {
-        EventBus.Raise(new PlayerCanInput(true));
-        EventBus.Raise(new NewGame(index));
+        EventBus.Raise(new PlayerCanInputed(true));
+        EventBus.Raise(new NewGamePlayed(index));
 
         SampleScene8x5.Load();
     }

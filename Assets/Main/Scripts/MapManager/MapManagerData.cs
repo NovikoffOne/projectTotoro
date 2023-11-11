@@ -6,13 +6,13 @@ using UnityEngine;
 public class MapManagerData : ScriptableObject
 {
     [SerializeField] private List<GridData> _gridData;
-    [SerializeField] private GridGenerator _gridPrefab;
+    [SerializeField] private LevelGenerator _gridPrefab;
 
     [SerializeField] private int _minNumberPassengersCarried;
 
     public IReadOnlyList<GridData> GridData => _gridData;
 
-    public GridGenerator GridGenerator => _gridPrefab;
+    public LevelGenerator GridGenerator => _gridPrefab;
 
     public int MinNumberPassengersCarried => _minNumberPassengersCarried;
 }

@@ -5,7 +5,7 @@ using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public abstract class EnergyReserve : 
-    IEventReceiver<RewardAddGas>,
+    IEventReceiver<RewardGasAdded>,
     IEventReceiver<GameActionEvent>
 {
     private const int BaseMilage = 1;
@@ -22,13 +22,13 @@ public abstract class EnergyReserve :
     {
         CurrentValue = _startValue = startValue;
 
-        this.Subscribe<RewardAddGas>();
+        this.Subscribe<RewardGasAdded>();
         this.Subscribe<GameActionEvent>();
     }
 
     ~EnergyReserve()
     {
-        this.Unsubscribe<RewardAddGas>();
+        this.Unsubscribe<RewardGasAdded>();
         this.Unsubscribe<GameActionEvent>();
     }
 
@@ -53,18 +53,18 @@ public abstract class EnergyReserve :
         EventBus.Raise(new OnTankValueChange(ValueNormalized));
     }
 
-    public void OnEvent(RewardAddGas var)
+    public void OnEvent(RewardGasAdded gasCount)
     {
-        AddGas(var.Value);
+        AddGas(gasCount.Value);
     }
 
-    public void OnEvent(GameActionEvent var)
+    public void OnEvent(GameActionEvent gameAction)
     {
-        if(var.GameAction == GameAction.Completed)
+        if(gameAction.GameAction == GameAction.Completed)
         {
-            var temp = CurrentValue * PointMultiplier;
+            var point = CurrentValue * PointMultiplier;
 
-            EventBus.Raise(new ReturnPlayerPoints(temp));
+            EventBus.Raise(new PointsReturned(point));
         }
     }
 }

@@ -37,7 +37,7 @@ public class LevelStar :
 
             var currentData = CalculateStar(Time.time);
 
-            EventBus.Raise(new CalculateCountStar(currentData));
+            EventBus.Raise(new StarCalculated(currentData));
 
             if (PlayerPrefs.HasKey(LevelStarText + LevelIndex))
             {

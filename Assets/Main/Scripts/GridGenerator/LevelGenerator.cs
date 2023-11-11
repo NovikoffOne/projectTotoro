@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class GridGenerator
+public partial class LevelGenerator
 {
-    private GridData _gridData;
+    private GridData _data;
 
     private PoolMono<Tile> _tilePool;
 
@@ -16,20 +16,27 @@ public partial class GridGenerator
     private PoolMono<TriggerZoneEnter> _triggerZoneLoading;
     private PoolMono<TriggerZoneEnter> _triggerZoneLevelTransition;
 
-    public void NewGrid(GridData gridData)
+    private int _tileFactory = 2;
+    private int _widthFactory = 2;
+
+    private float _cameraPositionFactory = 0.5f;
+
+    private string _tileName = "Tile ";
+
+    public void NewLevel(GridData gridData)
     {
-        _gridData = gridData;
+        _data = gridData;
 
         if (_trigerZonePools.Count > 0)
             _trigerZonePools.ForEach(pool => pool.DeSpawnAll());
         else
         {
-            _triggerZoneBarrier = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Barier));
-            _triggerZoneAccelerartor = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Accelerartor));
-            _triggerZoneRepulsor = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Repulsor));
-            _triggerZoneLanding = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Landing));
-            _triggerZoneLoading = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.Loading));
-            _triggerZoneLevelTransition = new PoolMono<TriggerZoneEnter>(_gridData.GetTriggerZone(ZoneIndex.LevelTransition));
+            _triggerZoneBarrier = new PoolMono<TriggerZoneEnter>(_data.GetTriggerZone(ZoneIndex.Barier));
+            _triggerZoneAccelerartor = new PoolMono<TriggerZoneEnter>(_data.GetTriggerZone(ZoneIndex.Accelerartor));
+            _triggerZoneRepulsor = new PoolMono<TriggerZoneEnter>(_data.GetTriggerZone(ZoneIndex.Repulsor));
+            _triggerZoneLanding = new PoolMono<TriggerZoneEnter>(_data.GetTriggerZone(ZoneIndex.Landing));
+            _triggerZoneLoading = new PoolMono<TriggerZoneEnter>(_data.GetTriggerZone(ZoneIndex.Loading));
+            _triggerZoneLevelTransition = new PoolMono<TriggerZoneEnter>(_data.GetTriggerZone(ZoneIndex.LevelTransition));
 
             _trigerZonePools.Add(_triggerZoneBarrier);
             _trigerZonePools.Add(_triggerZoneAccelerartor);
@@ -42,7 +49,7 @@ public partial class GridGenerator
         if (_tilePool != null)
             _tilePool.DeSpawnAll();
         else
-            _tilePool = new PoolMono<Tile>(_gridData.TilePrefab);
+            _tilePool = new PoolMono<Tile>(_data.TilePrefab);
 
         GenerateGrid();
     }
@@ -57,15 +64,15 @@ public partial class GridGenerator
         return landingPlaces;
     }
 
-    private void InstantiateGrid()
+    private void GenerateTile()
     {
         var countTile = 0;
-
-        for (int x = 0; x < _gridData.Width; x++)
+        
+        for (int x = 0; x < _data.Width; x++)
         {
-            for (int y = 0; y < _gridData.Height; y++)
+            for (int y = 0; y < _data.Height; y++)
             {
-                var isOffset = (countTile % 2 == 0);
+                var isOffset = (countTile % _tileFactory == 0);
 
                 countTile++;
 
@@ -75,28 +82,35 @@ public partial class GridGenerator
 
                 tempTile.Init(isOffset);
 
-                tempTile.name = $"Tile {x} {y}";
+                tempTile.name = $"{_tileName} {x} {y}";
             }
         }
     }
 
     private void GenerateGrid()
     {
-        InstantiateGrid();
+        GenerateTile();
 
         SetPositionsTriggerZones();
 
-        Camera.main.transform.position = new Vector3(((float)_gridData.Width / 2 - 0.5f), _gridData.CameraPositionY, _gridData.CameraPositionZ);
+        SetCameraPosition();
+    }
+
+    private void SetCameraPosition()
+    {
+        var centerPositionX = ((float)_data.Width / _widthFactory - _cameraPositionFactory);
+
+        Camera.main.transform.position = new Vector3(centerPositionX, _data.CameraPositionY, _data.CameraPositionZ);
     }
 
     private void SetPositionsTriggerZones()
     {
-        SetPositionTriggerZone(_gridData.BarriersPosition, _triggerZoneBarrier);
-        SetPositionTriggerZone(_gridData.AcceleratorPosition, _triggerZoneAccelerartor);
-        SetPositionTriggerZone(_gridData.RepulsorPosition, _triggerZoneRepulsor);
-        SetPositionTriggerZone(_gridData.LandingPlacePosition, _triggerZoneLanding);
-        SetPositionTriggerZone(_gridData.LoadingPlacePosition, _triggerZoneLoading);
-        SetPositionTriggerZone(_gridData.LevelTransitionPosition, _triggerZoneLevelTransition);
+        SetPositionTriggerZone(_data.BarriersPosition, _triggerZoneBarrier);
+        SetPositionTriggerZone(_data.AcceleratorPosition, _triggerZoneAccelerartor);
+        SetPositionTriggerZone(_data.RepulsorPosition, _triggerZoneRepulsor);
+        SetPositionTriggerZone(_data.LandingPlacePosition, _triggerZoneLanding);
+        SetPositionTriggerZone(_data.LoadingPlacePosition, _triggerZoneLoading);
+        SetPositionTriggerZone(_data.LevelTransitionPosition, _triggerZoneLevelTransition);
     }
 
     private void SetPositionTriggerZone(IReadOnlyList<Vector3> zonePositions, PoolMono<TriggerZoneEnter> triggerZones)

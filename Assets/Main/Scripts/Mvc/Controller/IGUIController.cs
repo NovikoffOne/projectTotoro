@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public interface IGUIController<V, M> : IController // Основной рабочий элеммент
+﻿public interface IGUIController<V, M> : IController
     where V : class, IView
     where M : class, IModel, new()
 {

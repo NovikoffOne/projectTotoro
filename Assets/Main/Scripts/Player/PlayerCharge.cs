@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ChargeChanger : MonoBehaviour
+public class PlayerCharge : MonoBehaviour
 {
     [SerializeField] private Charge _chargePrefab;
     [SerializeField] private Transform _chargePosition;

@@ -1,13 +1,13 @@
 using UnityEngine;
 
 public class MapManager :
-    IEventReceiver<EnergyChangeEvent>,
-    IEventReceiver<OnPlayerInsided>,
+    IEventReceiver<EnergyChanged>,
+    IEventReceiver<PlayerInsided>,
     IEventReceiver<GameActionEvent>,
-    IEventReceiver<NewGame>,
+    IEventReceiver<NewGamePlayed>,
     IEventReceiver<IsRewarded>
 {
-    private GridGenerator _grid;
+    private LevelGenerator _grid;
     private Player _player;
     private MapManagerData _mapManagerData;
     private PoolMono<Player> _playerPool;
@@ -17,7 +17,7 @@ public class MapManager :
 
     public MapManager(MapManagerData mapManagerData, PoolMono<Player> poolPlayer)
     {
-        _grid = new GridGenerator();
+        _grid = new LevelGenerator();
 
         _mapManagerData = mapManagerData;
         _playerPool = poolPlayer;
@@ -44,7 +44,7 @@ public class MapManager :
         _gridIndex = index;
 
         if (_mapManagerData.GridData.Count > _gridIndex)
-            _grid.NewGrid(_mapManagerData.GridData[_gridIndex]);
+            _grid.NewLevel(_mapManagerData.GridData[_gridIndex]);
         else
         {
             DespawnPlayer();
@@ -58,17 +58,17 @@ public class MapManager :
         _playerPool?.DeSpawn(_player);
     }
 
-    public void OnEvent(IsRewarded var)
+    public void OnEvent(IsRewarded isRewarded)
     {
-        EventBus.Raise(new PlayerCanInput(true));
+        EventBus.Raise(new PlayerCanInputed(true));
     }
 
-    public void OnEvent(EnergyChangeEvent var)
+    public void OnEvent(EnergyChanged isChargeChanged)
     {
-        if (!var.IsChargeChange && _gridIndex == 0)
-            EventBus.Raise(new ChangeTutorialState(3));
+        if (!isChargeChanged.IsChargeChange && _gridIndex == 0)
+            EventBus.Raise(new TutorialStateChanged(3));
 
-        if (var.IsChargeChange)
+        if (isChargeChanged.IsChargeChange)
             _numberPassengersCarried++;
 
         if (IsCanTransition)
@@ -76,19 +76,20 @@ public class MapManager :
             EventBus.Raise(new OpenLevelTransition());
 
             if (_gridIndex == 0)
-                EventBus.Raise(new ChangeTutorialState(5));
+                EventBus.Raise(new TutorialStateChanged(5));
         }
     }
 
-    public void OnEvent(NewGame var)
+    public void OnEvent(NewGamePlayed newLevelIndex)
     {
-        NewLevel(var.IndexLevel);
-        EventBus.Raise(new StartGame(_gridIndex));
+        NewLevel(newLevelIndex.IndexLevel);
+
+        EventBus.Raise(new GameStarted(_gridIndex));
     }
 
-    public void OnEvent(GameActionEvent var)
+    public void OnEvent(GameActionEvent gameAction)
     {
-        switch (var.GameAction)
+        switch (gameAction.GameAction)
         {
             case GameAction.ClickReload:
                 DespawnPlayer();
@@ -101,7 +102,7 @@ public class MapManager :
                 break;
 
             case GameAction.GameOver:
-                EventBus.Raise(new PlayerCanInput(false));
+                EventBus.Raise(new PlayerCanInputed(false));
                 break;
 
             case GameAction.Start:
@@ -118,7 +119,7 @@ public class MapManager :
         }
     }
 
-    public void OnEvent(OnPlayerInsided var)
+    public void OnEvent(PlayerInsided playerInsided)
     {
         if (IsCanTransition)
         {
@@ -132,26 +133,26 @@ public class MapManager :
     private void ChangeTutorialState()
     {
         if (_gridIndex == 0)
-            EventBus.Raise(new ChangeTutorialState(0));
+            EventBus.Raise(new TutorialStateChanged(0));
         else
-            EventBus.Raise(new ChangeTutorialState(0, false));
+            EventBus.Raise(new TutorialStateChanged(0, false));
     }
 
     private void SubscribeAll()
     {
-        this.Subscribe<EnergyChangeEvent>();
+        this.Subscribe<EnergyChanged>();
         this.Subscribe<GameActionEvent>();
-        this.Subscribe<OnPlayerInsided>();
-        this.Subscribe<NewGame>();
+        this.Subscribe<PlayerInsided>();
+        this.Subscribe<NewGamePlayed>();
         this.Subscribe<IsRewarded>();
     }
 
     private void UnsubscribeAll()
     {
-        this.Unsubscribe<EnergyChangeEvent>();
+        this.Unsubscribe<EnergyChanged>();
         this.Unsubscribe<GameActionEvent>();
-        this.Unsubscribe<OnPlayerInsided>();
-        this.Unsubscribe<NewGame>();
+        this.Unsubscribe<PlayerInsided>();
+        this.Unsubscribe<NewGamePlayed>();
         this.Unsubscribe<IsRewarded>();
     }
 }

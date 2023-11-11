@@ -6,7 +6,7 @@ public class Barrier : MonoBehaviour, ITriggerZone
     {
         player.Movement.Move(player.Movement.LastPosition);
 
-        EventBus.Raise<PlayerCanInput>(new PlayerCanInput(false));
+        EventBus.Raise<PlayerCanInputed>(new PlayerCanInputed(false));
         EventBus.Raise(new GameActionEvent(GameAction.GameOver));
     }
 }

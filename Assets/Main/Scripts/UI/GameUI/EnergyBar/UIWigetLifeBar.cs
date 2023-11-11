@@ -14,8 +14,8 @@ public class UIWigetLifeBar : MonoBehaviour, IEventReceiver<OnTankValueChange>
         EventBus.Unsubscribe(this);
     }
 
-    public void OnEvent(OnTankValueChange var)
+    public void OnEvent(OnTankValueChange gasCount)
     {
-        _energyBar.SetValue(var.NewValue);
+        _energyBar.SetValue(gasCount.NewValue);
     }
 }

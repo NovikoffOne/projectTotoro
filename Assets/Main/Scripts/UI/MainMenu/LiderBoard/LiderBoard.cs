@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 public class LiderBoard :
-    IEventReceiver<ReturnPlayerPoints>
+    IEventReceiver<PointsReturned>
 {
     public static LiderBoard Instance;
 
@@ -18,15 +18,15 @@ public class LiderBoard :
         if (Instance == null)
             Instance = this;
 
-        this.Subscribe<ReturnPlayerPoints>();
+        this.Subscribe<PointsReturned>();
     }
 
     ~LiderBoard()
     {
-        this.Unsubscribe<ReturnPlayerPoints>();
+        this.Unsubscribe<PointsReturned>();
     }
 
-    public void OnEvent(ReturnPlayerPoints var)
+    public void OnEvent(PointsReturned var)
     {
 #if !UNITY_WEBGL || UNITY_EDITOR
 

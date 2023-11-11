@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 
 public static class MVCConnecter
 {
-    private static event Action<string> OnControllerUpdate;
+    private static event Action<string> OnControllerUpdated;
 
     public static void AddController<T>(this IView view) where T : class, IController, new()
     {
@@ -18,7 +18,7 @@ public static class MVCConnecter
         {
             var updateController = controller as IUpdatebleController;
 
-            OnControllerUpdate += updateController.UpdateController;
+            OnControllerUpdated += updateController.Update;
         }
     }
 
@@ -26,7 +26,7 @@ public static class MVCConnecter
 
     public static void UpdateController(string tag)
     {
-        OnControllerUpdate?.Invoke(tag);
+        OnControllerUpdated?.Invoke(tag);
     }
 
     public static void UpdateAllControllers() 

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class Tutorial : MonoBehaviour,
-    IEventReceiver<ChangeTutorialState>
+    IEventReceiver<TutorialStateChanged>
 {
     [SerializeField] private Light _pointLightPrefab;
 
@@ -19,7 +19,7 @@ public class Tutorial : MonoBehaviour,
 
     private void Start()
     {
-        this.Subscribe<ChangeTutorialState>();
+        this.Subscribe<TutorialStateChanged>();
     }
 
     private void OnDisable()
@@ -33,10 +33,10 @@ public class Tutorial : MonoBehaviour,
     private void OnDestroy()
     {
         this.gameObject.SetActive(false);
-        this.Unsubscribe<ChangeTutorialState>();
+        this.Unsubscribe<TutorialStateChanged>();
     }
 
-    public void OnEvent(ChangeTutorialState var)
+    public void OnEvent(TutorialStateChanged var)
     {
         if (var.IsTutorial == false || _isFirst == false)
             return;

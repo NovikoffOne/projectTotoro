@@ -10,7 +10,7 @@ public class Push : MonoBehaviour, ITriggerZone
         {
             player.Movement.Move(player.Movement.CurrentPosition + _direction);
 
-            EventBus.Raise<PlayerCanInput>(new PlayerCanInput(false));
+            EventBus.Raise<PlayerCanInputed>(new PlayerCanInputed(false));
         }
     }
 }

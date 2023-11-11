@@ -6,12 +6,12 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
 
     [SerializeField] private Charge _chargePrefab;
 
-    [SerializeField] private ChargeChanger _chargeChanger;
+    [SerializeField] private PlayerCharge _chargeChanger;
 
     [SerializeField] private int _energyReserve = 20;
 
     public PlayerEnergyReserve EnergyTank { get; private set; }
-    public ChargeChanger ChargeChanger { get => _chargeChanger; }
+    public PlayerCharge ChargeChanger { get => _chargeChanger; }
     public PlayerMovement Movement { get; private set; }
     public PlayerInput Input { get; private set; }
 
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
         EventBus.Unsubscribe(this);
     }
 
-    public void OnEvent(OnTankValueChange var)
+    public void OnEvent(OnTankValueChange valueChanged)
     {
         if (!EnergyTank.HaveGas)
             EventBus.Raise(new GameActionEvent(GameAction.GameOver));

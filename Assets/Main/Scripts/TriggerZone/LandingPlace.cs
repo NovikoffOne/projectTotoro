@@ -31,7 +31,7 @@ public class LandingPlace : MonoBehaviour, ITriggerZone
         {
             _charge = charge;
 
-            EventBus.Raise(new EnergyChangeEvent(true));
+            EventBus.Raise(new EnergyChanged(true));
 
             _charge.Move(_chargePostion);
 

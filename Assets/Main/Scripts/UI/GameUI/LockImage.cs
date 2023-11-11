@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class LockImage : MonoBehaviour
 {
-    [SerializeField] Button _button;
+    [SerializeField] private Button _button;
 
     private void OnEnable()
     {

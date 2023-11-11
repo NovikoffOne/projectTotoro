@@ -24,7 +24,7 @@ internal class GameCanvasController : BaseUpdateController<GameCanvas, GameCanva
             View.PauseButton.gameObject.SetActive(false);
 
             View.InterLevelPanel.gameObject.SetActive(true);
-            View.InterLevelPanel.StarFiller.FillStars(Model.CountStar, Model.PlayerPoint);
+            View.InterLevelPanel.StarFiller.Fill(Model.CountStar, Model.PlayerPoint);
 
             Model.Pause(true);
             Model.UpdateData();

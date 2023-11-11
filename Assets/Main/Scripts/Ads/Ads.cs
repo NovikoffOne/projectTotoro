@@ -74,6 +74,6 @@ public class Ads :
     private void OnRewardedCallback()
     {
         EventBus.Raise(new IsRewarded());
-        EventBus.Raise(new RewardAddGas(_amountEnergyPerReward));
+        EventBus.Raise(new RewardGasAdded(_amountEnergyPerReward));
     }
 }

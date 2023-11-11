@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class StarFillerGameUI : MonoBehaviour
+public class PrizeFiller : MonoBehaviour
 {
     [SerializeField] private TMP_Text _point;
     [SerializeField] private List<GameObject> _stars;
@@ -12,13 +12,13 @@ public class StarFillerGameUI : MonoBehaviour
         _stars.ForEach(star => star.SetActive(false));
     }
 
-    public void FillStars(int star, int point)
+    public void Fill(int star, int point)
     {
-        DrawStars(star);
+        DrawStar(star);
         DrawPoint(point);
     }
 
-    private void DrawStars(int countStars)
+    private void DrawStar(int countStars)
     {
         for (int i = 0; i < countStars; i++)
             _stars[i].SetActive(true);

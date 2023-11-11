@@ -28,7 +28,7 @@ public class LoadingPlace : MonoBehaviour, ITriggerZone
         {
             player.ChargeChanger.SetCharge(_charge);
 
-            EventBus.Raise(new EnergyChangeEvent(false));
+            EventBus.Raise(new EnergyChanged(false));
 
             _charge = null;
         }

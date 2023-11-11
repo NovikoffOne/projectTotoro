@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class Tile : MonoBehaviour,
-    IEventReceiver<PlayerCanInput>
+    IEventReceiver<PlayerCanInputed>
 {
     [SerializeField] private GameObject _baseTile;
     [SerializeField] private GameObject _offsetTile;
@@ -15,7 +15,7 @@ public class Tile : MonoBehaviour,
 
     private void OnDestroy()
     {
-        this.Unsubscribe<PlayerCanInput>();
+        this.Unsubscribe<PlayerCanInputed>();
     }
 
     public void OnMouseEnter()
@@ -45,10 +45,10 @@ public class Tile : MonoBehaviour,
             _currentTile = _baseTile;
         }
 
-        this.Subscribe<PlayerCanInput>();
+        this.Subscribe<PlayerCanInputed>();
     }
 
-    public void OnEvent(PlayerCanInput var)
+    public void OnEvent(PlayerCanInputed var)
     {
         _canInput = var.IsCanInput;
     }

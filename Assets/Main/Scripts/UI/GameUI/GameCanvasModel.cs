@@ -3,9 +3,9 @@
 internal class GameCanvasModel : IModel,
     IEventReceiver<GameActionEvent>,
     IEventReceiver<IsRewarded>,
-    IEventReceiver<ChangeTutorialState>,
-    IEventReceiver<CalculateCountStar>,
-    IEventReceiver<ReturnPlayerPoints>
+    IEventReceiver<TutorialStateChanged>,
+    IEventReceiver<StarCalculated>,
+    IEventReceiver<PointsReturned>
 {
     public GameCanvasModel()
     {
@@ -54,7 +54,7 @@ internal class GameCanvasModel : IModel,
     public void Pause(bool isPause)
     {
         Time.timeScale = isPause ? 0 : 1;
-        EventBus.Raise(new PlayerCanInput(!isPause));
+        EventBus.Raise(new PlayerCanInputed(!isPause));
     }
 
     public void Exit()
@@ -100,18 +100,18 @@ internal class GameCanvasModel : IModel,
     {
         this.Subscribe<GameActionEvent>();
         this.Subscribe<IsRewarded>();
-        this.Subscribe<ChangeTutorialState>();
-        this.Subscribe<CalculateCountStar>();
-        this.Subscribe<ReturnPlayerPoints>();
+        this.Subscribe<TutorialStateChanged>();
+        this.Subscribe<StarCalculated>();
+        this.Subscribe<PointsReturned>();
     }
 
     public void Unscribe()
     {
         this.Unsubscribe<GameActionEvent>();
         this.Unsubscribe<IsRewarded>();
-        this.Unsubscribe<ChangeTutorialState>();
-        this.Unsubscribe<ReturnPlayerPoints>();
-        this.Unsubscribe<CalculateCountStar>();
+        this.Unsubscribe<TutorialStateChanged>();
+        this.Unsubscribe<PointsReturned>();
+        this.Unsubscribe<StarCalculated>();
     }
 
     public void Reward()
@@ -126,7 +126,7 @@ internal class GameCanvasModel : IModel,
         MVCConnecter.UpdateController<GameCanvasController>();
     }
 
-    public void OnEvent(ChangeTutorialState var)
+    public void OnEvent(TutorialStateChanged var)
     {
         if (var.IsTutorial == true)
         {
@@ -144,17 +144,17 @@ internal class GameCanvasModel : IModel,
 
     public void CompleteTutorial()
     {
-        EventBus.Raise(new TutorialCompletd());
+        EventBus.Raise(new TutorialComplted());
         IsTutorial = false;
     }
 
-    public void OnEvent(ReturnPlayerPoints var)
+    public void OnEvent(PointsReturned var)
     {
         PlayerPoint = var.Point;
         MVCConnecter.UpdateController<GameCanvasController>();
     }
 
-    public void OnEvent(CalculateCountStar var)
+    public void OnEvent(StarCalculated var)
     {
         CountStar = var.Count;
         MVCConnecter.UpdateController<GameCanvasController>();

@@ -32,7 +32,7 @@ public class LevelTransition : MonoBehaviour,
 
     public void ApplyEffect(Player player)
     {
-        EventBus.Raise(new OnPlayerInsided());
+        EventBus.Raise(new PlayerInsided());
     }
 
     public void OnEvent(OpenLevelTransition var)

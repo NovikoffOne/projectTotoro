@@ -48,7 +48,7 @@ public class Bootstrap : MonoBehaviour
         var mapManager = new MapManager(_mapManagerData, new PoolMono<Player>(_playerPrefab));
         mapManager.NewLevel();
 
-        EventBus.Raise(new PlayerCanInput(false));
+        EventBus.Raise(new PlayerCanInputed(false));
 
         SceneManager.sceneLoaded -= StartNewGame;
 

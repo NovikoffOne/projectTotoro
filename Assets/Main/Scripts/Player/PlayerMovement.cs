@@ -1,14 +1,11 @@
 using UnityEngine;
 
 public class PlayerMovement :
-    IEventReceiver<GameActionEvent>,
-    IEventReceiver<StartGame>
+    IEventReceiver<GameActionEvent>
 {
     private readonly PlayerView PlayerView;
 
     private readonly float Speed;
-
-    private bool _isGame;
 
     public PlayerMovement(PlayerView playerView, float speed = 1f)
     {
@@ -30,9 +27,6 @@ public class PlayerMovement :
 
     public void Move(Vector3 newPosition)
     {
-        if (_isGame == false)
-            return;
-
         IsApplyAffect = true;
 
         newPosition = ClampingMoveDirection(newPosition);
@@ -55,51 +49,12 @@ public class PlayerMovement :
         IsApplyAffect = true;
     }
 
-    public void OnEvent(GameActionEvent var)
+    public void OnEvent(GameActionEvent gameAction)
     {
-        switch (var.GameAction)
+        if (gameAction.GameAction == GameAction.ClickReward)
         {
-            case GameAction.Start:
-                _isGame = true;
-                break;
-
-            case GameAction.Completed:
-                _isGame = false;
-                break;
-
-            case GameAction.ClickNextLevel:
-                _isGame = true;
-                break;
-
-            case GameAction.ClickReload:
-                _isGame = true;
-                break;
-
-            case GameAction.ClickPlay:
-                _isGame = true;
-                break;
-
-            case GameAction.Exit:
-                _isGame = false;
-                break;
-
-            case GameAction.GameOver:
-                _isGame = false;
-                break;
-
-            case GameAction.ClickReward:
-                _isGame = true;
-                IsApplyAffect = false;
-                break;
-
-            default:
-                break;
+            IsApplyAffect = false;
         }
-    }
-
-    public void OnEvent(StartGame var)
-    {
-        _isGame = true;
     }
 
     private Vector2 ClampingMoveDirection(Vector2 newPosition)
