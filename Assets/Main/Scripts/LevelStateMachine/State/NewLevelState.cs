@@ -27,6 +27,7 @@ public class NewLevelState : BaseState<LevelStateMachine>
         }
 
         EventBus.Raise(new PlayerCanInputed(false));
-        EventBus.Raise(new GameStarted(Target.GridIndex));
+
+        Target.PlayGame();
     }
 }

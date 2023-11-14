@@ -1,8 +1,5 @@
 public class LevelStateMachine :
-    IEventReceiver<PlayerInsided>,
-    IEventReceiver<GameActionEvent>,
-    IEventReceiver<NewGamePlayed>,
-    IEventReceiver<GameStarted>
+    IEventReceiver<NewGamePlayed>
 {
     private LevelGenerator _grid;
     private Player _player;
@@ -23,12 +20,12 @@ public class LevelStateMachine :
 
         _stateMachine.ChangeState<InstalizeState>(state => state.Target = this);
 
-        SubscribeAll();
+        this.Subscribe<NewGamePlayed>();
     }
 
     ~LevelStateMachine()
     {
-        UnsubscribeAll();
+        this.Unsubscribe<NewGamePlayed>();
     }
 
     public LevelGenerator Grid => _grid;
@@ -45,15 +42,6 @@ public class LevelStateMachine :
         _playerPool?.DeSpawn(_player);
     }
 
-    public void OnEvent(PlayerInsided playerInsided)
-    {
-        if (IsCanTransition)
-        {
-            DespawnPlayer();
-            EventBus.Raise(new GameActionEvent(GameAction.Completed));
-        }
-    }
-
     public void StartTutorial()
     {
         if (_gridIndex == 0)
@@ -62,25 +50,9 @@ public class LevelStateMachine :
             EventBus.Raise(new TutorialStateChanged(0, false));
     }
 
-    public void SubscribeAll()
-    {
-        this.Subscribe<GameActionEvent>();
-        this.Subscribe<PlayerInsided>();
-        this.Subscribe<NewGamePlayed>();
-        this.Subscribe<GameStarted>();
-    }
-
     public void SetNumberCarried(int charge)
     {
         _numberChargeCarried = charge;
-    }
-
-    public void UnsubscribeAll()
-    {
-        this.Unsubscribe<GameActionEvent>();
-        this.Unsubscribe<PlayerInsided>();
-        this.Unsubscribe<NewGamePlayed>();
-        this.Unsubscribe<GameStarted>();
     }
 
     public void SpawnPlayer()
@@ -88,8 +60,10 @@ public class LevelStateMachine :
         _player = _playerPool.Spawn();
     }
 
-    public void OnEvent(GameStarted var)
+    public void PlayGame()
     {
+        EventBus.Raise(new GameStarted(_gridIndex));
+        
         _stateMachine.ChangeState<LoopGameState>(state => state.Target = this);
     }
 
@@ -98,33 +72,7 @@ public class LevelStateMachine :
         ChangeNewLevelState(newLevelIndex.IndexLevel);
     }
 
-    public void OnEvent(GameActionEvent gameAction)
-    {
-        switch (gameAction.GameAction)
-        {
-            case GameAction.Start:
-                StartTutorial();
-                break;
-
-            case GameAction.ClickReload:
-                ChangeNewLevelState(GridIndex);
-                break;
-
-            case GameAction.ClickNextLevel:
-                ChangeNewLevelState(GridIndex + 1);
-                break;
-
-            case GameAction.Exit:
-                DespawnPlayer();
-                IJunior.TypedScenes.MainMenu.Load();
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    private void ChangeNewLevelState(int index = 0)
+    public void ChangeNewLevelState(int index = 0)
     {
         if (_player != null)
             DespawnPlayer();

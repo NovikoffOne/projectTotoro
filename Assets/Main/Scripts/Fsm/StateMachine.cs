@@ -25,8 +25,6 @@ public class StateMachine : IStateMachine
         CurrentState = state;
 
         CurrentState.Enter();
-
-        Debug.Log(CurrentState);
     }
 
     public void Dispose()

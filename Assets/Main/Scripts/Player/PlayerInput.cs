@@ -48,7 +48,7 @@ public class PlayerInput :
             if (_firstClick)
             {
                 EventBus.Raise(new GameActionEvent(GameAction.Start));
-                
+
                 _firstClick = false;
             }
             
