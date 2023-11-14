@@ -8,5 +8,6 @@
     GameOver,
     Exit,
     Start,
-    ClickReward
+    ClickReward,
+    Pause
 }

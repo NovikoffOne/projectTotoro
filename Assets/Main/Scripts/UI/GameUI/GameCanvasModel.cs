@@ -55,6 +55,7 @@ internal class GameCanvasModel : IModel,
     {
         Time.timeScale = isPause ? 0 : 1;
         EventBus.Raise(new PlayerCanInputed(!isPause));
+        EventBus.Raise(new GameActionEvent(GameAction.Pause));
     }
 
     public void Exit()

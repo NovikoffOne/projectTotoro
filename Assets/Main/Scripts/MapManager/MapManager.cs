@@ -1,7 +1,9 @@
+using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager :
-    IEventReceiver<EnergyChanged>,
+    //IEventReceiver<EnergyChanged>,
     IEventReceiver<PlayerInsided>,
     IEventReceiver<GameActionEvent>,
     IEventReceiver<NewGamePlayed>,
@@ -12,17 +14,33 @@ public class MapManager :
     private MapManagerData _mapManagerData;
     private PoolMono<Player> _playerPool;
 
-    private int _numberPassengersCarried;
+    private StateMachine _stateMachine;
+
+    #region StateMachine
+    public int LevelIndex => _gridIndex;
+    public LevelGenerator Grid => _grid;
+    public Player Player => _player;
+    public MapManagerData Data => _mapManagerData;
+    public PoolMono<Player> PlayerPool => _playerPool;
+
+    public StateMachine StateMachine => _stateMachine;
+
+    #endregion
+
+    private int _numberChargeCarried;
     private int _gridIndex;
 
     public MapManager(MapManagerData mapManagerData, PoolMono<Player> poolPlayer)
     {
+        _stateMachine = new StateMachine();
+        
         _grid = new LevelGenerator();
 
         _mapManagerData = mapManagerData;
         _playerPool = poolPlayer;
 
-        SubscribeAll();
+        _stateMachine.ChangeState<InstalizeState>(state => state.Target = this);
+        //SubscribeAll();
     }
 
     ~MapManager()
@@ -30,83 +48,87 @@ public class MapManager :
         UnsubscribeAll();
     }
 
-    private bool IsCanTransition => _numberPassengersCarried >= _mapManagerData.MinNumberPassengersCarried;
+    public bool IsCanTransition => _numberChargeCarried >= _mapManagerData.MinNumberPassengersCarried;
 
     public int GridIndex => _gridIndex;
 
-    public void NewLevel(int index = 0)
-    {
-        if (_player == null || _player.gameObject.activeSelf == false)
-            _player = _playerPool.Spawn();
+    //public void NewLevel(int index = 0)
+    //{
+    //    if (_player == null || _player.gameObject.activeSelf == false)
+    //        _player = _playerPool.Spawn();
 
-        _numberPassengersCarried = 0;
+    //    _numberPassengersCarried = 0;
 
-        _gridIndex = index;
+    //    _gridIndex = index;
 
-        if (_mapManagerData.GridData.Count > _gridIndex)
-            _grid.NewLevel(_mapManagerData.GridData[_gridIndex]);
-        else
-        {
-            DespawnPlayer();
-            IJunior.TypedScenes.MainMenu.Load();
-        }
-    }
+    //    if (_mapManagerData.GridData.Count > _gridIndex)
+    //        _grid.NewLevel(_mapManagerData.GridData[_gridIndex]);
+    //    else
+    //    {
+    //        DespawnPlayer();
+    //        IJunior.TypedScenes.MainMenu.Load();
+    //    }
+    //}
 
     public void DespawnPlayer()
     {
-        _player.Movement.ResetPosition();
+        _player?.Movement.ResetPosition();
         _playerPool?.DeSpawn(_player);
     }
 
     public void OnEvent(IsRewarded isRewarded)
     {
-        EventBus.Raise(new PlayerCanInputed(true));
+        _stateMachine.ChangeState<LoopGameState>(state => state.Target = this);
     }
 
-    public void OnEvent(EnergyChanged isChargeChanged)
-    {
-        if (!isChargeChanged.IsChargeChange && _gridIndex == 0)
-            EventBus.Raise(new TutorialStateChanged(3));
+    //public void OnEvent(EnergyChanged isChargeChanged)
+    //{
+    //    if (!isChargeChanged.IsChargeChange && _gridIndex == 0)
+    //        EventBus.Raise(new TutorialStateChanged(3));
 
-        if (isChargeChanged.IsChargeChange)
-            _numberPassengersCarried++;
+    //    if (isChargeChanged.IsChargeChange)
+    //        _numberPassengersCarried++;
 
-        if (IsCanTransition)
-        {
-            EventBus.Raise(new OpenLevelTransition());
+    //    if (IsCanTransition)
+    //    {
+    //        EventBus.Raise(new OpenLevelTransition());
 
-            if (_gridIndex == 0)
-                EventBus.Raise(new TutorialStateChanged(5));
-        }
-    }
+    //        if (_gridIndex == 0)
+    //            EventBus.Raise(new TutorialStateChanged(5));
+    //    }
+    //}
 
     public void OnEvent(NewGamePlayed newLevelIndex)
     {
-        NewLevel(newLevelIndex.IndexLevel);
-
-        EventBus.Raise(new GameStarted(_gridIndex));
+        ChangeNewLevelState(newLevelIndex.IndexLevel);
     }
 
     public void OnEvent(GameActionEvent gameAction)
     {
         switch (gameAction.GameAction)
         {
-            case GameAction.ClickReload:
-                DespawnPlayer();
-                NewLevel(_gridIndex);
-                break;
-
-            case GameAction.ClickNextLevel:
-                DespawnPlayer();
-                NewLevel(++_gridIndex);
+            case GameAction.Start:
+                if (_stateMachine.CurrentState.Equals(typeof(LoopGameState)))
+                {
+                    _stateMachine.ChangeState<LoopGameState>(state=> state.Target = this);
+                    ChangeTutorialState();
+                }
                 break;
 
             case GameAction.GameOver:
-                EventBus.Raise(new PlayerCanInputed(false));
+                _stateMachine.ChangeState<OpenPanelState>(state => state.Target = this);
                 break;
 
-            case GameAction.Start:
-                ChangeTutorialState();
+            case GameAction.Pause:
+                _stateMachine.ChangeState<OpenPanelState>(state => state.Target = this);
+                break;
+
+            case GameAction.ClickReload:
+                ChangeNewLevelState(GridIndex);
+                break;
+
+            case GameAction.ClickNextLevel:
+                ChangeNewLevelState(GridIndex + 1);
                 break;
 
             case GameAction.Exit:
@@ -125,12 +147,11 @@ public class MapManager :
         {
             EventBus.Raise(new GameActionEvent(GameAction.Completed));
             DespawnPlayer();
+            StateMachine.ChangeState<OpenPanelState>();
         }
-        else
-            Debug.Log("Нет питания");
     }
 
-    private void ChangeTutorialState()
+    public void ChangeTutorialState()
     {
         if (_gridIndex == 0)
             EventBus.Raise(new TutorialStateChanged(0));
@@ -138,21 +159,52 @@ public class MapManager :
             EventBus.Raise(new TutorialStateChanged(0, false));
     }
 
-    private void SubscribeAll()
+    #region StateMachine
+    public void SubscribeAll()
     {
-        this.Subscribe<EnergyChanged>();
+        //this.Subscribe<EnergyChanged>();
         this.Subscribe<GameActionEvent>();
         this.Subscribe<PlayerInsided>();
         this.Subscribe<NewGamePlayed>();
         this.Subscribe<IsRewarded>();
     }
 
-    private void UnsubscribeAll()
+    public void SetNumberCarried(int charge)
     {
-        this.Unsubscribe<EnergyChanged>();
+        _numberChargeCarried = charge;
+    }
+
+    public void UnsubscribeAll()
+    {
+        //this.Unsubscribe<EnergyChanged>();
         this.Unsubscribe<GameActionEvent>();
         this.Unsubscribe<PlayerInsided>();
         this.Unsubscribe<NewGamePlayed>();
         this.Unsubscribe<IsRewarded>();
     }
+
+    public void SpawnPlayer()
+    {
+        _player = _playerPool.Spawn();
+    }
+
+    public int NumberPassengersCarried
+    {
+        get => _numberChargeCarried;
+
+        set
+        {
+            if (_numberChargeCarried == default)
+                _numberChargeCarried = value;
+        }
+    }
+
+    public void ChangeNewLevelState(int index = 0)
+    {
+        if(_player != null)
+            DespawnPlayer();
+
+        _stateMachine.ChangeState<NewLevelState>(state => state.Target = this);
+    }
+    #endregion
 }
