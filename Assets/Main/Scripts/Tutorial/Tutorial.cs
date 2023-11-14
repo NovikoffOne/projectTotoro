@@ -5,16 +5,21 @@ public class Tutorial : MonoBehaviour,
 {
     [SerializeField] private Light _pointLightPrefab;
 
-    private Vector3 _startLightPosition = new Vector3(3, 1, -.3f);
-    private Vector3 _state3LightPosition = new Vector3(7, 1, -.3f);
-    private Vector3 _state5LightPosition = new Vector3(7, 2, -.3f);
-
     private Light _pointLight;
-    private bool _isFirst;
+    
+    private StateMachine _stateMachine;
+    
+    public Light PointLight => _pointLight;
+    public Vector3 StartLightPosition { get; } = new Vector3(3, 1, -.3f);
+    public Vector3 State3LightPosition { get; } = new Vector3(7, 1, -.3f);
+    public Vector3 State5LightPosition { get; } = new Vector3(7, 2, -.3f);
 
     private void Awake()
     {
-        _isFirst = true;
+        if(_stateMachine == null)
+        {
+            _stateMachine = new StateMachine();
+        }
     }
 
     private void Start()
@@ -38,29 +43,35 @@ public class Tutorial : MonoBehaviour,
 
     public void OnEvent(TutorialStateChanged var)
     {
-        if (var.IsTutorial == false || _isFirst == false)
-            return;
-
-        if (_pointLight == null)
-            _pointLight = Instantiate(_pointLightPrefab, _startLightPosition, Quaternion.identity);
-
-        switch (var.TutorialState)
+        if (var.IsTutorial == false)
         {
-            case 0:
-                _pointLight.transform.position = _startLightPosition;
-                break;
-
-            case 3:
-                _pointLight.transform.position = _state3LightPosition;
-                break;
-
-            case 5:
-                _pointLight.transform.position = _state5LightPosition;
-                _isFirst = false;
-                break;
-
-            default:
-                break;
+            _stateMachine.ChangeState<OffTutorialState>(state => state.Target = this);
+            return;
         }
+        else
+        {
+            switch (var.TutorialState)
+            {
+                case 0:
+                    _stateMachine.ChangeState<StartTutorialState>(state => state.Target = this);
+                    break;
+
+                case 3:
+                    _stateMachine.ChangeState<LoadingTutorialState>(state => state.Target = this);
+                    break;
+
+                case 5:
+                    _stateMachine.ChangeState<LevelTransitionTutorialState>(state => state.Target = this);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void CreatePointLigth()
+    {
+        _pointLight = Instantiate(_pointLightPrefab, StartLightPosition, Quaternion.identity);
     }
 }

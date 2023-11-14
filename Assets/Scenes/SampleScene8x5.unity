@@ -1848,6 +1848,7 @@ GameObject:
   - component: {fileID: 1369031530}
   - component: {fileID: 1369031532}
   - component: {fileID: 1369031531}
+  - component: {fileID: 1369031533}
   m_Layer: 5
   m_Name: ScorePanel
   m_TagString: Untagged
@@ -1917,6 +1918,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1369031529}
   m_CullTransparentMesh: 1
+--- !u!114 &1369031533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369031529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96226e6db6d5f1a4d8f697210e5e2d54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _point: {fileID: 1135096637}
+  _stars:
+  - {fileID: 741158393}
+  - {fileID: 781435386}
+  - {fileID: 1100689660}
 --- !u!1 &1397187350
 GameObject:
   m_ObjectHideFlags: 0
@@ -2762,7 +2780,7 @@ PrefabInstance:
     - target: {fileID: 8264139041877136360, guid: e1b1fdc60a6130a4483250e8a4018068, type: 3}
       propertyPath: _starFiller
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1369031533}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

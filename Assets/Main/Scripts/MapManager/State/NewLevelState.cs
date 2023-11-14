@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
-public class NewLevelState : BaseState<MapManager>
+public class NewLevelState : BaseState<LevelStateMachine>
 {
     public override void Enter()
     {
@@ -28,18 +28,5 @@ public class NewLevelState : BaseState<MapManager>
 
         EventBus.Raise(new PlayerCanInputed(false));
         EventBus.Raise(new GameStarted(Target.GridIndex));
-
-        Time.timeScale = 0;
-
-        Target.StateMachine.ChangeState<LoopGameState>(state => state.Target = Target);
-    }
-
-    public override void Exit()
-    {
-    }
-
-    public override void Update()
-    {
-        base.Update();
     }
 }

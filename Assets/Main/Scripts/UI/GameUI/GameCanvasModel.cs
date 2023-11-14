@@ -82,10 +82,10 @@ internal class GameCanvasModel : IModel,
 
     public void ActionComplete()
     {
-        IsCompleted = true;
+        //IsCompleted = true;
 
-        MVCConnecter.UpdateController<GameCanvasController>();
-        Time.timeScale = 0;
+        //MVCConnecter.UpdateController<GameCanvasController>();
+        //Time.timeScale = 0;
     }
 
     public void ActionGameOver()
@@ -152,12 +152,16 @@ internal class GameCanvasModel : IModel,
     public void OnEvent(PointsReturned var)
     {
         PlayerPoint = var.Point;
+        IsCompleted = true;
+
         MVCConnecter.UpdateController<GameCanvasController>();
     }
 
     public void OnEvent(StarCalculated var)
     {
         CountStar = var.Count;
+        IsCompleted = true;
+
         MVCConnecter.UpdateController<GameCanvasController>();
     }
 }

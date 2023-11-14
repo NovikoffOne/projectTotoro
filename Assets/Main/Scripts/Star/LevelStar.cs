@@ -3,7 +3,7 @@ using UnityEngine;
 public class LevelStar :
     IEventReceiver<GameActionEvent>
 {
-    private readonly MapManager MapManager;
+    private readonly LevelStateMachine MapManager;
 
     private const string LevelPassedText = "LevelPassed ";
     private const string LevelStarText = "LevelStar ";
@@ -20,7 +20,7 @@ public class LevelStar :
 
     private float _startTime;
 
-    public LevelStar(MapManager mapManager)
+    public LevelStar(LevelStateMachine mapManager)
     {
         MapManager = mapManager;
 

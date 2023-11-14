@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 
-public class LoopGameState : BaseState<MapManager>,
-    IEventReceiver<GameActionEvent>,
+public class LoopGameState : BaseState<LevelStateMachine>,
     IEventReceiver<EnergyChanged>
 {
     public override void Enter()
     {
-        this.Subscribe<EnergyChanged>();
+        Time.timeScale = 1;
 
-        if (Time.timeScale == 0)
-            Time.timeScale = 1;
+        this.Subscribe<EnergyChanged>();
 
         EventBus.Raise(new PlayerCanInputed(true));
     }
@@ -17,34 +15,12 @@ public class LoopGameState : BaseState<MapManager>,
     public override void Exit()
     {
         EventBus.Raise(new PlayerCanInputed(false));
-    }
-
-    public void OnEvent(GameActionEvent gameAction)
-    {
-        //switch (gameAction.GameAction)
-        //{
-        //    case GameAction.GameOver:
-        //        Target.StateMachine.ChangeState<OpenPanelState>(state => state.Target = Target);
-        //        break;
-
-        //    case GameAction.Start:
-        //        Target.ChangeTutorialState();
-        //        break;
-
-        //    case GameAction.Pause:
-        //        Target.StateMachine.ChangeState<OpenPanelState>(state => state.Target = Target);
-        //        break;
-
-        //    default:
-        //        break;
-        //}
+        this.Unsubscribe<EnergyChanged>();
     }
 
     public void OnEvent(EnergyChanged isChargeChanged)
     {
-        Debug.Log($"isChargeChanged {isChargeChanged.IsChargeChange}");
-
-        if (!isChargeChanged.IsChargeChange == false && Target.LevelIndex == 0)
+        if (isChargeChanged.IsChargeChange == false && Target.GridIndex == 0)
         {
             EventBus.Raise(new TutorialStateChanged(3));
         }
@@ -52,27 +28,14 @@ public class LoopGameState : BaseState<MapManager>,
         if (isChargeChanged.IsChargeChange == true)
         {
             Target.SetNumberCarried(1);
-            Debug.Log(Target.NumberPassengersCarried);
         }
 
         if (Target.IsCanTransition)
         {
             EventBus.Raise(new OpenLevelTransition());
 
-            Debug.Log("OpenLevelTransition");
-
-            if (Target.LevelIndex == 0)
+            if (Target.GridIndex == 0)
                 EventBus.Raise(new TutorialStateChanged(5));
         }
     }
-
-    //public void OnEvent(PlayerInsided var)
-    //{
-    //    if (Target.IsCanTransition)
-    //    {
-    //        Target.StateMachine.ChangeState<OpenPanelState>(state => state.Target = Target);
-    //        EventBus.Raise(new GameActionEvent(GameAction.Completed));
-    //        Target.DespawnPlayer();
-    //    }
-    //}
 }

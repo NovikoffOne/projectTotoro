@@ -45,7 +45,7 @@ public class Bootstrap : MonoBehaviour
 
     private void StartNewGame(Scene scene, LoadSceneMode loadScene)
     {
-        var mapManager = new MapManager(_mapManagerData, new PoolMono<Player>(_playerPrefab));
+        var mapManager = new LevelStateMachine(_mapManagerData, new PoolMono<Player>(_playerPrefab));
         
         SceneManager.sceneLoaded -= StartNewGame;
 
