@@ -30,6 +30,7 @@ public class LevelStateMachine :
 
     public LevelGenerator Grid => _grid;
     public Player Player => _player;
+    public PoolMono<Player> PlayerPool => _playerPool;
     public MapManagerData Data => _mapManagerData;
     public StateMachine StateMachine => _stateMachine;
 
@@ -42,12 +43,9 @@ public class LevelStateMachine :
         _playerPool?.DeSpawn(_player);
     }
 
-    public void StartTutorial()
+    public void SetPlayer(Player player)
     {
-        if (_gridIndex == 0)
-            EventBus.Raise(new TutorialStateChanged(0, true));
-        else
-            EventBus.Raise(new TutorialStateChanged(0, false));
+        _player = player;
     }
 
     public void SetNumberCarried(int charge)
@@ -55,15 +53,8 @@ public class LevelStateMachine :
         _numberChargeCarried = charge;
     }
 
-    public void SpawnPlayer()
-    {
-        _player = _playerPool.Spawn();
-    }
-
     public void PlayGame()
     {
-        EventBus.Raise(new GameStarted(_gridIndex));
-        
         _stateMachine.ChangeState<LoopGameState>(state => state.Target = this);
     }
 

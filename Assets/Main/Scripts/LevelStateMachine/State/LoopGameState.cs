@@ -13,6 +13,8 @@ public class LoopGameState : BaseState<LevelStateMachine>,
         this.Subscribe<GameActionEvent>();
         this.Subscribe<PlayerInsided>();
 
+
+        EventBus.Raise(new GameStarted(Target.GridIndex));
         EventBus.Raise(new PlayerCanInputed(true));
     }
 
@@ -60,7 +62,7 @@ public class LoopGameState : BaseState<LevelStateMachine>,
         switch (gameAction.GameAction)
         {
             case GameAction.Start:
-                Target.StartTutorial();
+                StartTutorial();
                 break;
 
             case GameAction.ClickReload:
@@ -79,5 +81,13 @@ public class LoopGameState : BaseState<LevelStateMachine>,
             default:
                 break;
         }
+    }
+
+    public void StartTutorial()
+    {
+        if (Target.GridIndex == 0)
+            EventBus.Raise(new TutorialStateChanged(0, true));
+        else
+            EventBus.Raise(new TutorialStateChanged(0, false));
     }
 }

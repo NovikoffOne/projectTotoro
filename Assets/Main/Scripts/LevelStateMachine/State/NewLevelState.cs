@@ -11,7 +11,7 @@ public class NewLevelState : BaseState<LevelStateMachine>
         if (Target.Player == null 
             || Target.Player.gameObject.activeSelf == false)
         {
-            Target.SpawnPlayer();
+            Target.SetPlayer(Target.PlayerPool.Spawn());
         }
 
         Target.SetNumberCarried(0);
