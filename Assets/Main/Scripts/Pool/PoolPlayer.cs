@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PoolPlayer<T> : PoolMono<T>
     where T : Player
@@ -7,13 +8,15 @@ public class PoolPlayer<T> : PoolMono<T>
 
     public override void OnSpawn(T element)
     {
-        element.transform.position = new Vector3(0, 0, 0);
+        element?.Movement.ResetPosition();
 
         element.gameObject.SetActive(true);
     }
 
     public override void OnDespawn(T element)
     {
+        element?.Movement.ResetPosition();
+
         element.gameObject.SetActive(false);
     }
 }

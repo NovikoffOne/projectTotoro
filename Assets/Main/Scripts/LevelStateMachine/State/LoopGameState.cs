@@ -5,8 +5,15 @@ public class LoopGameState : BaseState<LevelStateMachine>,
     IEventReceiver<PlayerInsided>,
     IEventReceiver<GameActionEvent>
 {
+    private bool _isChargeChanged;
+
     public override void Enter()
     {
+        if(Target.Player == null || Target.Player.gameObject.activeSelf == false)
+        {
+            Target.PlayerPool.Spawn();
+        }
+
         Time.timeScale = 1;
 
         this.Subscribe<EnergyChanged>();
@@ -29,17 +36,14 @@ public class LoopGameState : BaseState<LevelStateMachine>,
 
     public void OnEvent(EnergyChanged isChargeChanged)
     {
-        if (isChargeChanged.IsChargeChange == false && Target.GridIndex == 0)
+        _isChargeChanged = isChargeChanged.IsChargeChange;
+
+        if (_isChargeChanged == false && Target.GridIndex == 0)
         {
             EventBus.Raise(new TutorialStateChanged(3));
         }
 
-        if (isChargeChanged.IsChargeChange == true)
-        {
-            Target.SetNumberCarried(1);
-        }
-
-        if (Target.IsCanTransition)
+        if (_isChargeChanged == true)
         {
             EventBus.Raise(new OpenLevelTransition());
 
@@ -50,9 +54,11 @@ public class LoopGameState : BaseState<LevelStateMachine>,
 
     public void OnEvent(PlayerInsided playerInsided)
     {
-        if (Target.IsCanTransition)
+        if (_isChargeChanged)
         {
-            Target.DespawnPlayer();
+            Target.PlayerPool.DeSpawn(Target.Player);
+            _isChargeChanged = false;
+
             EventBus.Raise(new GameActionEvent(GameAction.Completed));
         }
     }
@@ -66,15 +72,15 @@ public class LoopGameState : BaseState<LevelStateMachine>,
                 break;
 
             case GameAction.ClickReload:
-                Target.ChangeNewLevelState(Target.GridIndex);
+                ChangeNewLevelState(Target.GridIndex);
                 break;
 
             case GameAction.ClickNextLevel:
-                Target.ChangeNewLevelState(Target.GridIndex + 1);
+                ChangeNewLevelState(Target.GridIndex + 1);
                 break;
 
             case GameAction.Exit:
-                Target.DespawnPlayer();
+                Target.PlayerPool.DeSpawn(Target.Player);
                 IJunior.TypedScenes.MainMenu.Load();
                 break;
 
@@ -89,5 +95,17 @@ public class LoopGameState : BaseState<LevelStateMachine>,
             EventBus.Raise(new TutorialStateChanged(0, true));
         else
             EventBus.Raise(new TutorialStateChanged(0, false));
+    }
+
+    public void ChangeNewLevelState(int index = 0)
+    {
+        //if (Target.Player != null)
+        //{
+        //    Target.PlayerPool.DeSpawn(Target.Player);
+        //}
+
+        Target.GridIndex = index;
+
+        Target.StateMachine.ChangeState<NewLevelState>(state => state.Target = Target);
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class LevelStar :
     IEventReceiver<GameActionEvent>
 {
-    private readonly LevelStateMachine MapManager;
+    private readonly LevelStateMachine LevelStateMachine;
 
     private const string LevelPassedText = "LevelPassed ";
     private const string LevelStarText = "LevelStar ";
@@ -20,14 +20,14 @@ public class LevelStar :
 
     private float _startTime;
 
-    public LevelStar(LevelStateMachine mapManager)
+    public LevelStar(LevelStateMachine levelStateMachine)
     {
-        MapManager = mapManager;
+        LevelStateMachine = levelStateMachine;
 
         this.Subscribe<GameActionEvent>();
     }
 
-    private int LevelIndex => MapManager.GridIndex;
+    private int LevelIndex => LevelStateMachine.GridIndex;
 
     public void OnEvent(GameActionEvent var)
     {

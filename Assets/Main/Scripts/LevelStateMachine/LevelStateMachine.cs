@@ -1,5 +1,6 @@
-public class LevelStateMachine :
-    IEventReceiver<NewGamePlayed>
+using UnityEngine;
+
+public class LevelStateMachine
 {
     private LevelGenerator _grid;
     private Player _player;
@@ -7,7 +8,6 @@ public class LevelStateMachine :
     private PoolMono<Player> _playerPool;
     private StateMachine _stateMachine;
 
-    private int _numberChargeCarried;
     private int _gridIndex;
 
     public LevelStateMachine(MapManagerData mapManagerData, PoolMono<Player> poolPlayer)
@@ -19,57 +19,38 @@ public class LevelStateMachine :
         _playerPool = poolPlayer;
 
         _stateMachine.ChangeState<InstalizeState>(state => state.Target = this);
-
-        this.Subscribe<NewGamePlayed>();
-    }
-
-    ~LevelStateMachine()
-    {
-        this.Unsubscribe<NewGamePlayed>();
     }
 
     public LevelGenerator Grid => _grid;
-    public Player Player => _player;
     public PoolMono<Player> PlayerPool => _playerPool;
     public MapManagerData Data => _mapManagerData;
     public StateMachine StateMachine => _stateMachine;
 
-    public int GridIndex => _gridIndex;
-    public bool IsCanTransition => _numberChargeCarried >= _mapManagerData.MinNumberPassengersCarried;
-
-    public void DespawnPlayer()
+    public int GridIndex
     {
-        _player?.Movement.ResetPosition();
-        _playerPool?.DeSpawn(_player);
+        get
+        {
+            return _gridIndex;
+        }
+        set
+        {
+            if (value >= 0)
+                _gridIndex = value;
+        }
     }
 
-    public void SetPlayer(Player player)
+    public Player Player
     {
-        _player = player;
-    }
-
-    public void SetNumberCarried(int charge)
-    {
-        _numberChargeCarried = charge;
-    }
-
-    public void PlayGame()
-    {
-        _stateMachine.ChangeState<LoopGameState>(state => state.Target = this);
-    }
-
-    public void OnEvent(NewGamePlayed newLevelIndex)
-    {
-        ChangeNewLevelState(newLevelIndex.IndexLevel);
-    }
-
-    public void ChangeNewLevelState(int index = 0)
-    {
-        if (_player != null)
-            DespawnPlayer();
-
-        _gridIndex = index;
-
-        _stateMachine.ChangeState<NewLevelState>(state => state.Target = this);
+        get
+        {
+            return _player;
+        }
+        set
+        {
+            if(_player == null)
+            {
+                _player = value;
+            }
+        }
     }
 }

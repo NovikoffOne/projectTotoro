@@ -45,15 +45,15 @@ public class Bootstrap : MonoBehaviour
 
     private void StartNewGame(Scene scene, LoadSceneMode loadScene)
     {
-        var mapManager = new LevelStateMachine(_mapManagerData, new PoolMono<Player>(_playerPrefab));
+        var levelStateMachine = new LevelStateMachine(_mapManagerData, new PoolMono<Player>(_playerPrefab));
         
         SceneManager.sceneLoaded -= StartNewGame;
 
         new LiderBoard();
         new Ads();
-        new LevelStar(mapManager);
+        new LevelStar(levelStateMachine);
         
-        mapManager.StateMachine.ChangeState<PlayerInMenuState>();
+        levelStateMachine.StateMachine.ChangeState<PlayerInMenuState>(state => state.Target = levelStateMachine);
 
 #if !UNITY_WEBGL || UNITY_EDITOR
         return;

@@ -8,13 +8,13 @@ public class NewLevelState : BaseState<LevelStateMachine>
 {
     public override void Enter()
     {
-        if (Target.Player == null 
-            || Target.Player.gameObject.activeSelf == false)
-        {
-            Target.SetPlayer(Target.PlayerPool.Spawn());
-        }
+        //if (Target.Player == null 
+        //    || Target.Player.gameObject.activeSelf == false)
+        //{
+        //    Target.Player = Target.PlayerPool.Spawn();
+        //}
 
-        Target.SetNumberCarried(0);
+        Target.Player = Target.PlayerPool.Spawn();
 
         if (Target.Data.GridData.Count > Target.GridIndex)
         {
@@ -22,12 +22,12 @@ public class NewLevelState : BaseState<LevelStateMachine>
         }
         else
         {
-            Target.DespawnPlayer();
+            Target.PlayerPool.DeSpawn(Target.Player);
             IJunior.TypedScenes.MainMenu.Load();
         }
 
         EventBus.Raise(new PlayerCanInputed(false));
 
-        Target.PlayGame();
+        Target.StateMachine.ChangeState<LoopGameState>(state => state.Target = Target);
     }
 }
