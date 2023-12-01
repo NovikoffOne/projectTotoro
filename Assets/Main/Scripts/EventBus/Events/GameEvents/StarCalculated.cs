@@ -1,9 +1,12 @@
-﻿public readonly struct StarCalculated : IEvent
+﻿namespace Assets.Main.Scripts.Events.GameEvents
 {
-    public readonly int Count;
-
-    public StarCalculated(int count)
+    public readonly struct StarCalculated : IEvent
     {
-        Count = count;
+        public readonly int Count;
+
+        public StarCalculated(int count)
+        {
+            Count = count;
+        }
     }
 }

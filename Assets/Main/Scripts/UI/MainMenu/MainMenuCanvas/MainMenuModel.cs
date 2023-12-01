@@ -1,4 +1,7 @@
-﻿using IJunior.TypedScenes;
+﻿using Assets.Main.Scripts.Events;
+using Assets.Main.Scripts.Events.GameEvents;
+using Assets.Main.Scripts.Events.MainMenuEvents;
+using IJunior.TypedScenes;
 
 public class MainMenuModel : IModel
 {

@@ -1,9 +1,12 @@
-public readonly struct EnergyChanged : IEvent
+namespace Assets.Main.Scripts.Events.GameEvents
 {
-    public readonly bool IsChargeChange;
-
-    public EnergyChanged(bool isChargeChange)
+    public readonly struct EnergyChanged : IEvent
     {
-        IsChargeChange = isChargeChange;
+        public readonly bool IsChargeChange;
+
+        public EnergyChanged(bool isChargeChange)
+        {
+            IsChargeChange = isChargeChange;
+        }
     }
 }

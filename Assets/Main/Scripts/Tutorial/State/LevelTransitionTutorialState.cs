@@ -1,4 +1,6 @@
-﻿public class LevelTransitionTutorialState : BaseState<Tutorial>
+﻿using Assets.Main.Scripts.Fsm;
+
+public class LevelTransitionTutorialState : BaseState<Tutorial>
 {
     public override void Enter()
     {

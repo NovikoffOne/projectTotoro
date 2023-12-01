@@ -1,33 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using UnityEngine;
-public class NewLevelState : BaseState<LevelStateMachine>
+﻿using Assets.Main.Scripts.Events;
+using Assets.Main.Scripts.Fsm;
+
+namespace Assets.Main.Scripts.LevelFSM
 {
-    public override void Enter()
+    public class NewLevelState : BaseState<LevelStateMachine>
     {
-        //if (Target.Player == null 
-        //    || Target.Player.gameObject.activeSelf == false)
-        //{
-        //    Target.Player = Target.PlayerPool.Spawn();
-        //}
-
-        Target.Player = Target.PlayerPool.Spawn();
-
-        if (Target.Data.GridData.Count > Target.GridIndex)
+        public override void Enter()
         {
-            Target.Grid.NewLevel(Target.Data.GridData[Target.GridIndex]);
-        }
-        else
-        {
-            Target.PlayerPool.DeSpawn(Target.Player);
-            IJunior.TypedScenes.MainMenu.Load();
-        }
+            if (Target.Player != null)
+            {
+                Target.PlayerPool.DeSpawn(Target.Player);
+            }
 
-        EventBus.Raise(new PlayerCanInputed(false));
+            if (Target.Data.GridData.Count > Target.GridIndex)
+            {
+                Target.Grid.NewLevel(Target.Data.GridData[Target.GridIndex]);
+            }
+            else
+            {
+                Target.PlayerPool.DeSpawn(Target.Player);
+                IJunior.TypedScenes.MainMenu.Load();
+            }
 
-        Target.StateMachine.ChangeState<LoopGameState>(state => state.Target = Target);
+            EventBus.Raise(new PlayerCanInputed(false));
+
+            Target.StateMachine.ChangeState<LoopGameState>(state => state.Target = Target);
+        }
     }
 }

@@ -1,16 +1,20 @@
+using Assets.Main.Scripts.Events;
 using UnityEngine;
 
-public class Push : MonoBehaviour, ITriggerZone
+namespace Assets.Main.Scripts.Generator
 {
-    [SerializeField] private Vector3 _direction;
-
-    public void ApplyEffect(Player player)
+    public class Push : MonoBehaviour, ITriggerZone
     {
-        if (player.Movement.IsApplyAffect)
-        {
-            player.Movement.Move(player.Movement.CurrentPosition + _direction);
+        [SerializeField] private Vector3 _direction;
 
-            EventBus.Raise<PlayerCanInputed>(new PlayerCanInputed(false));
+        public void ApplyEffect(PlayerEnity.Player player)
+        {
+            if (player.Movement.IsApplyAffect)
+            {
+                player.Movement.Move(player.Movement.CurrentPosition + _direction);
+
+                EventBus.Raise(new PlayerCanInputed(false));
+            }
         }
     }
 }

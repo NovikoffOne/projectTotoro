@@ -1,77 +1,81 @@
+using Assets.Main.Scripts.Events.GameEvents;
 using UnityEngine;
 
-public class LevelStar :
-    IEventReceiver<GameActionEvent>
+namespace Assets.Main.Scripts.Star
 {
-    private readonly LevelStateMachine LevelStateMachine;
-
-    private const string LevelPassedText = "LevelPassed ";
-    private const string LevelStarText = "LevelStar ";
-
-    private const int TrueInt = 1;
-
-    private const int MinTime = 30;
-    private const int MidleTime = 40;
-    private const int MaxTime = 50;
-
-    private const int MaxCountStar = 3;
-    private const int MidleCountStar = 2;
-    private const int MinCountStar = 1;
-
-    private float _startTime;
-
-    public LevelStar(LevelStateMachine levelStateMachine)
+    public class LevelStar :
+        IEventReceiver<GameActionEvent>
     {
-        LevelStateMachine = levelStateMachine;
+        private readonly LevelFSM.LevelStateMachine LevelStateMachine;
 
-        this.Subscribe<GameActionEvent>();
-    }
+        private const string LevelPassedText = "LevelPassed ";
+        private const string LevelStarText = "LevelStar ";
 
-    private int LevelIndex => LevelStateMachine.GridIndex;
+        private const int TrueInt = 1;
 
-    public void OnEvent(GameActionEvent var)
-    {
-        if (var.GameAction == GameAction.Completed)
+        private const int MinTime = 30;
+        private const int MidleTime = 40;
+        private const int MaxTime = 50;
+
+        private const int MaxCountStar = 3;
+        private const int MidleCountStar = 2;
+        private const int MinCountStar = 1;
+
+        private float _startTime;
+
+        public LevelStar(LevelFSM.LevelStateMachine levelStateMachine)
         {
-            PlayerPrefs.SetInt(LevelPassedText + LevelIndex, TrueInt);
+            LevelStateMachine = levelStateMachine;
 
-            var currentData = CalculateStar(Time.time);
+            this.Subscribe();
+        }
 
-            EventBus.Raise(new StarCalculated(currentData));
+        private int LevelIndex => LevelStateMachine.GridIndex;
 
-            if (PlayerPrefs.HasKey(LevelStarText + LevelIndex))
+        public void OnEvent(GameActionEvent var)
+        {
+            if (var.GameAction == GameAction.Completed)
             {
-                var oldData = PlayerPrefs.GetInt(LevelStarText + LevelIndex);
+                PlayerPrefs.SetInt(LevelPassedText + LevelIndex, TrueInt);
 
-                if (oldData < currentData)
+                var currentData = CalculateStar(Time.time);
+
+                EventBus.Raise(new StarCalculated(currentData));
+
+                if (PlayerPrefs.HasKey(LevelStarText + LevelIndex))
+                {
+                    var oldData = PlayerPrefs.GetInt(LevelStarText + LevelIndex);
+
+                    if (oldData < currentData)
+                        PlayerPrefs.SetInt(LevelStarText + LevelIndex, CalculateStar(Time.time));
+                }
+                else
                     PlayerPrefs.SetInt(LevelStarText + LevelIndex, CalculateStar(Time.time));
             }
-            else
-                PlayerPrefs.SetInt(LevelStarText + LevelIndex, CalculateStar(Time.time));
+
+            if (var.GameAction == GameAction.Start)
+            {
+                _startTime = Time.time;
+            }
         }
 
-        if (var.GameAction == GameAction.Start)
+        private int CalculateStar(float finishTime)
         {
-            _startTime = Time.time;
-        }
-    }
+            var time = finishTime - _startTime;
 
-    private int CalculateStar(float finishTime)
-    {
-        var time = finishTime - _startTime;
+            if (time <= MinTime)
+                return MaxCountStar;
 
-        if (time <= MinTime)
-            return MaxCountStar;
+            if (time <= MidleTime)
+                return MidleCountStar;
 
-        if (time <= MidleTime)
-            return MidleCountStar;
+            if (time <= MaxTime)
+                return MinCountStar;
 
-        if (time <= MaxTime)
-            return MinCountStar;
+            if (time > MaxTime)
+                return 0;
 
-        if (time > MaxTime)
             return 0;
-
-        return 0;
+        }
     }
 }

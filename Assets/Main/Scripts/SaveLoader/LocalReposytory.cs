@@ -2,33 +2,36 @@ using System;
 using System.IO;
 using UnityEngine;
 
-public class LocalReposytory : IReposytory
+namespace Assets.Main.Scripts.SaveLoader
 {
-    public void Save<T>(T data, string fileName)
-        where T : IData
+    public class LocalReposytory : IReposytory
     {
-        var dataJson = JsonUtility.ToJson(data);
-
-        string path = Application.persistentDataPath + $"/{fileName}.json";
-
-        File.WriteAllText(path, dataJson);
-    }
-
-    public T Load<T>(string fileName)
-        where T : IData
-
-    {
-        if (File.Exists(Application.persistentDataPath + $"/{fileName}.json"))
+        public void Save<T>(T data, string fileName)
+            where T : IData
         {
-            var dataJson = File.ReadAllText(Application.persistentDataPath + $"/{fileName}.json");
+            var dataJson = JsonUtility.ToJson(data);
 
-            var data = JsonUtility.FromJson<T>(dataJson);
+            string path = Application.persistentDataPath + $"/{fileName}.json";
 
-            return data;
+            File.WriteAllText(path, dataJson);
         }
-        else
+
+        public T Load<T>(string fileName)
+            where T : IData
+
         {
-            return Activator.CreateInstance<T>();
+            if (File.Exists(Application.persistentDataPath + $"/{fileName}.json"))
+            {
+                var dataJson = File.ReadAllText(Application.persistentDataPath + $"/{fileName}.json");
+
+                var data = JsonUtility.FromJson<T>(dataJson);
+
+                return data;
+            }
+            else
+            {
+                return Activator.CreateInstance<T>();
+            }
         }
     }
 }

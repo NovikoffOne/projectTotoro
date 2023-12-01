@@ -1,9 +1,12 @@
-﻿public readonly struct PointsReturned : IEvent
+﻿namespace Assets.Main.Scripts.Events.GameEvents
 {
-    public readonly int Point;
-
-    public PointsReturned(int point)
+    public readonly struct PointsReturned : IEvent
     {
-        Point = point;
+        public readonly int Point;
+
+        public PointsReturned(int point)
+        {
+            Point = point;
+        }
     }
 }

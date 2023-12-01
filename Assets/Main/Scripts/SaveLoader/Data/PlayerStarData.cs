@@ -1,12 +1,15 @@
 ﻿using System;
 
-public class PlayerStarData : IData
+namespace Assets.Main.Scripts.SaveLoader
 {
-    public int Count;
-    public int LevelIndex;
-
-    public void Dispose()
+    public class PlayerStarData : IData
     {
-        GC.SuppressFinalize(this);
+        public int Count;
+        public int LevelIndex;
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
     }
 }

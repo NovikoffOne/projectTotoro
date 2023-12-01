@@ -1,10 +1,12 @@
-﻿public readonly struct RewardGasAdded : IEvent
+﻿namespace Assets.Main.Scripts.Events.GameEvents
 {
-    public readonly int Value;
+    public readonly struct RewardGasAdded : IEvent
+    {
+        public readonly int Value;
 
-	public RewardGasAdded(int gasValue)
-	{
-		Value = gasValue;
-	} 
+        public RewardGasAdded(int gasValue)
+        {
+            Value = gasValue;
+        }
+    }
 }
-

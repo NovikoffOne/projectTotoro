@@ -1,21 +1,24 @@
 using UnityEngine;
 
-public class TriggerZoneEnter : MonoBehaviour
+namespace Assets.Main.Scripts.Generator
 {
-    [SerializeField] protected ZoneIndex Index;
-
-    protected ITriggerZone EntityTriggerZone;
-
-    public ZoneIndex ZoneIndex => Index;
-
-    private void Start()
+    public class TriggerZoneEnter : MonoBehaviour
     {
-        EntityTriggerZone = GetComponent<ITriggerZone>();
-    }
+        [SerializeField] protected ZoneIndex Index;
 
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent<Player>(out Player player))
-            EntityTriggerZone.ApplyEffect(player);
+        protected ITriggerZone EntityTriggerZone;
+
+        public ZoneIndex ZoneIndex => Index;
+
+        private void Start()
+        {
+            EntityTriggerZone = GetComponent<ITriggerZone>();
+        }
+
+        protected virtual void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent<PlayerEnity.Player>(out PlayerEnity.Player player))
+                EntityTriggerZone.ApplyEffect(player);
+        }
     }
 }

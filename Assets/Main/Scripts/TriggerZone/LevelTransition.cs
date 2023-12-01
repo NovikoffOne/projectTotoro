@@ -1,43 +1,48 @@
+using Assets.Main.Scripts.Events.GameEvents;
+using Assets.Main.Scripts.PlayerEnity;
 using UnityEngine;
 
-public class LevelTransition : MonoBehaviour,
-    ITriggerZone,
-    IEventReceiver<OpenLevelTransition>
-
+namespace Assets.Main.Scripts.Generator
 {
-    [SerializeField] private GameObject _door;
-    [SerializeField] private Charge _particle;
-    [SerializeField] private Transform _particlePosition;
-    
-    private void Start()
+    public class LevelTransition : MonoBehaviour,
+        ITriggerZone,
+        IEventReceiver<OpenLevelTransition>
+
     {
-        this.Subscribe<OpenLevelTransition>();
+        [SerializeField] private GameObject _door;
+        [SerializeField] private Charge _particle;
+        [SerializeField] private Transform _particlePosition;
 
-        _particle = Instantiate(_particle, _particlePosition);
+        private void Start()
+        {
+            this.Subscribe();
 
-        _door.SetActive(false);
-        _particle.gameObject.SetActive(false);
-    }
+            _particle = Instantiate(_particle, _particlePosition);
 
-    private void OnDisable()
-    {
-        _door.SetActive(false);
-        _particle.gameObject.SetActive(false);
-    }
+            _door.SetActive(false);
+            _particle.gameObject.SetActive(false);
+        }
 
-    private void OnDestroy()
-    {
-        this.Unsubscribe<OpenLevelTransition>();
-    }
+        private void OnDisable()
+        {
+            _door.SetActive(false);
+            _particle.gameObject.SetActive(false);
+        }
 
-    public void ApplyEffect(Player player)
-    {
-        EventBus.Raise(new PlayerInsided());
-    }
+        private void OnDestroy()
+        {
+            this.Unsubscribe();
+        }
 
-    public void OnEvent(OpenLevelTransition var)
-    {
-        _door.SetActive(true);
-        _particle.gameObject.SetActive(true);
+        public void ApplyEffect(PlayerEnity.Player player)
+        {
+            EventBus.Raise(new PlayerInsided());
+        }
+
+        public void OnEvent(OpenLevelTransition var)
+        {
+            _door.SetActive(true);
+            _particle.gameObject.SetActive(true);
+        }
     }
 }

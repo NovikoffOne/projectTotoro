@@ -1,12 +1,16 @@
+using Assets.Main.Scripts.Events;
 using UnityEngine;
 
-public class Barrier : MonoBehaviour, ITriggerZone
+namespace Assets.Main.Scripts.Generator
 {
-    public void ApplyEffect(Player player)
+    public class Barrier : MonoBehaviour, ITriggerZone
     {
-        player.Movement.Move(player.Movement.LastPosition);
+        public void ApplyEffect(PlayerEnity.Player player)
+        {
+            player.Movement.Move(player.Movement.LastPosition);
 
-        EventBus.Raise<PlayerCanInputed>(new PlayerCanInputed(false));
-        EventBus.Raise(new GameActionEvent(GameAction.GameOver));
+            EventBus.Raise<PlayerCanInputed>(new PlayerCanInputed(false));
+            EventBus.Raise(new GameActionEvent(GameAction.GameOver));
+        }
     }
 }

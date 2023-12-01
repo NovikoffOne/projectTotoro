@@ -1,6 +1,9 @@
 ﻿using System;
 
-public interface IStateFactory : IDisposable
+namespace Assets.Main.Scripts.Fsm
 {
-    T Create<T>(IStateMachine stateMachine) where T : IState;
+    public interface IStateFactory : IDisposable
+    {
+        T Create<T>(IStateMachine stateMachine) where T : IState;
+    }
 }

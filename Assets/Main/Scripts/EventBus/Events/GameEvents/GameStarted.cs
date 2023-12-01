@@ -1,10 +1,13 @@
-﻿public readonly struct GameStarted : IEvent
+﻿namespace Assets.Main.Scripts.Events.GameEvents
 {
-
-    public readonly int LevelIndex;
-
-    public GameStarted(int levelIndex = 0)
+    public readonly struct GameStarted : IEvent
     {
-        LevelIndex = levelIndex;
+
+        public readonly int LevelIndex;
+
+        public GameStarted(int levelIndex = 0)
+        {
+            LevelIndex = levelIndex;
+        }
     }
 }

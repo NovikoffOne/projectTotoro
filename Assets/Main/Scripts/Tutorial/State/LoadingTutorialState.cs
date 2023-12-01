@@ -1,4 +1,6 @@
-﻿public class LoadingTutorialState : BaseState<Tutorial>
+﻿using Assets.Main.Scripts.Fsm;
+
+public class LoadingTutorialState : BaseState<Tutorial>
 {
     public override void Enter()
     {

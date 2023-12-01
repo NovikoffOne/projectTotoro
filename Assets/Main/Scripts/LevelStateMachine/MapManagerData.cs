@@ -1,18 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Main.Scripts.Generator;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = nameof(MapManagerData), menuName = "Data/Create new MapManagerData", order = 51)]
-
-public class MapManagerData : ScriptableObject
+namespace Assets.Main.Scripts.LevelFSM
 {
-    [SerializeField] private List<GridData> _gridData;
-    [SerializeField] private LevelGenerator _gridPrefab;
+    [CreateAssetMenu(fileName = nameof(MapManagerData), menuName = "Data/Create new MapManagerData", order = 51)]
 
-    [SerializeField] private int _minNumberPassengersCarried;
+    public class MapManagerData : ScriptableObject
+    {
+        [SerializeField] private List<GridData> _gridData;
+        [SerializeField] private LevelGenerator _gridPrefab;
 
-    public IReadOnlyList<GridData> GridData => _gridData;
+        [SerializeField] private int _minNumberPassengersCarried;
 
-    public LevelGenerator GridGenerator => _gridPrefab;
+        public IReadOnlyList<GridData> GridData => _gridData;
 
-    public int MinNumberPassengersCarried => _minNumberPassengersCarried;
+        public LevelGenerator GridGenerator => _gridPrefab;
+
+        public int MinNumberPassengersCarried => _minNumberPassengersCarried;
+    }
 }

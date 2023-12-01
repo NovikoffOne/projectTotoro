@@ -1,4 +1,7 @@
-public class PlayerEnergyReserve : EnergyReserve
+namespace Assets.Main.Scripts.PlayerEnity
 {
-    public PlayerEnergyReserve(int startValue) : base(startValue) { }
+    public class PlayerEnergyReserve : EnergyReserve
+    {
+        public PlayerEnergyReserve(int startValue) : base(startValue) { }
+    }
 }

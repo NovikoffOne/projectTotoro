@@ -1,67 +1,71 @@
+using Assets.Main.Scripts.Events;
 using UnityEngine;
 
-public class Tile : MonoBehaviour,
-    IEventReceiver<PlayerCanInputed>
+namespace Assets.Main.Scripts.Generator
 {
-    [SerializeField] private GameObject _baseTile;
-    [SerializeField] private GameObject _offsetTile;
-    [SerializeField] private GameObject _highlightingTile;
-
-    private GameObject _currentTile;
-
-    private bool _canInput;
-
-    public Vector3 Position => transform.position;
-
-    private void OnDestroy()
+    public class Tile : MonoBehaviour,
+        IEventReceiver<PlayerCanInputed>
     {
-        this.Unsubscribe<PlayerCanInputed>();
-    }
+        [SerializeField] private GameObject _baseTile;
+        [SerializeField] private GameObject _offsetTile;
+        [SerializeField] private GameObject _highlightingTile;
 
-    public void OnMouseEnter()
-    {
-        if (Time.timeScale == 0 || !_canInput)
-            return;
+        private GameObject _currentTile;
 
-        Highlight(_highlightingTile);
-    }
+        private bool _canInput;
 
-    public void OnMouseExit()
-    {
-        RevertBase(_highlightingTile);
-    }
+        public Vector3 Position => transform.position;
 
-    public void Init(bool isOffset)
-    {
-        if (isOffset)
+        private void OnDestroy()
         {
-            _offsetTile.SetActive(true);
-            _currentTile = _offsetTile;
+            this.Unsubscribe();
         }
 
-        else
+        public void OnMouseEnter()
         {
-            _baseTile.SetActive(true);
-            _currentTile = _baseTile;
+            if (Time.timeScale == 0 || !_canInput)
+                return;
+
+            Highlight(_highlightingTile);
         }
 
-        this.Subscribe<PlayerCanInputed>();
-    }
+        public void OnMouseExit()
+        {
+            RevertBase(_highlightingTile);
+        }
 
-    public void OnEvent(PlayerCanInputed var)
-    {
-        _canInput = var.IsCanInput;
-    }
+        public void Init(bool isOffset)
+        {
+            if (isOffset)
+            {
+                _offsetTile.SetActive(true);
+                _currentTile = _offsetTile;
+            }
 
-    private void RevertBase(GameObject tile)
-    {
-        tile.SetActive(false);
-        _currentTile.SetActive(true);
-    }
+            else
+            {
+                _baseTile.SetActive(true);
+                _currentTile = _baseTile;
+            }
 
-    private void Highlight(GameObject tile)
-    {
-        tile.SetActive(true);
-        _currentTile.SetActive(false);
+            this.Subscribe();
+        }
+
+        public void OnEvent(PlayerCanInputed var)
+        {
+            _canInput = var.IsCanInput;
+        }
+
+        private void RevertBase(GameObject tile)
+        {
+            tile.SetActive(false);
+            _currentTile.SetActive(true);
+        }
+
+        private void Highlight(GameObject tile)
+        {
+            tile.SetActive(true);
+            _currentTile.SetActive(false);
+        }
     }
 }

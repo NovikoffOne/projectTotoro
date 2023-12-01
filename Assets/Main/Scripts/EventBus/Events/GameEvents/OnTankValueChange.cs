@@ -1,9 +1,12 @@
-﻿public readonly struct OnTankValueChange : IEvent
+﻿namespace Assets.Main.Scripts.Events.GameEvents
 {
-    public readonly float NewValue;
+    public readonly struct OnTankValueChange : IEvent
+    {
+        public readonly float NewValue;
 
-	public OnTankValueChange(float newValue)
-	{
-		NewValue = newValue;
-	}
+        public OnTankValueChange(float newValue)
+        {
+            NewValue = newValue;
+        }
+    }
 }

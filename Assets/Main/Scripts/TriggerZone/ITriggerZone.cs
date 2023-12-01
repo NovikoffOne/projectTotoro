@@ -1,4 +1,7 @@
-public interface ITriggerZone
+namespace Assets.Main.Scripts.Generator
 {
-    void ApplyEffect(Player player);
+    public interface ITriggerZone
+    {
+        void ApplyEffect(PlayerEnity.Player player);
+    }
 }

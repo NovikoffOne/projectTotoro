@@ -1,60 +1,66 @@
+using Assets.Main.Scripts.Events;
+using Assets.Main.Scripts.Events.GameEvents;
+using Assets.Main.Scripts.Generator;
 using UnityEngine;
 
-public class PlayerInput : 
-    IEventReceiver<PlayerCanInputed>,
-    IEventReceiver<GameStarted>
+namespace Assets.Main.Scripts.PlayerEnity
 {
-    private Player _player;
-    private LayerMask _ignorLayer = 3;
-
-    private bool _firstClick = true;
-    private bool _canInput;
-
-    private float _rayDistance = 20;
-
-    public PlayerInput(Player player)
+    public class PlayerInput :
+        IEventReceiver<PlayerCanInputed>,
+        IEventReceiver<GameStarted>
     {
-        _player = player;
+        private Player _player;
+        private LayerMask _ignorLayer = 3;
 
-        this.Subscribe<PlayerCanInputed>();
-        this.Subscribe<GameStarted>();
-    }
+        private bool _firstClick = true;
+        private bool _canInput;
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _canInput == true)
-            _player.Movement.Move(GetMouseColision());
-    }
+        private float _rayDistance = 20;
 
-    public void OnEvent(PlayerCanInputed isCanInput)
-    {
-        _canInput = isCanInput.IsCanInput;
-    }
-
-    public void OnEvent(GameStarted isStarted)
-    {
-        _firstClick = true;
-    }
-
-    private Vector2 GetMouseColision()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, _rayDistance, _ignorLayer) && hit.transform.TryGetComponent<Tile>(out Tile tile)
-          && _player.Movement.CurrentPosition != tile.Position)
+        public PlayerInput(Player player)
         {
-            _player.EnergyTank.SpendGas();
+            _player = player;
 
-            if (_firstClick)
-            {
-                EventBus.Raise(new GameActionEvent(GameAction.Start));
-
-                _firstClick = false;
-            }
-            
-            return tile.Position;
+            this.Subscribe<PlayerCanInputed>();
+            this.Subscribe<GameStarted>();
         }
-        else
-            return _player.Movement.CurrentPosition;
+
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0) && _canInput == true)
+                _player.Movement.Move(GetMouseColision());
+        }
+
+        public void OnEvent(PlayerCanInputed isCanInput)
+        {
+            _canInput = isCanInput.IsCanInput;
+        }
+
+        public void OnEvent(GameStarted isStarted)
+        {
+            _firstClick = true;
+        }
+
+        private Vector2 GetMouseColision()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, _rayDistance, _ignorLayer) && hit.transform.TryGetComponent(out Tile tile)
+              && _player.Movement.CurrentPosition != tile.Position)
+            {
+                _player.EnergyTank.SpendGas();
+
+                if (_firstClick)
+                {
+                    EventBus.Raise(new GameActionEvent(GameAction.Start));
+
+                    _firstClick = false;
+                }
+
+                return tile.Position;
+            }
+            else
+                return _player.Movement.CurrentPosition;
+        }
     }
 }

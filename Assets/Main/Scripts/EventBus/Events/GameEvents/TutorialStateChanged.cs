@@ -1,11 +1,14 @@
-﻿public readonly struct TutorialStateChanged : IEvent
+﻿namespace Assets.Main.Scripts.Events.GameEvents
 {
-    public readonly int TutorialState;
-    public readonly bool IsTutorial;
-
-    public TutorialStateChanged(int tutorialState, bool isTutorial = true)
+    public readonly struct TutorialStateChanged : IEvent
     {
-        TutorialState = tutorialState;
-        IsTutorial = isTutorial;
+        public readonly int TutorialState;
+        public readonly bool IsTutorial;
+
+        public TutorialStateChanged(int tutorialState, bool isTutorial = true)
+        {
+            TutorialState = tutorialState;
+            IsTutorial = isTutorial;
+        }
     }
 }

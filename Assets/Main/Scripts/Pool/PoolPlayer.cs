@@ -1,22 +1,24 @@
-﻿using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+﻿using Assets.Main.Scripts;
 
-public class PoolPlayer<T> : PoolMono<T>
-    where T : Player
+namespace Assets.Main.Scripts.Pool
 {
-    public PoolPlayer(T prefab) : base(prefab) { }
-
-    public override void OnSpawn(T element)
+    public class PoolPlayer<T> : PoolMono<T>
+        where T : PlayerEnity.Player
     {
-        element?.Movement.ResetPosition();
+        public PoolPlayer(T prefab) : base(prefab) { }
 
-        element.gameObject.SetActive(true);
-    }
+        public override void OnSpawn(T element)
+        {
+            element?.Movement.ResetPosition();
 
-    public override void OnDespawn(T element)
-    {
-        element?.Movement.ResetPosition();
+            element?.gameObject.SetActive(true);
+        }
 
-        element.gameObject.SetActive(false);
+        public override void OnDespawn(T element)
+        {
+            element?.Movement.ResetPosition();
+
+            element?.gameObject.SetActive(false);
+        }
     }
 }

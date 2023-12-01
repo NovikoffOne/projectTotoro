@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Assets.Main.Scripts.Events;
+using Assets.Main.Scripts.Fsm;
 
-public class InstalizeState : BaseState<LevelStateMachine>
+namespace Assets.Main.Scripts.LevelFSM
 {
-    public override void Enter()
+    public class InstalizeState : BaseState<LevelStateMachine>
     {
-        EventBus.Raise(new PlayerCanInputed(false));
+        public override void Enter()
+        {
+            EventBus.Raise(new PlayerCanInputed(false));
+        }
     }
 }

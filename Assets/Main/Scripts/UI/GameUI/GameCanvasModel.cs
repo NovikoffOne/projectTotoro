@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Main.Scripts.Events;
+using Assets.Main.Scripts.Events.GameEvents;
+using UnityEngine;
 
 internal class GameCanvasModel : IModel,
     IEventReceiver<GameActionEvent>,

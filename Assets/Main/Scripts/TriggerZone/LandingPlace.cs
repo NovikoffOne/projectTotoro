@@ -1,44 +1,50 @@
+using Assets.Main.Scripts.Events.GameEvents;
+using Assets.Main.Scripts.Generator;
+using Assets.Main.Scripts.PlayerEnity;
 using UnityEngine;
 
-public class LandingPlace : MonoBehaviour, ITriggerZone
+namespace Assets.Main.Scripts.Generator
 {
-    [SerializeField] private Charge _chargeRed;
-    [SerializeField] private Transform _chargePostion;
-
-    [SerializeField] private GameObject _basePlatform;
-    [SerializeField] private GameObject _completPlatform;
-
-    [SerializeField] private int _index;
-
-    private Charge _charge;
-
-    private void OnEnable()
+    public class LandingPlace : MonoBehaviour, ITriggerZone
     {
-        _basePlatform.SetActive(true);
-    }
+        [SerializeField] private Charge _chargeRed;
+        [SerializeField] private Transform _chargePostion;
 
-    private void OnDisable()
-    {
-        if (_charge != null)
-            Destroy(_charge.gameObject);
-    }
+        [SerializeField] private GameObject _basePlatform;
+        [SerializeField] private GameObject _completPlatform;
 
-    public void ApplyEffect(Player player)
-    {
-        var charge = player.ChargeChanger.GetCharge(_index);
+        [SerializeField] private int _index;
 
-        if (charge != null)
+        private Charge _charge;
+
+        private void OnEnable()
         {
-            _charge = charge;
-
-            EventBus.Raise(new EnergyChanged(true));
-
-            _charge.Move(_chargePostion);
-
-            _basePlatform.SetActive(false);
-            _completPlatform.SetActive(true);
+            _basePlatform.SetActive(true);
         }
-        else
-            return;
+
+        private void OnDisable()
+        {
+            if (_charge != null)
+                Destroy(_charge.gameObject);
+        }
+
+        public void ApplyEffect(PlayerEnity.Player player)
+        {
+            var charge = player.ChargeChanger.GetCharge(_index);
+
+            if (charge != null)
+            {
+                _charge = charge;
+
+                EventBus.Raise(new EnergyChanged(true));
+
+                _charge.Move(_chargePostion);
+
+                _basePlatform.SetActive(false);
+                _completPlatform.SetActive(true);
+            }
+            else
+                return;
+        }
     }
 }

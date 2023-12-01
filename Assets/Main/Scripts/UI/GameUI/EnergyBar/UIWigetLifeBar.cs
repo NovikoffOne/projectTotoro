@@ -1,3 +1,4 @@
+using Assets.Main.Scripts.Events.GameEvents;
 using UnityEngine;
 
 public class UIWigetLifeBar : MonoBehaviour, IEventReceiver<OnTankValueChange>

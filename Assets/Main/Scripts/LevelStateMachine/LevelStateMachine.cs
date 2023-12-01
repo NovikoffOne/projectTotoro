@@ -1,55 +1,61 @@
-using UnityEngine;
+using Assets.Main.Scripts.Fsm;
+using Assets.Main.Scripts.Generator;
+using Assets.Main.Scripts.PlayerEnity;
+using Assets.Main.Scripts.Pool;
 
-public class LevelStateMachine
+namespace Assets.Main.Scripts.LevelFSM
 {
-    private LevelGenerator _grid;
-    private Player _player;
-    private MapManagerData _mapManagerData;
-    private PoolMono<Player> _playerPool;
-    private StateMachine _stateMachine;
-
-    private int _gridIndex;
-
-    public LevelStateMachine(MapManagerData mapManagerData, PoolMono<Player> poolPlayer)
+    public class LevelStateMachine
     {
-        _stateMachine = new StateMachine();
-        _grid = new LevelGenerator();
+        private LevelGenerator _grid;
+        private Player _player;
+        private MapManagerData _mapManagerData;
+        private PoolMono<Player> _playerPool;
+        private StateMachine _stateMachine;
 
-        _mapManagerData = mapManagerData;
-        _playerPool = poolPlayer;
+        private int _gridIndex;
 
-        _stateMachine.ChangeState<InstalizeState>(state => state.Target = this);
-    }
-
-    public LevelGenerator Grid => _grid;
-    public PoolMono<Player> PlayerPool => _playerPool;
-    public MapManagerData Data => _mapManagerData;
-    public StateMachine StateMachine => _stateMachine;
-
-    public int GridIndex
-    {
-        get
+        public LevelStateMachine(MapManagerData mapManagerData, PoolMono<Player> poolPlayer)
         {
-            return _gridIndex;
+            _stateMachine = new StateMachine();
+            _grid = new LevelGenerator();
+
+            _mapManagerData = mapManagerData;
+            _playerPool = poolPlayer;
+
+            _stateMachine.ChangeState<InstalizeState>(state => state.Target = this);
         }
-        set
-        {
-            if (value >= 0)
-                _gridIndex = value;
-        }
-    }
 
-    public Player Player
-    {
-        get
+        public Generator.LevelGenerator Grid => _grid;
+        public PoolMono<Player> PlayerPool => _playerPool;
+        public MapManagerData Data => _mapManagerData;
+        public StateMachine StateMachine => _stateMachine;
+
+        public int GridIndex
         {
-            return _player;
-        }
-        set
-        {
-            if(_player == null)
+            get
             {
-                _player = value;
+                return _gridIndex;
+            }
+            set
+            {
+                if (value >= 0)
+                    _gridIndex = value;
+            }
+        }
+
+        public Player Player
+        {
+            get
+            {
+                return _player;
+            }
+            set
+            {
+                if (_player == null || _player.gameObject.activeSelf == false)
+                {
+                    _player = value;
+                }
             }
         }
     }

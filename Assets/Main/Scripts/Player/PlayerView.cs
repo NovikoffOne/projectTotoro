@@ -1,36 +1,40 @@
+using Assets.Main.Scripts.Events;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerView : MonoBehaviour
+namespace Assets.Main.Scripts.PlayerEnity
 {
-    [SerializeField] private GameObject _prefab;
-    [SerializeField] private Transform _playerViewPosition;
-
-    [SerializeField] private float _durationMove;
-
-    private void Start()
+    public class PlayerView : MonoBehaviour
     {
-        Instantiate(_prefab, _playerViewPosition.position, Quaternion.identity, transform);
-    }
+        [SerializeField] private GameObject _prefab;
+        [SerializeField] private Transform _playerViewPosition;
 
-    public void ChangePosition(Vector3 newPosition)
-    {
-        transform.DOMove(newPosition, _durationMove).SetEase(Ease.Linear, 0);
+        [SerializeField] private float _durationMove;
 
-        StartCoroutine(AllowInput());
-    }
+        private void Start()
+        {
+            Instantiate(_prefab, _playerViewPosition.position, Quaternion.identity, transform);
+        }
 
-    public void ResetPosition()
-    {
-        transform.DOComplete();
-        transform.position = new Vector3(0, 0, transform.position.z);
-    }
+        public void ChangePosition(Vector3 newPosition)
+        {
+            transform.DOMove(newPosition, _durationMove).SetEase(Ease.Linear, 0);
 
-    private IEnumerator AllowInput()
-    {
-        yield return new WaitForSeconds(_durationMove);
+            StartCoroutine(AllowInput());
+        }
 
-        EventBus.Raise(new PlayerCanInputed(true));
+        public void ResetPosition()
+        {
+            transform.DOComplete();
+            transform.position = new Vector3(0, 0, transform.position.z);
+        }
+
+        private IEnumerator AllowInput()
+        {
+            yield return new WaitForSeconds(_durationMove);
+
+            EventBus.Raise(new PlayerCanInputed(true));
+        }
     }
 }

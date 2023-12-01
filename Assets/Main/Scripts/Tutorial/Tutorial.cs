@@ -1,3 +1,5 @@
+using Assets.Main.Scripts.Events.GameEvents;
+using Assets.Main.Scripts.Fsm;
 using UnityEngine;
 
 public class Tutorial : MonoBehaviour,
@@ -6,9 +8,9 @@ public class Tutorial : MonoBehaviour,
     [SerializeField] private Light _pointLightPrefab;
 
     private Light _pointLight;
-    
+
     private StateMachine _stateMachine;
-    
+
     public Light PointLight => _pointLight;
     public Vector3 StartLightPosition { get; } = new Vector3(3, 1, -.3f);
     public Vector3 State3LightPosition { get; } = new Vector3(7, 1, -.3f);
@@ -16,7 +18,7 @@ public class Tutorial : MonoBehaviour,
 
     private void Awake()
     {
-        if(_stateMachine == null)
+        if (_stateMachine == null)
         {
             _stateMachine = new StateMachine();
         }

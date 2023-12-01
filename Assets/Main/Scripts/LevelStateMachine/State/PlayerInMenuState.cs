@@ -1,35 +1,30 @@
-﻿using static UnityEditor.Experimental.GraphView.GraphView;
-using UnityEngine.LowLevel;
+﻿using Assets.Main.Scripts.Events.GameEvents;
+using Assets.Main.Scripts.Fsm;
 
-public class PlayerInMenuState : BaseState<LevelStateMachine>,
-    IEventReceiver<NewGamePlayed>
+namespace Assets.Main.Scripts.LevelFSM
 {
-    public override void Enter()
+    public class PlayerInMenuState : BaseState<LevelStateMachine>,
+        IEventReceiver<NewGamePlayed>
     {
-        this.Subscribe<NewGamePlayed>();
-    }
-
-    public override void Exit()
-    {
-        this.Unsubscribe<NewGamePlayed>();
-    }
-
-    public void OnEvent(NewGamePlayed newLevelIndex)
-    {
-        ChangeNewLevelState(newLevelIndex.IndexLevel);
-    }
-
-    // Дубляж
-
-    public void ChangeNewLevelState(int index = 0)
-    {
-        if (Target.Player != null)
+        public override void Enter()
         {
-            Target.PlayerPool.DeSpawn(Target.Player);
+            this.Subscribe();
+
+            if (Target.Player != null)
+            {
+                Target.PlayerPool.DeSpawn(Target.Player);
+            }
         }
 
-        Target.GridIndex = index;
+        public override void Exit()
+        {
+            this.Unsubscribe();
+        }
 
-        Target.StateMachine.ChangeState<NewLevelState>(state => state.Target = Target);
+        public void OnEvent(NewGamePlayed newLevelIndex)
+        {
+            Target.GridIndex = newLevelIndex.IndexLevel;
+            Target.StateMachine.ChangeState<NewLevelState>(state => state.Target = Target);
+        }
     }
 }

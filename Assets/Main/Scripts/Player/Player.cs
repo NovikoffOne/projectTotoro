@@ -1,65 +1,69 @@
+using Assets.Main.Scripts.Events.GameEvents;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
+namespace Assets.Main.Scripts.PlayerEnity
 {
-    [SerializeField] private PlayerView _playerView;
-
-    [SerializeField] private Charge _chargePrefab;
-
-    [SerializeField] private PlayerCharge _chargeChanger;
-
-    [SerializeField] private int _energyReserve = 20;
-
-    public PlayerEnergyReserve EnergyTank { get; private set; }
-    public PlayerCharge ChargeChanger { get => _chargeChanger; }
-    public PlayerMovement Movement { get; private set; }
-    public PlayerInput Input { get; private set; }
-
-    private void Awake()
+    public class Player : MonoBehaviour, IEventReceiver<OnTankValueChange>
     {
-        Movement = new PlayerMovement(_playerView);
+        [SerializeField] private PlayerView _playerView;
 
-        EnergyTank = new PlayerEnergyReserve(_energyReserve);
+        [SerializeField] private Charge _chargePrefab;
 
-        Input = new PlayerInput(this);
-    }
+        [SerializeField] private PlayerCharge _chargeChanger;
 
-    private void Start()
-    {
-        EventBus.Subscribe(this);
-    }
+        [SerializeField] private int _energyReserve = 20;
 
-    private void Update()
-    {
-        Input.Update();
-    }
+        public PlayerEnergyReserve EnergyTank { get; private set; }
+        public PlayerCharge ChargeChanger { get => _chargeChanger; }
+        public PlayerMovement Movement { get; private set; }
+        public PlayerInput Input { get; private set; }
 
-    private void OnEnable()
-    {
-        _chargeChanger.InstantiateCharge();
+        private void Awake()
+        {
+            Movement = new PlayerMovement(_playerView);
 
-        EnergyTank.SetValueReserve(_energyReserve);
+            EnergyTank = new PlayerEnergyReserve(_energyReserve);
 
-        transform.position = new Vector3(0, 0, 0);
+            Input = new PlayerInput(this);
+        }
 
-        Movement.ResetPosition();
-    }
+        private void Start()
+        {
+            this.Subscribe();
+        }
 
-    private void OnDisable()
-    {
-        transform.position = new Vector3(0, 0, 0);
+        private void Update()
+        {
+            Input.Update();
+        }
 
-        Movement.ResetPosition();
-    }
+        private void OnEnable()
+        {
+            _chargeChanger.InstantiateCharge();
 
-    private void OnDestroy()
-    {
-        EventBus.Unsubscribe(this);
-    }
+            EnergyTank.SetValueReserve(_energyReserve);
 
-    public void OnEvent(OnTankValueChange valueChanged)
-    {
-        if (!EnergyTank.HaveGas)
-            EventBus.Raise(new GameActionEvent(GameAction.GameOver));
+            transform.position = new Vector3(0, 0, 0);
+
+            Movement.ResetPosition();
+        }
+
+        private void OnDisable()
+        {
+            transform.position = new Vector3(0, 0, 0);
+
+            Movement.ResetPosition();
+        }
+
+        private void OnDestroy()
+        {
+            this.Unsubscribe();
+        }
+
+        public void OnEvent(OnTankValueChange valueChanged)
+        {
+            if (!EnergyTank.HaveGas)
+                EventBus.Raise(new GameActionEvent(GameAction.GameOver));
+        }
     }
 }

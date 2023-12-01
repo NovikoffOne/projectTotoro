@@ -1,9 +1,12 @@
-﻿public readonly struct NewGamePlayed : IEvent
+﻿namespace Assets.Main.Scripts.Events.GameEvents
 {
-    public readonly int IndexLevel;
-
-    public NewGamePlayed(int index = 0)
+    public readonly struct NewGamePlayed : IEvent
     {
-        IndexLevel = index;
+        public readonly int IndexLevel;
+
+        public NewGamePlayed(int index = 0)
+        {
+            IndexLevel = index;
+        }
     }
 }

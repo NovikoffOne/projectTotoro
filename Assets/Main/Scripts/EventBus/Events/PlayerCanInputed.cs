@@ -1,9 +1,12 @@
-﻿public readonly struct PlayerCanInputed : IEvent
+﻿namespace Assets.Main.Scripts.Events
 {
-    public readonly bool IsCanInput;
-
-    public PlayerCanInputed(bool canInput)
+    public readonly struct PlayerCanInputed : IEvent
     {
-        IsCanInput = canInput;
+        public readonly bool IsCanInput;
+
+        public PlayerCanInputed(bool canInput)
+        {
+            IsCanInput = canInput;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Assets.Main.Scripts.Generator;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,9 +41,6 @@ public class GridData : ScriptableObject
     public TriggerZoneEnter GetTriggerZone(ZoneIndex zone)
     {
         var triggerZone = _zonePrefabs.Find(element => element.ZoneIndex == zone);
-
-        if (triggerZone == null)
-            Debug.Log("Список пуст!");
 
         return triggerZone;
     }

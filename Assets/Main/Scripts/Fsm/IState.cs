@@ -1,10 +1,13 @@
 ﻿using System;
 
-public interface IState : IDisposable
+namespace Assets.Main.Scripts.Fsm
 {
-    public IStateMachine StateMachine { get; set; }
+    public interface IState : IDisposable
+    {
+        public IStateMachine StateMachine { get; set; }
 
-    void Enter();
-    void Update();
-    void Exit();
+        void Enter();
+        void Update();
+        void Exit();
+    }
 }

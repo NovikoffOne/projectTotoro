@@ -1,36 +1,41 @@
+using Assets.Main.Scripts.Events.GameEvents;
+using Assets.Main.Scripts.PlayerEnity;
 using UnityEngine;
 
-public class LoadingPlace : MonoBehaviour, ITriggerZone
+namespace Assets.Main.Scripts.Generator
 {
-    [SerializeField] private ChargeColor _chargeColler;
-    [SerializeField] private Transform _chargePosition;
-
-    [SerializeField] private int SiteLandingIndex;
-
-    private Charge _charge;
-
-    private void OnEnable()
+    public class LoadingPlace : MonoBehaviour, ITriggerZone
     {
-        _charge = Instantiate(_chargeColler.GetMaterial(SiteLandingIndex), _chargePosition.position, Quaternion.identity, transform);
+        [SerializeField] private ChargeColor _chargeColler;
+        [SerializeField] private Transform _chargePosition;
 
-        _charge.Init(SiteLandingIndex);
-    }
+        [SerializeField] private int SiteLandingIndex;
 
-    private void OnDisable()
-    {
-        if (_charge != null)
-            Destroy(_charge.gameObject);
-    }
+        private Charge _charge;
 
-    public void ApplyEffect(Player player)
-    {
-        if (_charge != null)
+        private void OnEnable()
         {
-            player.ChargeChanger.SetCharge(_charge);
+            _charge = Instantiate(_chargeColler.GetMaterial(SiteLandingIndex), _chargePosition.position, Quaternion.identity, transform);
 
-            EventBus.Raise(new EnergyChanged(false));
+            _charge.Init(SiteLandingIndex);
+        }
 
-            _charge = null;
+        private void OnDisable()
+        {
+            if (_charge != null)
+                Destroy(_charge.gameObject);
+        }
+
+        public void ApplyEffect(PlayerEnity.Player player)
+        {
+            if (_charge != null)
+            {
+                player.ChargeChanger.SetCharge(_charge);
+
+                EventBus.Raise(new EnergyChanged(false));
+
+                _charge = null;
+            }
         }
     }
 }
